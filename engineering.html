@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sebastian Higa — Industrial Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F7FC;
+    --card:#FFFFFF;
+    --ink:#181A22;
+    --ink-soft:#5B5E6B;
+    --ink-faint:#9A9CA8;
+    --accent:#3D5AF1;
+    --accent-soft:#EDF0FE;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --shadow:0 2px 6px rgba(24,26,34,0.04), 0 12px 32px rgba(24,26,34,0.06);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--ink); font-family:'Inter', sans-serif; -webkit-font-smoothing:antialiased;}
+  a{text-decoration:none; color:inherit;}
+  h1,h2,h3,h4{font-family:'Plus Jakarta Sans', sans-serif;}
+  .wrap{max-width:1080px; margin:0 auto; padding:40px 32px 100px;}
+
+  .back{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13.5px; font-weight:600; color:var(--ink-soft);
+    background:var(--card); border-radius:100px; padding:8px 16px;
+    box-shadow:var(--shadow); margin-bottom:36px;
+  }
+  .back:hover{color:var(--accent);}
+
+  /* ---- hero ---- */
+  .hero-row{display:flex; gap:28px; align-items:center; margin-bottom:12px; flex-wrap:wrap;}
+  .ph-avatar{
+    width:112px; height:112px; border-radius:32px; flex-shrink:0;
+    border:1.5px dashed #D3D8F7; background:var(--accent-soft);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--accent); font-size:11px; font-weight:600; text-align:center; gap:4px;
+  }
+  h1{font-size:clamp(32px,5vw,48px); font-weight:800; letter-spacing:-0.02em; margin-bottom:8px;}
+  p.role{font-size:16px; color:var(--accent); font-weight:600; margin-bottom:4px;}
+  p.lede{font-size:16px; color:var(--ink-soft); max-width:600px; line-height:1.6; margin:16px 0 24px;}
+
+  .contact-row{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:40px;}
+  .contact-pill{
+    font-size:13px; font-weight:500; color:var(--ink-soft);
+    background:var(--card); box-shadow:var(--shadow); border-radius:100px; padding:8px 14px;
+  }
+
+  .stat-strip{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:44px;
+  }
+  .stat-cell{background:var(--card); border-radius:var(--radius-md); box-shadow:var(--shadow); padding:18px 20px;}
+  .stat-num{font-family:'Plus Jakarta Sans'; font-weight:800; font-size:28px; color:var(--accent); line-height:1;}
+  .stat-label{font-size:11.5px; color:var(--ink-soft); margin-top:6px; font-weight:500;}
+
+  /* ---- tab nav ---- */
+  .tool-nav{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:36px;}
+  .tool-btn{
+    background:var(--card); border:none; border-radius:100px;
+    padding:12px 22px; font-family:'Inter'; font-size:14px; font-weight:600;
+    color:var(--ink-soft); box-shadow:var(--shadow); cursor:pointer; transition:all 0.2s ease;
+  }
+  .tool-btn:hover{color:var(--accent);}
+  .tool-btn.active{background:var(--accent); color:#fff; box-shadow:0 8px 20px rgba(61,90,241,0.28);}
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  /* ---- experience timeline ---- */
+  .timeline{display:flex; flex-direction:column; gap:16px;}
+  .tl-card{background:var(--card); border-radius:var(--radius-md); box-shadow:var(--shadow); padding:24px 28px;}
+  .tl-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:10px;}
+  .tl-role{font-size:17px; font-weight:700;}
+  .tl-org{color:var(--accent); font-weight:600; font-size:14px; margin-top:2px;}
+  .tl-meta{font-size:12.5px; color:var(--ink-faint); font-weight:500; white-space:nowrap;}
+  .tl-bullets{list-style:none; display:flex; flex-direction:column; gap:6px; margin-top:12px;}
+  .tl-bullets li{padding-left:16px; position:relative; font-size:14px; color:var(--ink-soft); line-height:1.55;}
+  .tl-bullets li::before{content:'—'; position:absolute; left:0; color:#C7CCF5;}
+
+  /* ---- skills ---- */
+  .skill-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px; margin-bottom:36px;}
+  .skill-card{background:var(--card); border-radius:var(--radius-md); box-shadow:var(--shadow); padding:22px;}
+  .skill-card h4{font-size:15px; font-weight:700; margin-bottom:6px;}
+  .skill-card p{font-size:13px; color:var(--ink-soft);}
+  .tool-tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .tool-tag{font-size:12.5px; font-weight:600; background:var(--accent-soft); color:var(--accent); padding:7px 14px; border-radius:100px;}
+
+  /* ---- education ---- */
+  .edu-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:16px;}
+  .edu-card{background:var(--card); border-radius:var(--radius-md); box-shadow:var(--shadow); padding:22px;}
+  .edu-card h4{font-size:15px; font-weight:700; margin-bottom:4px;}
+  .edu-card p{font-size:13px; color:var(--ink-soft);}
+
+  /* ---- zaizai teaser ---- */
+  .zaizai-teaser{
+    background:var(--ink); color:#fff; border-radius:var(--radius-lg);
+    padding:30px 32px; display:flex; align-items:center; gap:24px; flex-wrap:wrap;
+  }
+  .zaizai-teaser .zlogo{
+    width:80px; height:80px; border-radius:20px; flex-shrink:0;
+    border:1.5px dashed rgba(255,255,255,0.3); background:rgba(255,255,255,0.06);
+    display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.5); font-size:11px;
+  }
+  .zaizai-teaser h4{font-size:20px; font-weight:700; margin-bottom:6px;}
+  .zaizai-teaser p{color:rgba(255,255,255,0.65); font-size:13.5px; max-width:480px;}
+  .zaizai-links{display:flex; gap:10px; margin-left:auto; flex-wrap:wrap;}
+  .zaizai-link{
+    font-size:13px; font-weight:600; color:#fff; border:1px solid rgba(255,255,255,0.35);
+    padding:9px 16px; border-radius:100px;
+  }
+  .zaizai-link:hover{background:#fff; color:var(--ink);}
+  .zaizai-link.primary{background:var(--accent); border-color:var(--accent);}
+
+  @media (max-width:680px){
+    .stat-strip{grid-template-columns:repeat(2,1fr);}
+    .zaizai-links{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← back to portfolio</a>
+
+  <div class="hero-row">
+    <img class="ph-avatar" src="assets/engineering/headshot.jpg" alt="Sebastian Higa" style="object-fit:cover; border:none;">
+    <div>
+      <h1>Sebastian Higa</h1>
+      <p class="role">Industrial Engineer — Operations & Supply Chain</p>
+    </div>
+  </div>
+  <p class="lede">I diagnose operational bottlenecks and build tools — Python, SQL, automation — that speed up production, inventory, and logistics workflows.</p>
+
+  <div class="contact-row">
+    <span class="contact-pill">✉ sebastian.shigeru@gmail.com</span>
+    <span class="contact-pill">☎ (236) 978-4744</span>
+    <span class="contact-pill">📍 Vancouver, BC → GTA</span>
+    <span class="contact-pill">EN · ES · PT</span>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-cell"><div class="stat-num">3+</div><div class="stat-label">years in industrial operations</div></div>
+    <div class="stat-cell"><div class="stat-num">43%</div><div class="stat-label">process time improvement</div></div>
+    <div class="stat-cell"><div class="stat-num">6</div><div class="stat-label">python tools built</div></div>
+    <div class="stat-cell"><div class="stat-num">12K+</div><div class="stat-label">mems units planned / week</div></div>
+  </div>
+
+  <div class="tool-nav" id="toolNav">
+    <button class="tool-btn active" data-panel="experience">Experience</button>
+    <button class="tool-btn" data-panel="skills">Skills & Tools</button>
+    <button class="tool-btn" data-panel="education">Education</button>
+    <button class="tool-btn" data-panel="zaizai">zaizai.ca</button>
+  </div>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <div class="panel active" id="panel-experience">
+    <div class="timeline">
+      <div class="tl-card">
+        <div class="tl-top">
+          <div><div class="tl-role">Production Coordinator</div><div class="tl-org">Preciseley Microtechnology Corp. — Burnaby, BC</div></div>
+          <div class="tl-meta">Fabless semiconductor / MEMS · 2025–2026</div>
+        </div>
+        <ul class="tl-bullets">
+          <li>Planned and scheduled 12,000+ MEMS products for weekly customer deliveries; managed shipping/receiving, outbound packaging, and export documentation under Incoterms.</li>
+          <li>Developed 4 project proposals to diagnose operational bottlenecks and implement productivity improvements.</li>
+          <li>Built 6 custom Python tools (production scheduling, inventory reconciliation, document data extraction, sales-to-planning sync) with AI-assisted development.</li>
+        </ul>
+      </div>
+      <div class="tl-card">
+        <div class="tl-top">
+          <div><div class="tl-role">Operations Coordinator</div><div class="tl-org">JM Test Systems — Vancouver / Richmond, BC</div></div>
+          <div class="tl-meta">Industrial instrumentation calibration · 2024–2026</div>
+        </div>
+        <ul class="tl-bullets">
+          <li>Supported order creation, scheduling, and timeline tracking for 200+ customized orders per month; coordinated rental, sales, and calibration activities as main liaison between clients and internal teams, managing 1,200+ products monthly.</li>
+          <li>Coordinated operational workflows and documentation for 260+ clients, ensuring accuracy, traceability, and compliance; registered and validated 6,000+ equipment items, supporting inventory control and audits.</li>
+          <li>Developed 4 internal process improvement proposals using technology and AI.</li>
+        </ul>
+      </div>
+      <div class="tl-card">
+        <div class="tl-top">
+          <div><div class="tl-role">Manager</div><div class="tl-org">Arumi's Pharmacies — Arica, Chile</div></div>
+          <div class="tl-meta">2021–2023</div>
+        </div>
+        <ul class="tl-bullets">
+          <li>Implemented business management software to automate data processing for operational analysis.</li>
+          <li>Managed inventory of 15,000+ SKUs across pharmaceutical, chemical, and personal care products via ERP/CRM.</li>
+          <li>Managed 3 pharmacy locations and supported a new store opening, contributing to a 23% sales increase in 12 months.</li>
+        </ul>
+      </div>
+      <div class="tl-card">
+        <div class="tl-top">
+          <div><div class="tl-role">Production Operator</div><div class="tl-org">Cuneo Agri-food Industry — Tacna, Peru</div></div>
+          <div class="tl-meta">2018–2020</div>
+        </div>
+        <ul class="tl-bullets">
+          <li>Involved in sales and logistics activities alongside daily production operations.</li>
+          <li>Analyzed customer purchasing behavior to help implement 4 improvement plans in logistics, increasing throughput times.</li>
+          <li>Supported 3 process improvements that helped eliminate bottlenecks in production.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SKILLS ================= -->
+  <div class="panel" id="panel-skills">
+    <div class="skill-grid">
+      <div class="skill-card"><h4>Production Analysis</h4><p>Gantt, Kanban, Pareto, ABC</p></div>
+      <div class="skill-card"><h4>Inventory Reconciliation</h4><p>Flow-conservation solvers</p></div>
+      <div class="skill-card"><h4>Root Cause Analysis</h4><p>Bottleneck diagnosis</p></div>
+      <div class="skill-card"><h4>Cross-functional Coordination</h4><p>Marketing, finance, teams, coaches</p></div>
+    </div>
+    <div class="tool-tags">
+      <span class="tool-tag">Python</span>
+      <span class="tool-tag">SQL / SQLite</span>
+      <span class="tool-tag">Excel & VBA</span>
+      <span class="tool-tag">ERP / CRM</span>
+      <span class="tool-tag">Notion & ClickUp</span>
+      <span class="tool-tag">R / Tableau</span>
+      <span class="tool-tag">Dynamics 365</span>
+      <span class="tool-tag">Google Data Analytics</span>
+    </div>
+  </div>
+
+  <!-- ================= EDUCATION ================= -->
+  <div class="panel" id="panel-education">
+    <div class="edu-grid">
+      <div class="edu-card"><h4>Industrial Engineering</h4><p>Private University of Tacna, Peru — 2022</p></div>
+      <div class="edu-card"><h4>International Business Administration</h4><p>Gastown Business College, Vancouver — 2024</p></div>
+      <div class="edu-card"><h4>Google Data Analytics Certificate</h4><p>Coursera & Google — 2025</p></div>
+      <div class="edu-card"><h4>Lean Six Sigma, Green Belt</h4><p>Coursera — in progress</p></div>
+    </div>
+  </div>
+
+  <!-- ================= ZAIZAI TEASER ================= -->
+  <div class="panel" id="panel-zaizai">
+    <div class="zaizai-teaser">
+      <div class="zlogo">300×300</div>
+      <div>
+        <h4>zaizai.ca</h4>
+        <p>AI-powered resume and cover letter platform for international students and skilled immigrants building their career in Canada. Co-founder & frontend developer.</p>
+      </div>
+      <div class="zaizai-links">
+        <a class="zaizai-link" href="https://zaizai.ca" target="_blank" rel="noopener">Visit site ↗</a>
+        <a class="zaizai-link primary" href="automations.html#zaizai">Full case study →</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.tool-btn');
+  const panels = document.querySelectorAll('.panel');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

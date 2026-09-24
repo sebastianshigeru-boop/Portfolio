@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing — Sebastian Higa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FCF7F3;
+    --card:#FFFFFF;
+    --ink:#181A22;
+    --ink-soft:#5B5E6B;
+    --ink-faint:#9A9CA8;
+    --accent:#F5670A;
+    --accent-soft:#FEEEE2;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --shadow:0 2px 6px rgba(24,26,34,0.04), 0 12px 32px rgba(24,26,34,0.06);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--ink); font-family:'Inter', sans-serif; -webkit-font-smoothing:antialiased;}
+  a{text-decoration:none; color:inherit;}
+  h1,h2,h3,h4{font-family:'Plus Jakarta Sans', sans-serif;}
+  .wrap{max-width:1080px; margin:0 auto; padding:40px 32px 100px;}
+
+  .back{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13.5px; font-weight:600; color:var(--ink-soft);
+    background:var(--card); border-radius:100px; padding:8px 16px;
+    box-shadow:var(--shadow); margin-bottom:36px;
+  }
+  .back:hover{color:var(--accent);}
+
+  .hero-icon{
+    width:56px; height:56px; border-radius:18px; background:var(--accent-soft); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:22px;
+  }
+  h1{font-size:clamp(34px,5vw,50px); font-weight:800; letter-spacing:-0.02em; margin-bottom:14px;}
+  p.lede{font-size:17px; color:var(--ink-soft); max-width:640px; line-height:1.6; margin-bottom:48px;}
+
+  .tool-nav{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:44px;}
+  .tool-btn{
+    background:var(--card); border:none; border-radius:100px;
+    padding:12px 20px; font-family:'Inter'; font-size:14px; font-weight:600;
+    color:var(--ink-soft); box-shadow:var(--shadow); cursor:pointer;
+    display:flex; align-items:center; gap:8px; transition:all 0.2s ease;
+  }
+  .tool-btn:hover{color:var(--accent);}
+  .tool-btn.active{background:var(--accent); color:#fff; box-shadow:0 8px 20px rgba(245,103,10,0.28);}
+  .tool-btn .dot{width:6px; height:6px; border-radius:50%; background:currentColor; opacity:0.5;}
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .panel-head{display:flex; justify-content:space-between; align-items:flex-start; gap:24px; margin-bottom:24px; flex-wrap:wrap;}
+  .panel h2{font-size:24px; font-weight:700; margin-bottom:8px;}
+  .panel .desc{color:var(--ink-soft); font-size:14.5px; max-width:580px; line-height:1.6;}
+  .stack-tags{display:flex; gap:8px; flex-wrap:wrap;}
+  .stack-tag{font-size:12px; font-weight:600; background:var(--accent-soft); color:var(--accent); padding:6px 12px; border-radius:100px;}
+
+  .stat-strip{display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap;}
+  .stat-pill{background:var(--card); box-shadow:var(--shadow); border-radius:var(--radius-md); padding:14px 20px; min-width:120px;}
+  .stat-pill .num{font-family:'Plus Jakarta Sans'; font-weight:800; font-size:22px; color:var(--accent); line-height:1;}
+  .stat-pill .label{font-size:11.5px; color:var(--ink-soft); margin-top:4px; font-weight:500;}
+
+  .shot-frame{
+    background:var(--card); border-radius:var(--radius-lg); box-shadow:var(--shadow);
+    padding:14px; overflow:hidden;
+  }
+  .shot-frame img{width:100%; display:block; border-radius:var(--radius-md);}
+
+  .ph{
+    border-radius:var(--radius-md);
+    border:1.5px dashed #F2D9C4;
+    background:repeating-linear-gradient(135deg, #FEFBF9, #FEFBF9 10px, #FCEEE2 10px, #FCEEE2 11px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--ink-faint); text-align:center; font-size:12.5px; gap:6px;
+    height:220px; padding:14px;
+  }
+  .ph .dim{font-weight:700; color:var(--ink-soft);}
+
+  @media (max-width:680px){
+    .panel{padding:0;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← back to portfolio</a>
+
+  <div class="hero-icon">◆</div>
+  <h1>Marketing</h1>
+  <p class="lede">Social media management, content creation, and campaign design across personal brands, community organizations, and small businesses.</p>
+
+  <div class="tool-nav" id="toolNav">
+    <button class="tool-btn active" data-panel="djzech"><span class="dot"></span>DJ Zech</button>
+    <button class="tool-btn" data-panel="hermandad"><span class="dot"></span>Hermandad UPT</button>
+    <button class="tool-btn" data-panel="representantes"><span class="dot"></span>Representantes UPT 2020</button>
+    <button class="tool-btn" data-panel="pizzafast"><span class="dot"></span>Pizza Fast</button>
+  </div>
+
+  <!-- ================= DJ ZECH ================= -->
+  <div class="panel active" id="panel-djzech">
+    <div class="panel-head">
+      <div>
+        <h2>DJ Zech — personal brand</h2>
+        <p class="desc">Instagram and Facebook management for my own DJ brand — content planning, reel editing, and event promotion, growing the account to 1,453 followers with reels reaching up to 15K+ views.</p>
+      </div>
+      <div class="stack-tags">
+        <span class="stack-tag">Meta Business Suite</span>
+        <span class="stack-tag">CapCut</span>
+        <span class="stack-tag">Adobe Premiere Pro</span>
+        <span class="stack-tag">FL Studio</span>
+      </div>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-pill"><div class="num">1,453</div><div class="label">followers</div></div>
+      <div class="stat-pill"><div class="num">32</div><div class="label">posts</div></div>
+      <div class="stat-pill"><div class="num">15.7K</div><div class="label">top reel views</div></div>
+    </div>
+    <div class="ph"><span>DJ Zech Instagram grid — see the full profile in the DJ Zech section</span></div>
+  </div>
+
+  <!-- ================= HERMANDAD UPT ================= -->
+  <div class="panel" id="panel-hermandad">
+    <div class="panel-head">
+      <div>
+        <h2>Hermandad UPT</h2>
+        <p class="desc">Content and campaign management for a university political/volunteering organization — designed graphics for election campaigns, signature-gathering drives, inclusion festivals, and community fundraising initiatives.</p>
+      </div>
+      <div class="stack-tags">
+        <span class="stack-tag">Campaign design</span>
+        <span class="stack-tag">Community organizing</span>
+        <span class="stack-tag">Facebook management</span>
+      </div>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-pill"><div class="num">1.2K</div><div class="label">followers</div></div>
+      <div class="stat-pill"><div class="num">60+</div><div class="label">initiatives coordinated</div></div>
+    </div>
+    <div class="shot-frame"><img src="assets/marketing/hermandad-upt.png" alt="Hermandad UPT Facebook page"></div>
+  </div>
+
+  <!-- ================= REPRESENTANTES UPT 2020 ================= -->
+  <div class="panel" id="panel-representantes">
+    <div class="panel-head">
+      <div>
+        <h2>Representantes UPT 2020</h2>
+        <p class="desc">Community page for the university student council — informing 2,300+ students on campus decisions and elections, plus a Reels series covering campus life, events, and student talent, with some reels reaching 5K–9K views.</p>
+      </div>
+      <div class="stack-tags">
+        <span class="stack-tag">Community management</span>
+        <span class="stack-tag">Reels content</span>
+        <span class="stack-tag">Election coverage</span>
+      </div>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-pill"><div class="num">2.3K</div><div class="label">followers</div></div>
+      <div class="stat-pill"><div class="num">9.1K</div><div class="label">top reel views</div></div>
+      <div class="stat-pill"><div class="num">10K+</div><div class="label">students represented</div></div>
+    </div>
+    <div class="shot-frame"><img src="assets/marketing/representantes-upt.png" alt="Representantes UPT 2020 Facebook page"></div>
+  </div>
+
+  <!-- ================= PIZZA FAST ================= -->
+  <div class="panel" id="panel-pizzafast">
+    <div class="panel-head">
+      <div>
+        <h2>Pizza Fast (Tío Pizza Fast)</h2>
+        <p class="desc">Instagram brand and mascot marketing for a local pizza delivery business — created character-driven content ("Tío Pizza Fast"), ran promos (3x1 Wednesdays, free delivery) and raffles to drive engagement and orders.</p>
+      </div>
+      <div class="stack-tags">
+        <span class="stack-tag">Character marketing</span>
+        <span class="stack-tag">Promo design</span>
+        <span class="stack-tag">Instagram & Facebook Live</span>
+      </div>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-pill"><div class="num">165</div><div class="label">followers</div></div>
+      <div class="stat-pill"><div class="num">40</div><div class="label">posts</div></div>
+    </div>
+    <div class="shot-frame"><img src="assets/marketing/pizza-fast.png" alt="Pizza Fast Instagram page"></div>
+  </div>
+
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.tool-btn');
+  const panels = document.querySelectorAll('.panel');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sebastian Higa — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F6FB;
+    --card:#FFFFFF;
+    --ink:#181A22;
+    --ink-soft:#5B5E6B;
+    --ink-faint:#9A9CA8;
+
+    --c-eng:#3D5AF1;   --c-eng-soft:#EDF0FE;
+    --c-auto:#8B5CF6;  --c-auto-soft:#F2EDFE;
+    --c-mkt:#F5670A;   --c-mkt-soft:#FEEEE2;
+    --c-dj:#E0399B;    --c-dj-soft:#FCE9F4;
+    --c-soccer:#12A150;--c-soccer-soft:#E4F7EC;
+
+    --radius-lg:28px;
+    --radius-md:18px;
+    --shadow:0 2px 6px rgba(24,26,34,0.04), 0 12px 32px rgba(24,26,34,0.06);
+    --shadow-hover:0 8px 20px rgba(24,26,34,0.08), 0 20px 48px rgba(24,26,34,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{text-decoration:none; color:inherit;}
+  h1,h2,h3,h4{font-family:'Plus Jakarta Sans', sans-serif;}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:72px 32px 100px;}
+
+  .hero-eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:600; color:var(--ink-faint);
+    background:var(--card); border-radius:100px; padding:7px 16px;
+    box-shadow:var(--shadow); margin-bottom:28px;
+  }
+  .hero-dot{width:7px; height:7px; border-radius:50%; background:var(--c-soccer);}
+
+  h1.title{
+    font-size:clamp(40px, 6vw, 64px);
+    font-weight:800;
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    margin-bottom:18px;
+  }
+  p.subtitle{
+    font-size:19px; color:var(--ink-soft); max-width:600px; line-height:1.6;
+    margin-bottom:56px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:20px;
+  }
+  .grid .full{grid-column:1 / -1;}
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+    padding:32px;
+    display:flex; flex-direction:column;
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+    position:relative;
+    overflow:hidden;
+    min-height:200px;
+  }
+  .card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-hover); }
+
+  .card-blob{
+    position:absolute; top:-40px; right:-40px;
+    width:140px; height:140px; border-radius:50%;
+    opacity:0.14; filter:blur(2px);
+  }
+
+  .card-icon{
+    width:52px; height:52px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; margin-bottom:20px;
+  }
+  .card h3{font-size:21px; font-weight:700; margin-bottom:8px; letter-spacing:-0.01em;}
+  .card p{font-size:14.5px; color:var(--ink-soft); line-height:1.55; flex:1;}
+  .card .go{
+    margin-top:20px; font-size:13.5px; font-weight:600;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .card .go svg{transition:transform 0.2s ease;}
+  .card:hover .go svg{transform:translateX(3px);}
+
+  .card.eng .card-icon{background:var(--c-eng-soft); color:var(--c-eng);}
+  .card.eng .card-blob{background:var(--c-eng);}
+  .card.eng .go{color:var(--c-eng);}
+
+  .card.auto .card-icon{background:var(--c-auto-soft); color:var(--c-auto);}
+  .card.auto .card-blob{background:var(--c-auto);}
+  .card.auto .go{color:var(--c-auto);}
+
+  .card.mkt .card-icon{background:var(--c-mkt-soft); color:var(--c-mkt);}
+  .card.mkt .card-blob{background:var(--c-mkt);}
+  .card.mkt .go{color:var(--c-mkt);}
+
+  .card.dj .card-icon{background:var(--c-dj-soft); color:var(--c-dj);}
+  .card.dj .card-blob{background:var(--c-dj);}
+  .card.dj .go{color:var(--c-dj);}
+
+  .card.soccer .card-icon{background:var(--c-soccer-soft); color:var(--c-soccer);}
+  .card.soccer .card-blob{background:var(--c-soccer);}
+  .card.soccer .go{color:var(--c-soccer);}
+
+  /* featured (first) card, spans full width, horizontal layout */
+  .card.featured{
+    flex-direction:row; align-items:center; gap:32px;
+    padding:36px 40px;
+  }
+  .card.featured .ph{
+    width:96px; height:96px; border-radius:24px; flex-shrink:0;
+    border:1.5px dashed #D8D5EE;
+    background:var(--c-eng-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--c-eng); text-align:center; font-weight:600;
+    padding:6px;
+  }
+  .card.featured .ftext{flex:1;}
+  .card.featured h2{font-size:26px; font-weight:800; margin-bottom:6px;}
+  .card.featured p{color:var(--ink-soft); font-size:15px;}
+  .card.featured .go{margin-top:14px;}
+
+  footer{
+    text-align:center; padding:40px 32px; color:var(--ink-faint); font-size:13px;
+  }
+
+  @media (max-width:640px){
+    .card.featured{flex-direction:column; align-items:flex-start; text-align:left;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero-eyebrow"><span class="hero-dot"></span> open to gta roles and freelance projects</div>
+  <h1 class="title">Sebastian Higa</h1>
+  <p class="subtitle">Industrial engineer, tool builder, DJ, and competitive defender. Pick what you want to see.</p>
+
+  <div class="grid">
+
+    <a class="card featured full" href="engineering.html">
+      <div class="ph">photo<br>400×400</div>
+      <div class="ftext">
+        <h2>Industrial Engineer — Sebastian Higa</h2>
+        <p>Full professional profile: experience in operations, semiconductor/MEMS, supply chain, and education.</p>
+        <span class="go" style="color:var(--c-eng);">View profile
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card auto" href="automations.html">
+      <div class="card-blob"></div>
+      <div class="card-icon">⚙</div>
+      <h3>Automations & Engineering Tools</h3>
+      <p>Python tools, inventory, order, and planning automation — including zaizai.ca.</p>
+      <span class="go">Explore tools
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <a class="card mkt" href="marketing.html">
+      <div class="card-blob"></div>
+      <div class="card-icon">◆</div>
+      <h3>Marketing</h3>
+      <p>Social media management, campaigns, and content — Meta Business Suite, TikTok for Business.</p>
+      <span class="go">See the work
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <a class="card dj" href="dj.html">
+      <div class="card-blob"></div>
+      <div class="card-icon">♪</div>
+      <h3>DJ Zech</h3>
+      <p>90+ events, DJ services, videos, and mixes. Book directly.</p>
+      <span class="go">See services
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <a class="card soccer" href="soccer.html">
+      <div class="card-blob"></div>
+      <div class="card-icon">●</div>
+      <h3>Soccer</h3>
+      <p>Player profile — competitive defender seeking an opportunity in the OPL circuit.</p>
+      <span class="go">View profile
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+  </div>
+</div>
+<footer>Sebastian Higa · Vancouver, BC → GTA</footer>
+</body>
+</html>
