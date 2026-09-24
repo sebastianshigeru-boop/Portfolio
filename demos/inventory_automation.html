@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventory automation demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --surface-0:#f7f6fb; --surface-1:#f3f2f8; --surface-2:#ffffff;
+  --border:rgba(20,16,40,.10); --border-strong:rgba(20,16,40,.20);
+  --text-primary:#18162a; --text-secondary:#5b5870; --text-muted:#8e8ba3;
+  --bg-pro:#efeaff; --text-pro:#6d3fe0; --border-pro:#c9b8fb;
+  --bg-success:#e6f6ec; --text-success:#1f7a44;
+  --bg-warning:#fdf3dc; --text-warning:#8a5a07;
+  --bg-danger:#fdecec; --text-danger:#b42323;
+  --radius:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --surface-0:#121118; --surface-1:#1c1a25; --surface-2:#22202c;
+    --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+    --text-primary:#f1effa; --text-secondary:#b3afc6; --text-muted:#817d96;
+    --bg-pro:#2e2550; --text-pro:#c7b6ff; --border-pro:#5b47a8;
+    --bg-success:#173524; --text-success:#8fdcaa;
+    --bg-warning:#3a2c0e; --text-warning:#f2c66a;
+    --bg-danger:#3d1717; --text-danger:#f4a3a3;
+  }
+}
+:root[data-theme="dark"]{
+  --surface-0:#121118; --surface-1:#1c1a25; --surface-2:#22202c;
+  --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+  --text-primary:#f1effa; --text-secondary:#b3afc6; --text-muted:#817d96;
+  --bg-pro:#2e2550; --text-pro:#c7b6ff; --border-pro:#5b47a8;
+  --bg-success:#173524; --text-success:#8fdcaa;
+  --bg-warning:#3a2c0e; --text-warning:#f2c66a;
+  --bg-danger:#3d1717; --text-danger:#f4a3a3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:transparent}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text-primary);padding:16px;-webkit-font-smoothing:antialiased}
+.demo{max-width:720px;margin:0 auto}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+button{font:inherit;font-size:13px;color:var(--text-primary);background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap}
+button:hover{background:var(--surface-1)}
+button:active{transform:scale(.98)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--text-pro);outline-offset:2px}
+input[type=range]{accent-color:#8b5cf6}
+input[type=checkbox]{accent-color:#8b5cf6;width:16px;height:16px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:560px){.stack{grid-template-columns:1fr!important}.hide-sm{display:none!important}}
+</style>
+</head>
+<body>
+<div class="demo">
+<h2 class="sr-only">Inventory reconciliation showing monthly flows between inspection, OQA, ATP, shipped, rework and scrap, with a balance check.</h2>
+<style>
+.iw{border:0.5px solid var(--border);border-radius:12px;background:var(--surface-2);overflow:hidden;font-size:13px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-bottom:0.5px solid var(--border);flex-wrap:wrap}
+.fl{display:grid;grid-template-columns:1fr 34px 1fr 34px 1fr 34px 1fr 34px 1fr;gap:4px;align-items:center}
+.nd{border-radius:var(--radius);padding:8px 4px;text-align:center}
+.nd b{display:block;font-weight:500;font-size:13px}
+.nd span{font-size:11px}
+.ar{text-align:center;color:var(--text-secondary);font-size:12px}
+.ar i{display:block;font-size:16px}
+.num{font-weight:500;color:var(--text-primary)}
+.pro{background:var(--bg-pro);color:var(--text-pro)}
+.neu{background:var(--surface-1)}
+.mt{background:var(--surface-1);border-radius:var(--radius);padding:10px 12px}
+.mt span{font-size:12px;color:var(--text-secondary)}
+.mt div{font-size:20px;font-weight:500}
+.scroll{overflow-x:auto}
+.scroll>div{min-width:560px}
+</style>
+<div class="iw">
+<div class="bar">
+<div style="display:flex;align-items:center;gap:8px;font-weight:500"><i class="ti ti-arrows-exchange" style="font-size:18px;color:var(--text-pro)" aria-hidden="true"></i>Inventory reconciliation</div>
+<div style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--text-secondary)"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i>Sep 1 snapshot <i class="ti ti-arrow-right" aria-hidden="true"></i> Sep 30 snapshot</div>
+</div>
+<div style="padding:16px">
+<div class="scroll"><div>
+<div class="fl">
+<div class="nd neu"><b>Receipts</b><span class="num" data-v="2000">0</span></div>
+<div class="ar"><span class="num" data-v="2000">0</span><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+<div class="nd pro"><b>Inspection</b><span>1,200 to 800</span></div>
+<div class="ar"><span class="num" data-v="2300">0</span><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+<div class="nd pro"><b>OQA</b><span>300 to 250</span></div>
+<div class="ar"><span class="num" data-v="2350">0</span><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+<div class="nd pro"><b>ATP</b><span>900 to 1,100</span></div>
+<div class="ar"><span class="num" data-v="2230">0</span><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+<div class="nd neu"><b>Shipped</b><span class="num" data-v="2230">0</span></div>
+</div>
+<div class="fl" style="margin-top:6px">
+<div></div><div></div>
+<div class="ar"><i class="ti ti-arrow-down" aria-hidden="true"></i><span class="num" data-v="100">0</span></div>
+<div></div><div></div><div></div>
+<div class="ar"><i class="ti ti-arrow-up" aria-hidden="true"></i><span class="num" data-v="80">0</span></div>
+<div></div><div></div>
+</div>
+<div class="fl">
+<div></div><div></div>
+<div class="nd" style="background:var(--bg-danger);color:var(--text-danger)"><b>Scrap</b><span>from inspection</span></div>
+<div></div><div></div><div></div>
+<div class="nd neu"><b>Rework</b><span>80 to 0</span></div>
+<div></div><div></div>
+</div>
+</div></div>
+<div class="stack" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px">
+<div class="mt"><span>Opening plus receipts</span><div>4,520</div></div>
+<div class="mt"><span>Closing plus shipped plus scrap</span><div>4,520</div></div>
+<div class="mt" style="background:var(--bg-success)"><span style="color:var(--text-success)">Unexplained units</span><div style="color:var(--text-success)" id="bal">?</div></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;flex-wrap:wrap">
+<div style="font-size:12px;padding:6px 10px;border-radius:var(--radius);background:var(--bg-warning);color:var(--text-warning)"><i class="ti ti-alert-triangle" aria-hidden="true" style="margin-right:4px"></i>Lot W2291: 40 units on Hold for 21 days</div>
+<button id="run"><i class="ti ti-player-play" aria-hidden="true" style="margin-right:6px"></i>Run reconciliation</button>
+</div>
+</div>
+</div>
+<script>
+(function(){
+const bal=document.getElementById('bal');
+function run(){bal.textContent='?';document.querySelectorAll('.num').forEach(el=>{const v=+el.dataset.v;const s=performance.now();(function f(n){const t=Math.min((n-s)/700,1);el.textContent=Math.round(v*t).toLocaleString('en-US');if(t<1)requestAnimationFrame(f)})(s)});setTimeout(()=>{bal.textContent='0'},750)}
+document.getElementById('run').addEventListener('click',run);run();
+})();
+</script>
+</div>
+<script>
+(function(){function send(){parent.postMessage({type:"demo-height",id:document.title,height:document.documentElement.scrollHeight},"*")}
+window.addEventListener("load",send);new ResizeObserver(send).observe(document.body)})();
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automatic order generator demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --surface-0:#f7f6fb; --surface-1:#f3f2f8; --surface-2:#ffffff;
+  --border:rgba(20,16,40,.10); --border-strong:rgba(20,16,40,.20);
+  --text-primary:#18162a; --text-secondary:#5b5870; --text-muted:#8e8ba3;
+  --bg-pro:#efeaff; --text-pro:#6d3fe0; --border-pro:#c9b8fb;
+  --bg-success:#e6f6ec; --text-success:#1f7a44;
+  --bg-warning:#fdf3dc; --text-warning:#8a5a07;
+  --bg-danger:#fdecec; --text-danger:#b42323;
+  --radius:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --surface-0:#121118; --surface-1:#1c1a25; --surface-2:#22202c;
+    --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+    --text-primary:#f1effa; --text-secondary:#b3afc6; --text-muted:#817d96;
+    --bg-pro:#2e2550; --text-pro:#c7b6ff; --border-pro:#5b47a8;
+    --bg-success:#173524; --text-success:#8fdcaa;
+    --bg-warning:#3a2c0e; --text-warning:#f2c66a;
+    --bg-danger:#3d1717; --text-danger:#f4a3a3;
+  }
+}
+:root[data-theme="dark"]{
+  --surface-0:#121118; --surface-1:#1c1a25; --surface-2:#22202c;
+  --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+  --text-primary:#f1effa; --text-secondary:#b3afc6; --text-muted:#817d96;
+  --bg-pro:#2e2550; --text-pro:#c7b6ff; --border-pro:#5b47a8;
+  --bg-success:#173524; --text-success:#8fdcaa;
+  --bg-warning:#3a2c0e; --text-warning:#f2c66a;
+  --bg-danger:#3d1717; --text-danger:#f4a3a3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:transparent}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text-primary);padding:16px;-webkit-font-smoothing:antialiased}
+.demo{max-width:720px;margin:0 auto}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+button{font:inherit;font-size:13px;color:var(--text-primary);background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap}
+button:hover{background:var(--surface-1)}
+button:active{transform:scale(.98)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--text-pro);outline-offset:2px}
+input[type=range]{accent-color:#8b5cf6}
+input[type=checkbox]{accent-color:#8b5cf6;width:16px;height:16px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:560px){.stack{grid-template-columns:1fr!important}.hide-sm{display:none!important}}
+</style>
+</head>
+<body>
+<div class="demo">
+<h2 class="sr-only">Order generator: select pending shipments and generate an invoice, packing slip and export declaration flag automatically.</h2>
+<style>
+.ow{border:0.5px solid var(--border);border-radius:12px;background:var(--surface-2);overflow:hidden;font-size:13px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-bottom:0.5px solid var(--border);flex-wrap:wrap}
+.it{display:flex;align-items:center;gap:10px;padding:9px 10px;border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:6px;cursor:pointer}
+.it.on{border-color:var(--border-pro);background:var(--bg-pro)}
+.it input{margin:0}
+.dl{display:flex;justify-content:space-between;gap:8px;padding:4px 0;font-size:12px}
+.ch{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 9px;border-radius:var(--radius);background:var(--bg-pro);color:var(--text-pro)}
+</style>
+<div class="ow">
+<div class="bar">
+<div style="display:flex;align-items:center;gap:8px;font-weight:500"><i class="ti ti-file-invoice" style="font-size:18px;color:var(--text-pro)" aria-hidden="true"></i>Order generator</div>
+<span style="font-size:12px;color:var(--text-secondary)">5 shipments ready this week</span>
+</div>
+<div class="stack" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;padding:16px">
+<div id="list"></div>
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:12px 14px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:500">Commercial invoice</span><span style="font-size:11px;color:var(--text-muted)">INV 2026 0418</span></div>
+<div style="font-size:12px;color:var(--text-secondary);margin:2px 0 8px" id="to"></div>
+<div id="lines" style="border-top:0.5px solid var(--border);padding-top:6px"></div>
+<div class="dl" style="border-top:0.5px solid var(--border);margin-top:6px;padding-top:8px;font-size:13px"><span style="font-weight:500">Total</span><span style="font-weight:500" id="tot">$0</span></div>
+<div id="flag" style="margin-top:8px"></div>
+</div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px 16px;flex-wrap:wrap">
+<div id="out" style="display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--text-secondary)">Nothing generated yet</div>
+<button id="gen"><i class="ti ti-bolt" aria-hidden="true" style="margin-right:6px"></i><span id="gl">Generate</span></button>
+</div>
+</div>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const S=[{po:"PO 4471",c:"Northwind Sensors",p:"MX5 accelerometer die",q:1200,u:0.85,on:true},{po:"PO 4502",c:"Northwind Sensors",p:"MX7 pressure die",q:600,u:1.40,on:true},{po:"PO 4519",c:"Orion Labs",p:"MX9 gyro die",q:250,u:2.10,on:false},{po:"PO 4533",c:"Kestrel Devices",p:"MX11 mirror array",q:40,u:18.50,on:false},{po:"PO 4540",c:"Northwind Sensors",p:"MX13 microphone die",q:900,u:0.60,on:false}];
+const money=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const total=sel=>sel.reduce((a,s)=>a+s.q*s.u,0);
+function render(){
+$('list').innerHTML=S.map((s,i)=>'<label class="it'+(s.on?' on':'')+'"><input type="checkbox" data-i="'+i+'" '+(s.on?'checked':'')+'><div style="flex:1;min-width:0"><div style="font-weight:500'+(s.on?';color:var(--text-pro)':'')+'">'+s.po+' <span style="font-weight:400;color:var(--text-secondary)">· '+s.c+'</span></div><div style="font-size:12px;color:var(--text-secondary)">'+s.q.toLocaleString('en-US')+' pcs · '+s.p+'</div></div></label>').join('');
+const sel=S.filter(s=>s.on),t=total(sel);
+$('lines').innerHTML=sel.length?sel.map(s=>'<div class="dl"><span>'+s.po+' · '+s.q.toLocaleString('en-US')+' × '+money(s.u)+'</span><span>'+money(s.q*s.u)+'</span></div>').join(''):'<div class="dl" style="color:var(--text-muted)">Select a shipment</div>';
+$('tot').textContent=money(t);
+const cs=[...new Set(sel.map(s=>s.c))];$('to').textContent='Bill to: '+(cs.length>1?cs.length+' customers, 1 invoice each':(cs[0]||'n/a'));
+$('flag').innerHTML=t>2000?'<div style="font-size:12px;padding:6px 10px;border-radius:var(--radius);background:var(--bg-warning);color:var(--text-warning)"><i class="ti ti-alert-triangle" aria-hidden="true" style="margin-right:4px"></i>Over $2,000: CERS export declaration required</div>':(sel.length?'<div style="font-size:12px;padding:6px 10px;border-radius:var(--radius);background:var(--bg-success);color:var(--text-success)"><i class="ti ti-check" aria-hidden="true" style="margin-right:4px"></i>No export declaration needed</div>':'');
+$('gl').textContent=sel.length?'Generate '+(sel.length*2+(t>2000?1:0))+' documents':'Generate';
+$('list').querySelectorAll('input').forEach(c=>c.addEventListener('change',e=>{S[+e.target.dataset.i].on=e.target.checked;$('out').textContent='Nothing generated yet';render()}));}
+$('gen').addEventListener('click',()=>{const sel=S.filter(s=>s.on);if(!sel.length){$('out').innerHTML='<span style="color:var(--text-danger)">Select at least one shipment</span>';return}
+let h=sel.map(s=>{const id=s.po.replace(' ','_');return '<span class="ch"><i class="ti ti-file-type-pdf" aria-hidden="true"></i>'+id+'_invoice.pdf</span><span class="ch"><i class="ti ti-package" aria-hidden="true"></i>'+id+'_packing.pdf</span>'}).join('');
+if(total(sel)>2000)h+='<span class="ch" style="background:var(--bg-warning);color:var(--text-warning)"><i class="ti ti-file-certificate" aria-hidden="true"></i>CERS_draft.pdf</span>';$('out').innerHTML=h;});
+render();
+})();
+</script>
+</div>
+<script>
+(function(){function send(){parent.postMessage({type:"demo-height",id:document.title,height:document.documentElement.scrollHeight},"*")}
+window.addEventListener("load",send);new ResizeObserver(send).observe(document.body)})();
+</script>
+</body>
+</html>

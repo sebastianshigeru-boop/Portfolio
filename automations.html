@@ -81,6 +81,12 @@
   .ph .icon{font-size:22px; opacity:0.6;}
   .ph .dim{font-weight:700; color:var(--ink-soft);}
 
+  .demo-block{margin-top:4px;}
+  .demo-label{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--accent); margin-bottom:10px;}
+  .demo-label::before{content:''; width:7px; height:7px; border-radius:50%; background:#12A150;}
+  .demo-frame{display:block; width:100%; border:0; border-radius:var(--radius-md); background:var(--bg);}
+  .demo-caption{font-size:12.5px; color:var(--ink-faint); margin-top:10px;}
+
   .result-strip{
     display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;
   }
@@ -92,6 +98,7 @@
   @media (max-width:680px){
     .panel-body-grid{grid-template-columns:1fr;}
     .panel{padding:26px;}
+    .panel .demo-frame{margin:0 -12px; width:calc(100% + 24px);}
   }
 </style>
 </head>
@@ -122,9 +129,10 @@
         <span class="stack-tag">Python</span><span class="stack-tag">pywebview</span><span class="stack-tag">SQLite</span><span class="stack-tag">Plotly.js</span><span class="stack-tag">Tabulator.js</span>
       </div>
     </div>
-    <div class="panel-body-grid">
-      <div class="ph"><span class="icon">▤</span><span>screenshot — weekly Gantt view</span><span class="dim">800×500 px</span></div>
-      <div class="ph"><span class="icon">▤</span><span>screenshot — order editing panel</span><span class="dim">800×500 px</span></div>
+    <div class="demo-block">
+      <div class="demo-label">Live demo</div>
+      <iframe class="demo-frame" src="demos/production_scheduling.html" title="Production and scheduling demo" loading="lazy" style="height:560px"></iframe>
+      <p class="demo-caption">Interactive demo with sample data. The original runs as a Python desktop app.</p>
     </div>
     <div class="result-strip"><span class="result-pill">12,000+ units planned/week</span></div>
   </div>
@@ -137,12 +145,13 @@
         <p class="desc">Tool that detects discrepancies between physical and recorded inventory, using a flow-conservation solver to trace the source of the mismatch.</p>
       </div>
       <div class="stack-tags">
-        <span class="stack-tag">Python</span><span class="stack-tag">Flow solver</span><span class="stack-tag">Excel export</span>
+        <span class="stack-tag">Python</span><span class="stack-tag">openpyxl</span><span class="stack-tag">Flow solver</span><span class="stack-tag">Excel export</span>
       </div>
     </div>
-    <div class="panel-body-grid">
-      <div class="ph"><span class="icon">▤</span><span>screenshot — discrepancy report</span><span class="dim">800×500 px</span></div>
-      <div class="ph"><span class="icon">▤</span><span>screenshot — reconciliation view</span><span class="dim">800×500 px</span></div>
+    <div class="demo-block">
+      <div class="demo-label">Live demo</div>
+      <iframe class="demo-frame" src="demos/inventory_automation.html" title="Inventory automation demo" loading="lazy" style="height:470px"></iframe>
+      <p class="demo-caption">Interactive demo with sample data. The original runs as a Python desktop app.</p>
     </div>
   </div>
 
@@ -157,9 +166,10 @@
         <span class="stack-tag">Python</span><span class="stack-tag">Document extraction</span><span class="stack-tag">AI-assisted</span>
       </div>
     </div>
-    <div class="panel-body-grid">
-      <div class="ph"><span class="icon">▤</span><span>screenshot — before/after extraction</span><span class="dim">800×500 px</span></div>
-      <div class="ph"><span class="icon">▤</span><span>screenshot — exported structured data</span><span class="dim">800×500 px</span></div>
+    <div class="demo-block">
+      <div class="demo-label">Live demo</div>
+      <iframe class="demo-frame" src="demos/order_generator.html" title="Automatic order generator demo" loading="lazy" style="height:560px"></iframe>
+      <p class="demo-caption">Interactive demo with sample data. The original runs as a Python desktop app.</p>
     </div>
   </div>
 
@@ -171,12 +181,13 @@
         <p class="desc">Script that automatically syncs the shipping summary with the work plan, keeping both documents aligned with no manual intervention.</p>
       </div>
       <div class="stack-tags">
-        <span class="stack-tag">Python</span><span class="stack-tag">Document automation</span>
+        <span class="stack-tag">Python</span><span class="stack-tag">openpyxl</span><span class="stack-tag">Document automation</span>
       </div>
     </div>
-    <div class="panel-body-grid">
-      <div class="ph"><span class="icon">▤</span><span>screenshot — sync flow</span><span class="dim">800×500 px</span></div>
-      <div class="ph"><span class="icon">▤</span><span>screenshot — result in work plan</span><span class="dim">800×500 px</span></div>
+    <div class="demo-block">
+      <div class="demo-label">Live demo</div>
+      <iframe class="demo-frame" src="demos/sales_planning_sync.html" title="Sales and planning sync demo" loading="lazy" style="height:400px"></iframe>
+      <p class="demo-caption">Interactive demo with sample data. The original runs as a Python desktop app.</p>
     </div>
   </div>
 
@@ -193,7 +204,7 @@
     </div>
     <div class="panel-body-grid">
       <img class="ph" src="assets/automations/zaizai-landing.png" alt="zaizai.ca landing page" style="padding:0; border:none; object-fit:cover; object-position:top; width:100%;">
-      <div class="ph"><span class="icon">▤</span><span>screenshot — AI resume generator</span><span class="dim">800×500 px</span></div>
+      <img class="ph" src="assets/automations/zaizai-resume-template.png" alt="Resume template generated by zaizai.ca" style="padding:0; border:1.5px solid #ECEAF3; background:#fff; object-fit:cover; object-position:top; width:100%;">
     </div>
     <div class="result-strip">
       <a href="https://zaizai.ca" target="_blank" rel="noopener" style="text-decoration:none;">
@@ -215,6 +226,23 @@
       document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
     });
   });
+
+  // Demos report their height; this page is light-only, so pin the demos to light.
+  const frames = document.querySelectorAll('.demo-frame');
+  // The reported height never drops below the iframe's own height, so measure the body when we can.
+  function fit(f, reported) {
+    let h = reported;
+    try { h = f.contentDocument.body.getBoundingClientRect().height || reported; } catch (err) {}
+    f.style.height = Math.ceil(h) + 'px';
+  }
+  window.addEventListener('message', e => {
+    if (!e.data || e.data.type !== 'demo-height') return;
+    frames.forEach(f => { if (f.contentWindow === e.source) fit(f, e.data.height); });
+  });
+  frames.forEach(f => f.addEventListener('load', () => {
+    try { f.contentDocument.documentElement.dataset.theme = 'light'; } catch (err) {}
+    fit(f, parseFloat(f.style.height));
+  }));
 </script>
 </body>
 </html>
