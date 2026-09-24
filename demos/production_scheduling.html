@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Production and scheduling demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --surface-0:#f7f6fb; --surface-1:#f3f2f8; --surface-2:#ffffff;
+  --border:rgba(20,16,40,.10); --border-strong:rgba(20,16,40,.20);
+  --text-primary:#18162a; --text-secondary:#5b5870; --text-muted:#8e8ba3;
+  --bg-pro:#efeaff; --text-pro:#6d3fe0; --border-pro:#c9b8fb;
+  --bg-success:#e6f6ec; --text-success:#1f7a44;
+  --bg-warning:#fdf3dc; --text-warning:#8a5a07;
+  --bg-danger:#fdecec; --text-danger:#b42323;
+  --radius:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --surface-0:#121118; --surface-1:#1c1a25; --surface-2:#22202c;
+    --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+    --text-primary:#f1effa; --text-secondary:#b3afc6; --text-muted:#817d96;
+    --bg-pro:#2e2550; --text-pro:#c7b6ff; --border-pro:#5b47a8;
+    --bg-success:#173524; --text-success:#8fdcaa;
+    --bg-warning:#3a2c0e; --text-warning:#f2c66a;
+    --bg-danger:#3d1717; --text-danger:#f4a3a3;
+  }
+}
+:root[data-theme="dark"]{
+  --surface-0:#121118; --surface-1:#1c1a25; --surface-2:#22202c;
+  --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+  --text-primary:#f1effa; --text-secondary:#b3afc6; --text-muted:#817d96;
+  --bg-pro:#2e2550; --text-pro:#c7b6ff; --border-pro:#5b47a8;
+  --bg-success:#173524; --text-success:#8fdcaa;
+  --bg-warning:#3a2c0e; --text-warning:#f2c66a;
+  --bg-danger:#3d1717; --text-danger:#f4a3a3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:transparent}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text-primary);padding:16px;-webkit-font-smoothing:antialiased}
+.demo{max-width:720px;margin:0 auto}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+button{font:inherit;font-size:13px;color:var(--text-primary);background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap}
+button:hover{background:var(--surface-1)}
+button:active{transform:scale(.98)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--text-pro);outline-offset:2px}
+input[type=range]{accent-color:#8b5cf6}
+input[type=checkbox]{accent-color:#8b5cf6;width:16px;height:16px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:560px){.stack{grid-template-columns:1fr!important}.hide-sm{display:none!important}}
+</style>
+</head>
+<body>
+<div class="demo">
+<h2 class="sr-only">Production planner with a Gantt chart that reschedules orders based on available FTE capacity.</h2>
+<style>
+.pw{border:0.5px solid var(--border);border-radius:12px;background:var(--surface-2);overflow:hidden;font-size:13px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-bottom:0.5px solid var(--border);flex-wrap:wrap}
+.kps{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.kp{background:var(--surface-1);border-radius:var(--radius);padding:10px 12px}
+.kp span{display:block;font-size:12px;color:var(--text-secondary)}
+.kp b{font-size:20px;font-weight:500}
+.gr{display:grid;grid-template-columns:130px minmax(0,1fr);align-items:center;height:38px;border-top:0.5px solid var(--border)}
+.ln{position:relative;height:100%}
+.tab{padding:4px 10px;border-radius:var(--radius);font-size:12px;color:var(--text-secondary)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+</style>
+<div class="pw">
+<div class="bar">
+<div style="display:flex;align-items:center;gap:8px;font-weight:500"><i class="ti ti-calendar-stats" style="font-size:18px;color:var(--text-pro)" aria-hidden="true"></i>Production planner</div>
+<div style="display:flex;gap:4px" class="hide-sm"><span class="tab">Work plan</span><span class="tab" style="background:var(--bg-pro);color:var(--text-pro)">Gantt</span><span class="tab">Skill matrix</span><span class="tab">Holidays</span></div>
+</div>
+<div style="padding:14px 16px">
+<div class="kps">
+<div class="kp"><span>Open orders</span><b>7</b></div>
+<div class="kp"><span>On time</span><b id="k1">6/7</b></div>
+<div class="kp"><span>Daily capacity</span><b id="k2">5.5 FTE</b></div>
+<div class="kp"><span>Plan finishes</span><b id="k3">Oct 14</b></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap">
+<label for="fte" style="font-size:12px;color:var(--text-secondary);white-space:nowrap">Available FTE</label>
+<input type="range" id="fte" min="3" max="8" step="0.5" value="5.5" style="flex:1;min-width:120px">
+<span id="fo" style="font-weight:500;min-width:34px">5.5</span>
+<span style="font-size:12px;padding:3px 8px;border-radius:var(--radius);background:var(--bg-warning);color:var(--text-warning)">Oct 12 holiday skipped</span>
+</div>
+<div id="g"></div>
+<div style="display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--text-secondary);flex-wrap:wrap">
+<span><i class="sw" style="background:#b8a4f7"></i>Inspection</span>
+<span><i class="sw" style="background:#5dcaa5"></i>OQA</span>
+<span><i class="sw" style="border:1.5px solid #e24b4a"></i>Late vs target</span>
+<span><i class="sw" style="width:2px;background:var(--text-muted)"></i>Customer target</span>
+</div>
+</div>
+</div>
+<script>
+(function(){
+const days=["Oct 5","Oct 6","Oct 7","Oct 8","Oct 9","Oct 13","Oct 14","Oct 15","Oct 16","Oct 19"];
+const O=[{po:"PO 4471",d:"MX5 · Northwind",f:4.5,t:2},{po:"PO 4502",d:"MX7 · Veltra",f:6,t:3},{po:"PO 4502",d:"MX7 · Veltra",f:3,t:4},{po:"PO 4519",d:"MX9 · Orion",f:8,t:3},{po:"PO 4533",d:"MX11 · Kestrel",f:5,t:6},{po:"PO 4540",d:"MX5 · Northwind",f:7,t:7},{po:"PO 4551",d:"MX13 · Aurel",f:4,t:8}];
+const N=10,$=id=>document.getElementById(id);
+function render(){
+const C=parseFloat($('fte').value);$('fo').textContent=C.toFixed(1);
+let h='<div class="gr" style="border-top:none;height:24px"><div></div><div style="display:grid;grid-template-columns:repeat(10,1fr)">'+days.map(d=>'<div style="font-size:11px;color:var(--text-muted);text-align:center">'+d+'</div>').join('')+'</div></div>';
+let cum=0,ok=0,last=0;
+O.forEach(o=>{const s=cum/C;cum+=o.f;const e=cum/C;const end=Math.ceil(e-1e-9);const late=end>o.t;if(!late)ok++;last=Math.max(last,end);
+const L=Math.min(s/N*100,100),W=Math.max(Math.min(e/N*100,100)-L,0);
+let cells='';for(let i=0;i<N;i++)cells+='<div style="position:absolute;top:0;bottom:0;left:'+(i*10)+'%;border-left:0.5px solid var(--border)"></div>';
+h+='<div class="gr"><div><div style="font-weight:500">'+o.po+'</div><div style="font-size:11px;color:var(--text-secondary)">'+o.d+'</div></div><div class="ln">'+cells+
+'<div style="position:absolute;top:9px;height:20px;left:'+L+'%;width:'+W+'%;display:flex;border-radius:4px;overflow:hidden;transition:all .35s;'+(late?'outline:1.5px solid #e24b4a;':'')+'"><div style="flex:4;background:#b8a4f7"></div><div style="flex:1;background:#5dcaa5"></div></div>'+
+'<div style="position:absolute;top:4px;bottom:4px;left:calc('+(o.t*10)+'% - 1px);width:2px;background:var(--text-muted)"></div></div></div>';});
+$('g').innerHTML=h;
+$('k1').textContent=ok+'/7';$('k1').style.color=ok<7?'var(--text-danger)':'var(--text-success)';
+$('k2').textContent=C.toFixed(1)+' FTE';$('k3').textContent=last>N?'Oct 19+':days[last-1];}
+$('fte').addEventListener('input',render);render();
+})();
+</script>
+</div>
+<script>
+(function(){function send(){parent.postMessage({type:"demo-height",id:document.title,height:document.documentElement.scrollHeight},"*")}
+window.addEventListener("load",send);new ResizeObserver(send).observe(document.body)})();
+</script>
+</body>
+</html>

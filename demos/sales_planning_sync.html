@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales and planning sync demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --surface-0:#f7f6fb; --surface-1:#f3f2f8; --surface-2:#ffffff;
+  --border:rgba(20,16,40,.10); --border-strong:rgba(20,16,40,.20);
+  --text-primary:#18162a; --text-secondary:#5b5870; --text-muted:#8e8ba3;
+  --bg-pro:#efeaff; --text-pro:#6d3fe0; --border-pro:#c9b8fb;
+  --bg-success:#e6f6ec; --text-success:#1f7a44;
+  --bg-warning:#fdf3dc; --text-warning:#8a5a07;
+  --bg-danger:#fdecec; --text-danger:#b42323;
+  --radius:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --surface-0:#121118; --surface-1:#1c1a25; --surface-2:#22202c;
+    --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+    --text-primary:#f1effa; --text-secondary:#b3afc6; --text-muted:#817d96;
+    --bg-pro:#2e2550; --text-pro:#c7b6ff; --border-pro:#5b47a8;
+    --bg-success:#173524; --text-success:#8fdcaa;
+    --bg-warning:#3a2c0e; --text-warning:#f2c66a;
+    --bg-danger:#3d1717; --text-danger:#f4a3a3;
+  }
+}
+:root[data-theme="dark"]{
+  --surface-0:#121118; --surface-1:#1c1a25; --surface-2:#22202c;
+  --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+  --text-primary:#f1effa; --text-secondary:#b3afc6; --text-muted:#817d96;
+  --bg-pro:#2e2550; --text-pro:#c7b6ff; --border-pro:#5b47a8;
+  --bg-success:#173524; --text-success:#8fdcaa;
+  --bg-warning:#3a2c0e; --text-warning:#f2c66a;
+  --bg-danger:#3d1717; --text-danger:#f4a3a3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:transparent}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text-primary);padding:16px;-webkit-font-smoothing:antialiased}
+.demo{max-width:720px;margin:0 auto}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+button{font:inherit;font-size:13px;color:var(--text-primary);background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap}
+button:hover{background:var(--surface-1)}
+button:active{transform:scale(.98)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--text-pro);outline-offset:2px}
+input[type=range]{accent-color:#8b5cf6}
+input[type=checkbox]{accent-color:#8b5cf6;width:16px;height:16px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:560px){.stack{grid-template-columns:1fr!important}.hide-sm{display:none!important}}
+</style>
+</head>
+<body>
+<div class="demo">
+<h2 class="sr-only">Sync tool: rows from the shipping summary are pushed into the production work plan, skipping duplicates and filling stock from ATP.</h2>
+<style>
+.sw{border:0.5px solid var(--border);border-radius:12px;background:var(--surface-2);overflow:hidden;font-size:12px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-bottom:0.5px solid var(--border);flex-wrap:wrap}
+.tb{width:100%;table-layout:fixed;border-collapse:collapse}
+.tb th{font-weight:500;text-align:left;color:var(--text-secondary);padding:6px;border-bottom:0.5px solid var(--border);font-size:11px}
+.tb td{padding:6px;border-bottom:0.5px solid var(--border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb tr.new td{background:var(--bg-pro);color:var(--text-pro)}
+.pn{background:var(--surface-1);border-radius:var(--radius);padding:10px 10px 4px}
+.hd{display:flex;align-items:center;gap:6px;font-weight:500;font-size:13px;margin-bottom:6px}
+.cp{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:var(--radius)}
+</style>
+<div class="sw">
+<div class="bar">
+<div style="display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px"><i class="ti ti-refresh" style="font-size:18px;color:var(--text-pro)" aria-hidden="true"></i>Sales and planning sync</div>
+<span id="st" style="font-size:12px;color:var(--text-secondary)">Last sync: yesterday 4:12 PM</span>
+</div>
+<div class="stack" style="display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1.15fr);gap:6px;padding:16px;align-items:start">
+<div class="pn"><div class="hd"><i class="ti ti-truck-delivery" aria-hidden="true"></i>Shipping summary</div>
+<table class="tb"><thead><tr><th style="width:30%">Invoice</th><th style="width:26%">CRSD</th><th>MEMS</th><th style="width:20%">Qty</th></tr></thead><tbody id="src"></tbody></table></div>
+<div class="hide-sm" style="text-align:center;padding-top:70px;color:var(--text-pro)"><i class="ti ti-arrow-right" style="font-size:20px" aria-hidden="true"></i></div>
+<div class="pn"><div class="hd"><i class="ti ti-layout-kanban" aria-hidden="true"></i>Work plan</div>
+<table class="tb"><thead><tr><th style="width:27%">Invoice</th><th style="width:24%">Planned wk</th><th>Device</th><th style="width:16%">Qty</th><th style="width:16%">Stock</th></tr></thead><tbody id="dst"></tbody></table></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px 16px;flex-wrap:wrap">
+<div id="log" style="display:flex;gap:6px;flex-wrap:wrap;color:var(--text-secondary)">2 new orders waiting in the shipping summary</div>
+<button id="go"><i class="ti ti-refresh" aria-hidden="true" style="margin-right:6px"></i><span id="gol">Sync now</span></button>
+</div>
+</div>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const R=[{i:"INV 3301",d:"12 Oct 2026",m:"MX5",q:"3,200",s:"1,150",old:1},{i:"INV 3302",d:"14 Oct 2026",m:"MX7",q:"1,800",s:"420",old:1},{i:"INV 3309",d:"19 Oct 2026",m:"MX9",q:"2,400",s:"610"},{i:"INV 3310",d:"21 Oct 2026",m:"MX11",q:"900",s:"0"},{i:"INV 3302",d:"14 Oct 2026",m:"MX7",q:"1,800",s:"420",dup:1}];
+$('src').innerHTML=R.map(r=>'<tr><td>'+r.i+'</td><td>'+r.d.slice(0,6)+'</td><td>'+r.m+'</td><td>'+r.q+'</td></tr>').join('');
+function draw(all){$('dst').innerHTML=R.filter(r=>!r.dup&&(r.old||all)).map(r=>'<tr'+(all&&!r.old?' class="new"':'')+'><td>'+r.i+'</td><td>'+r.d+'</td><td>'+r.m+'</td><td>'+r.q+'</td><td>'+r.s+'</td></tr>').join('')}
+const chip=(bg,tx,ic,t)=>'<span class="cp" style="background:'+bg+';color:'+tx+'"><i class="ti '+ic+'" aria-hidden="true"></i>'+t+'</span>';
+draw(false);let done=false;
+$('go').addEventListener('click',()=>{if(done){$('log').innerHTML='<span>Already up to date. No changes.</span>';return}
+$('gol').textContent='Syncing';
+setTimeout(()=>{draw(true);done=true;$('gol').textContent='Sync now';$('st').textContent='Last sync: just now, 0.8 s';
+$('log').innerHTML=chip('var(--bg-pro)','var(--text-pro)','ti-plus','2 rows added')+chip('var(--surface-1)','var(--text-secondary)','ti-copy-off','3 duplicates skipped')+chip('var(--bg-success)','var(--text-success)','ti-database','Stock filled from ATP')+chip('var(--bg-success)','var(--text-success)','ti-palette','Formatting untouched');},650)});
+})();
+</script>
+</div>
+<script>
+(function(){function send(){parent.postMessage({type:"demo-height",id:document.title,height:document.documentElement.scrollHeight},"*")}
+window.addEventListener("load",send);new ResizeObserver(send).observe(document.body)})();
+</script>
+</body>
+</html>
