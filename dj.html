@@ -52,13 +52,20 @@
   p.lede{font-size:16.5px; color:var(--ink-soft); max-width:640px; line-height:1.65; margin:18px 0 44px;}
   p.lede strong{color:var(--neon); font-weight:600;}
 
-  .tool-nav{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:40px;}
+  .nav-hint{font-size:13px; font-weight:600; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.08em; margin:22px 0 14px;}
+  .tool-nav{display:flex; flex-wrap:wrap; gap:12px; margin-bottom:40px;}
   .tool-btn{
-    background:var(--surface); border:1px solid #23271F; border-radius:100px;
-    padding:12px 22px; font-family:'Inter'; font-size:14px; font-weight:600;
-    color:var(--ink-soft); cursor:pointer; transition:all 0.2s ease;
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--surface); border:1.5px solid #3A4034; border-radius:16px;
+    padding:16px 24px; font-family:'Inter', sans-serif; font-size:16px; font-weight:600;
+    color:#fff; cursor:pointer; transition:all 0.2s ease;
   }
-  .tool-btn:hover{color:var(--neon); border-color:var(--neon-dim);}
+  .tool-btn .chev{font-size:18px; line-height:1; color:var(--ink-soft); transition:transform 0.2s ease;}
+  .tool-btn:hover{color:var(--neon); border-color:var(--neon); transform:translateY(-2px);}
+  .tool-btn:hover .chev{color:var(--neon); transform:translateX(3px);}
+  .tool-btn:focus-visible{outline:3px solid rgba(57,255,110,0.4); outline-offset:2px;}
+  .tool-btn.active:hover{color:#06170B;}
+  .tool-btn.active .chev{color:#06170B; transform:rotate(90deg);}
   .tool-btn.active{
     background:var(--neon); color:#06170B; border-color:var(--neon);
     box-shadow:0 0 22px rgba(57,255,110,0.45);
@@ -69,7 +76,7 @@
 
   /* ---------- HOME PANEL ---------- */
   .hero-photo{
-    width:100%; height:340px; object-fit:cover; border-radius:var(--radius-lg);
+    width:100%; height:420px; object-fit:cover; object-position:center 30%; border-radius:var(--radius-lg);
     margin-bottom:32px; border:1px solid #23271F;
   }
   .bio-full{max-width:760px; margin-bottom:20px;}
@@ -156,6 +163,9 @@
   @media (max-width:760px){
     .home-grid{grid-template-columns:1fr;}
     .form-row{grid-template-columns:1fr;}
+    .tool-nav{display:grid; grid-template-columns:1fr;}
+    .tool-btn{justify-content:space-between;}
+    .hero-photo{height:300px;}
   }
 </style>
 </head>
@@ -168,15 +178,16 @@
     <h1 class="title">DJ ZECH</h1>
   </div>
 
+  <div class="nav-hint">Tap a section to explore ↓</div>
   <div class="tool-nav" id="toolNav">
-    <button class="tool-btn active" data-panel="home">Home</button>
-    <button class="tool-btn" data-panel="events">Events I've Played</button>
-    <button class="tool-btn" data-panel="services">Services & Equipment</button>
+    <button class="tool-btn active" data-panel="home">Home<span class="chev">›</span></button>
+    <button class="tool-btn" data-panel="events">Events I've Played<span class="chev">›</span></button>
+    <button class="tool-btn" data-panel="services">Services &amp; Equipment<span class="chev">›</span></button>
   </div>
 
   <!-- ================= HOME ================= -->
   <div class="panel active" id="panel-home">
-    <img class="hero-photo" src="assets/dj/rooftop-vancouver.jpeg" alt="DJ Zech performing in Vancouver">
+    <img class="hero-photo" src="assets/dj/dj-zech-stage.webp" alt="DJ Zech performing on stage">
 
     <div class="bio-full">
       <h2>Hi, I'm DJ Zech</h2>

@@ -116,6 +116,8 @@
     border:1.5px dashed rgba(255,255,255,0.3); background:rgba(255,255,255,0.06);
     display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.5); font-size:11px;
   }
+  .zaizai-teaser .zshot{width:220px; max-width:100%; flex-shrink:0; border-radius:14px; overflow:hidden; background:#fff; aspect-ratio:1087/847;}
+  .zaizai-teaser .zshot img{width:100%; height:100%; object-fit:cover; object-position:top; display:block;}
   .zaizai-teaser h4{font-size:20px; font-weight:700; margin-bottom:6px;}
   .zaizai-teaser p{color:rgba(255,255,255,0.65); font-size:13.5px; max-width:480px;}
   .zaizai-links{display:flex; gap:10px; margin-left:auto; flex-wrap:wrap;}
@@ -131,6 +133,7 @@
     .tool-nav{display:grid; grid-template-columns:1fr 1fr;}
     .tool-btn{justify-content:center; padding:16px 14px;}
     .zaizai-links{margin-left:0;}
+    .zaizai-teaser .zshot{width:100%;}
   }
 </style>
 </head>
@@ -251,7 +254,7 @@
   <!-- ================= ZAIZAI TEASER ================= -->
   <div class="panel" id="panel-zaizai">
     <div class="zaizai-teaser">
-      <div class="zlogo">300×300</div>
+      <a class="zshot" href="https://zaizai.ca" target="_blank" rel="noopener"><img src="assets/automations/zaizai-landing.png" alt="zaizai.ca landing page"></a>
       <div>
         <h4>zaizai.ca</h4>
         <p>AI-powered resume and cover letter platform for international students and skilled immigrants building their career in Canada. Co-founder & frontend developer.</p>
