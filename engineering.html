@@ -205,8 +205,8 @@
     .skill-grid{grid-template-columns:1fr 1fr;}
     .slide.active{grid-template-columns:1fr;}
     .viewer{padding:20px;}
-    .tool-nav{display:grid; grid-template-columns:1fr 1fr;}
-    .tool-btn{justify-content:center; padding:16px 14px;}
+    .tool-nav{display:grid; grid-template-columns:repeat(2,minmax(0,1fr));}
+    .tool-btn{justify-content:center; padding:14px 10px; min-width:0; gap:8px; font-size:15px;}
     .zaizai-links{margin-left:0;}
     .zaizai-teaser .zshot{width:100%;}
   }
@@ -243,7 +243,7 @@
     <button class="tool-btn active" data-panel="experience" role="tab" aria-selected="true"><span class="ico">💼</span>Experience<span class="chev">›</span></button>
     <button class="tool-btn" data-panel="skills" role="tab" aria-selected="false"><span class="ico">🛠</span>Skills &amp; Tools<span class="chev">›</span></button>
     <button class="tool-btn" data-panel="education" role="tab" aria-selected="false"><span class="ico">🎓</span>Education<span class="chev">›</span></button>
-    <button class="tool-btn" data-panel="zaizai" role="tab" aria-selected="false"><span class="ico">🌐</span>ZaiZai<span class="chev">›</span></button>
+    <button class="tool-btn" data-panel="zaizai" role="tab" aria-selected="false"><span class="ico">🌐</span>Career Technology Startup<span class="chev">›</span></button>
   </div>
 
   <!-- ================= EXPERIENCE ================= -->
@@ -360,7 +360,7 @@
     <div class="zaizai-teaser">
       <a class="zshot" href="https://zaizai.ca" target="_blank" rel="noopener"><img src="assets/automations/zaizai-landing.png" alt="zaizai.ca landing page"></a>
       <div>
-        <h4>ZaiZai · Career Technology Startup</h4>
+        <h4>ZaiZai</h4>
         <p>A website that optimizes resumes with automations: it configures and tailors each resume to the specific job you're applying for. Co-founder &amp; frontend developer.</p>
       </div>
       <div class="zaizai-links">
