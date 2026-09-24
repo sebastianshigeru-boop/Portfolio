@@ -43,7 +43,9 @@
     font-size:13px; font-weight:600; color:var(--ink-faint);
     background:var(--card); border-radius:100px; padding:7px 16px;
     box-shadow:var(--shadow); margin-bottom:28px;
+    max-width:100%; line-height:1.4;
   }
+  .hero-dot{flex-shrink:0;}
   .hero-dot{width:7px; height:7px; border-radius:50%; background:var(--c-soccer);}
 
   h1.title{
@@ -57,6 +59,7 @@
     font-size:19px; color:var(--ink-soft); max-width:600px; line-height:1.6;
     margin-bottom:56px;
   }
+  p.subtitle .pick{display:block; margin-top:10px; color:var(--ink); font-weight:500;}
 
   .grid{
     display:grid;
@@ -131,6 +134,7 @@
     font-size:11px; color:var(--c-eng); text-align:center; font-weight:600;
     padding:6px;
   }
+  .card.featured img.ph{border:none; padding:0; object-fit:cover;}
   .card.featured .ftext{flex:1;}
   .card.featured h2{font-size:26px; font-weight:800; margin-bottom:6px;}
   .card.featured p{color:var(--ink-soft); font-size:15px;}
@@ -148,14 +152,14 @@
 <body>
 <div class="wrap">
 
-  <div class="hero-eyebrow"><span class="hero-dot"></span> open to gta roles and freelance projects</div>
+  <div class="hero-eyebrow"><span class="hero-dot"></span> Here to help build thoughtful solutions with high standards.</div>
   <h1 class="title">Sebastian Higa</h1>
-  <p class="subtitle">Industrial engineer, tool builder, DJ, and competitive defender. Pick what you want to see.</p>
+  <p class="subtitle">Industrial engineer creating innovative, effective solutions. Entrepreneur, DJ, and elite-level soccer player.<span class="pick">Pick what you want to see.</span></p>
 
   <div class="grid">
 
     <a class="card featured full" href="engineering.html">
-      <div class="ph">photo<br>400×400</div>
+      <img class="ph" src="assets/engineering/headshot.jpg" alt="Sebastian Higa" width="96" height="96">
       <div class="ftext">
         <h2>Industrial Engineer — Sebastian Higa</h2>
         <p>Full professional profile: experience in operations, semiconductor/MEMS, supply chain, and education.</p>
