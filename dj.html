@@ -22,6 +22,7 @@
     --radius-md:16px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
   body{
     background:var(--bg); color:var(--ink);
     font-family:'Inter', sans-serif;
@@ -90,21 +91,49 @@
   }
   .flag-row{display:flex; align-items:center; gap:8px; margin-top:22px; font-size:13px; color:var(--ink-faint);}
 
-  .form-card{
-    background:var(--surface); border:1px solid #23271F; border-radius:var(--radius-lg);
-    padding:32px; max-width:640px; margin-top:40px;
+  .bio-full p strong{color:#fff; font-weight:600;}
+  .book-cta{
+    display:inline-flex; align-items:center; gap:10px; margin-top:26px;
+    background:var(--neon); color:#06170B; font-weight:700; font-size:16px;
+    padding:15px 26px; border-radius:14px; box-shadow:0 0 22px rgba(57,255,110,0.4);
+    transition:transform 0.2s ease;
   }
-  .form-card h3{font-size:18px; font-weight:700; margin-bottom:6px; color:#fff;}
+  .book-cta:hover{transform:translateY(-2px);}
+
+  /* ---------- PRESS KIT SUMMARY ---------- */
+  .kit-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:36px;}
+  .kit-stat{background:var(--surface); border:1px solid #23271F; border-radius:var(--radius-md); padding:16px 18px;}
+  .kit-num{font-family:'Plus Jakarta Sans', sans-serif; font-weight:800; font-size:24px; color:var(--neon); line-height:1.1;}
+  .kit-label{font-size:12px; color:var(--ink-soft); margin-top:6px;}
+  .kit-offer{margin-top:28px;}
+  .kit-offer-head{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); margin-bottom:12px;}
+  .kit-offer-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  .kit-item{background:var(--surface); border:1px solid #23271F; border-radius:var(--radius-md); padding:16px 18px;}
+  .kit-n{font-size:11px; font-weight:700; color:var(--neon);}
+  .kit-item h4{font-size:14.5px; font-weight:700; color:#fff; margin:4px 0 4px;}
+  .kit-item p{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+  .kit-venues{margin-top:14px; font-size:13px; color:var(--ink-soft);}
+  .kit-venues span{color:var(--neon); font-weight:600; margin-right:6px;}
+
+  .form-card{
+    background:var(--surface); border:1.5px solid var(--neon-dim); border-radius:var(--radius-lg);
+    padding:36px; max-width:760px; margin-top:44px; scroll-margin-top:24px;
+    box-shadow:0 0 40px rgba(57,255,110,0.12);
+  }
+  .form-card h3{font-size:26px; font-weight:800; margin-bottom:6px; color:#fff;}
+  .direct-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px;}
+  .direct-pill{font-size:13px; font-weight:600; color:var(--ink); background:#0F1210; border:1px solid #262B25; padding:8px 14px; border-radius:100px;}
+  .direct-pill:hover{border-color:var(--neon); color:var(--neon);}
   .form-card .sub{color:var(--ink-faint); font-size:13.5px; margin-bottom:22px;}
   .form-row{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;}
   .form-row.full{grid-template-columns:1fr;}
   .form-field label{
-    display:block; font-family:'Inter'; font-size:11px; text-transform:uppercase;
+    display:block; font-family:'Inter', sans-serif; font-size:11px; text-transform:uppercase;
     letter-spacing:0.05em; color:var(--ink-faint); margin-bottom:6px; font-weight:600;
   }
   .form-field input, .form-field select, .form-field textarea{
     width:100%; border:1px solid #262B25; background:#0F1210; color:var(--ink);
-    border-radius:10px; padding:11px 13px; font-family:'Inter'; font-size:14px;
+    border-radius:10px; padding:11px 13px; font-family:'Inter', sans-serif; font-size:14px;
   }
   .form-field input:focus, .form-field select:focus, .form-field textarea:focus{
     outline:none; border-color:var(--neon);
@@ -113,10 +142,10 @@
   .form-submit{
     margin-top:6px; width:100%;
     background:var(--neon); color:#06170B; border:none; border-radius:10px;
-    font-family:'Inter'; font-weight:700; font-size:14px;
+    font-family:'Inter', sans-serif; font-weight:700; font-size:14px;
     padding:13px 22px; cursor:pointer; box-shadow:0 0 20px rgba(57,255,110,0.3);
   }
-  .form-note{font-family:'Inter'; font-size:11.5px; color:var(--ink-faint); margin-top:12px;}
+  .form-note{font-family:'Inter', sans-serif; font-size:11.5px; color:var(--ink-faint); margin-top:12px;}
 
   /* ---------- EVENTS PANEL ---------- */
   .event-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:20px;}
@@ -163,6 +192,9 @@
   @media (max-width:760px){
     .home-grid{grid-template-columns:1fr;}
     .form-row{grid-template-columns:1fr;}
+    .kit-stats{grid-template-columns:1fr 1fr;}
+    .kit-offer-grid{grid-template-columns:1fr;}
+    .form-card{padding:24px;}
     .tool-nav{display:grid; grid-template-columns:1fr;}
     .tool-btn{justify-content:space-between;}
     .hero-photo{height:300px;}
@@ -191,14 +223,15 @@
 
     <div class="bio-full">
       <h2>Hi, I'm DJ Zech</h2>
-      <p>I'm a DJ playing a wide variety of genres — Latin, Pop, Electro Pop, Rock, and many more — reading the crowd and keeping the energy moving all night.</p>
-      <p>Originally from Peru, now based in Canada, bringing a mix of Latin culture and North American club sound to every event.</p>
+      <p>I'm Sebastian Higa, a Peruvian DJ and <strong>bilingual MC (English + Spanish)</strong> based in Vancouver. Since 2019 I've played <strong>200+ events</strong> for guests from all over the world. I play open-format sets that move across genres, cultures, and generations, and I read the crowd to keep the energy going all night.</p>
+      <p>From Tacna to Vancouver, I bring Latin roots and international music to one dance floor.</p>
       <div class="genre-tags">
         <span class="genre-tag">Latin</span>
         <span class="genre-tag">Pop</span>
         <span class="genre-tag">Electro Pop</span>
         <span class="genre-tag">Rock</span>
         <span class="genre-tag">Reggaeton</span>
+        <span class="genre-tag">Bachata</span>
         <span class="genre-tag">2000s Latin</span>
         <span class="genre-tag">Pachanga</span>
         <span class="genre-tag">Cumbia</span>
@@ -207,11 +240,34 @@
         <span class="genre-tag">Open Format</span>
       </div>
       <div class="flag-row">🇵🇪 Peruvian &nbsp;→&nbsp; 🇨🇦 Based in Canada</div>
+      <a class="book-cta" href="#book">Book DJ Zech <span>→</span></a>
     </div>
 
-    <div class="form-card">
+    <div class="kit-stats">
+      <div class="kit-stat"><div class="kit-num">200+</div><div class="kit-label">events and counting</div></div>
+      <div class="kit-stat"><div class="kit-num">1,000+</div><div class="kit-label">guests at large events</div></div>
+      <div class="kit-stat"><div class="kit-num">2019</div><div class="kit-label">year started</div></div>
+      <div class="kit-stat"><div class="kit-num">EN + ES</div><div class="kit-label">bilingual MC</div></div>
+    </div>
+
+    <div class="kit-offer">
+      <div class="kit-offer-head">One contact. Your show.</div>
+      <div class="kit-offer-grid">
+        <div class="kit-item"><span class="kit-n">01</span><h4>DJ + Bilingual MC</h4><p>Open-format sets and hosting in English and Spanish.</p></div>
+        <div class="kit-item"><span class="kit-n">02</span><h4>Sound + Lighting</h4><p>Sound, moving heads, and event lighting scaled to your room.</p></div>
+        <div class="kit-item"><span class="kit-n">03</span><h4>Visuals + Experiences</h4><p>LED screens, effects, photo booths, dancers, and live musicians.</p></div>
+      </div>
+      <div class="kit-venues"><span>Currently playing</span> Mangos Kitchen Bar · RedRoom · Latin Cruises</div>
+    </div>
+
+    <div class="form-card" id="book">
       <h3>Book DJ Zech</h3>
-      <div class="sub">Tell me about your event and I'll get back to you.</div>
+      <div class="sub">Let's make it happen. Tell me about your event and I'll get back to you.</div>
+      <div class="direct-row">
+        <a class="direct-pill" href="mailto:djzecheventos@gmail.com">✉ djzecheventos@gmail.com</a>
+        <a class="direct-pill" href="tel:+12369784744">☎ +1 236 978 4744</a>
+        <a class="direct-pill" href="https://instagram.com/dj_zech" target="_blank" rel="noopener">◎ @dj_zech</a>
+      </div>
       <div class="form-row">
         <div class="form-field"><label>Name</label><input type="text" placeholder="Your name"></div>
         <div class="form-field"><label>Email</label><input type="email" placeholder="you@email.com"></div>
