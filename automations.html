@@ -41,6 +41,9 @@
   h1{font-size:clamp(34px,5vw,50px); font-weight:800; letter-spacing:-0.02em; margin-bottom:14px;}
   p.lede{font-size:17px; color:var(--ink-soft); max-width:620px; line-height:1.6; margin-bottom:48px;}
 
+  .consult-cta{display:inline-flex; margin:-24px 0 36px; font-size:14px; font-weight:700; color:var(--accent); background:var(--accent-soft); padding:11px 18px; border-radius:100px;}
+  .consult-cta:hover{background:var(--accent); color:#fff;}
+  html{scroll-behavior:smooth;}
   .tool-nav{
     display:flex; flex-wrap:wrap; gap:10px; margin-bottom:44px;
   }
@@ -87,6 +90,29 @@
   .demo-frame{display:block; width:100%; border:0; border-radius:var(--radius-md); background:var(--bg);}
   .demo-caption{font-size:12.5px; color:var(--ink-faint); margin-top:10px;}
 
+
+  /* ---- contact form ---- */
+  .contact{background:var(--card); border-radius:var(--radius-lg); box-shadow:var(--shadow); padding:40px; margin-top:44px; scroll-margin-top:24px;}
+  .contact-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:24px;}
+  .contact h2{font-size:26px; font-weight:800; margin-bottom:6px;}
+  .contact .desc{color:var(--ink-soft); font-size:14.5px; max-width:520px; line-height:1.6;}
+  .free-badge{display:inline-flex; align-items:center; gap:8px; background:#E4F7EC; color:#12A150; font-weight:700; font-size:13.5px; padding:10px 16px; border-radius:100px; white-space:nowrap;}
+  .cf-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .cf-field{display:flex; flex-direction:column; gap:6px;}
+  .cf-field.full{grid-column:1 / -1;}
+  .cf-field label{font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);}
+  .cf-field input, .cf-field textarea{font-family:'Inter', sans-serif; font-size:15px; color:var(--ink); background:var(--bg); border:1.5px solid #E6E3F0; border-radius:12px; padding:12px 14px; width:100%;}
+  .cf-field input:focus, .cf-field textarea:focus{outline:none; border-color:var(--accent); background:#fff;}
+  .cf-field textarea{min-height:120px; resize:vertical;}
+  .cf-hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;}
+  .cf-submit{margin-top:18px; background:var(--accent); color:#fff; border:none; border-radius:14px; padding:15px 26px; font-family:'Inter', sans-serif; font-size:15.5px; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(139,92,246,0.28); transition:transform 0.2s ease;}
+  .cf-submit:hover{transform:translateY(-2px);}
+  .cf-submit:disabled{opacity:0.6; cursor:wait; transform:none;}
+  .cf-status{margin-top:14px; font-size:14px; font-weight:500;}
+  .cf-status.ok{color:#12A150;}
+  .cf-status.err{color:#C0392B;}
+  .cf-status a{text-decoration:underline;}
+
   .result-strip{
     display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;
   }
@@ -96,6 +122,8 @@
   }
 
   @media (max-width:680px){
+    .cf-grid{grid-template-columns:1fr;}
+    .contact{padding:26px;}
     .panel-body-grid{grid-template-columns:1fr;}
     .panel{padding:26px;}
     .panel .demo-frame{margin:0 -12px; width:calc(100% + 24px);}
@@ -109,6 +137,8 @@
   <div class="hero-icon">⚙</div>
   <h1>Automations & Engineering Tools</h1>
   <p class="lede">Tools I built to solve real production, inventory, and planning problems — most of them with AI-assisted development. Pick a category to see examples.</p>
+
+  <a class="consult-cta" href="#contact">Request a free consultation ↓</a>
 
   <div class="tool-nav" id="toolNav">
     <button class="tool-btn active" data-panel="scheduling"><span class="dot"></span>Production & Scheduling</button>
@@ -213,6 +243,30 @@
     </div>
   </div>
 
+
+  <!-- ================= CONTACT ================= -->
+  <section class="contact" id="contact">
+    <div class="contact-head">
+      <div>
+        <h2>Tell us about your problem</h2>
+        <p class="desc">Need a tool like these for your operation? Share what you want to solve or ask about, and we'll get back to you.</p>
+      </div>
+      <span class="free-badge">✓ Initial consultation is free</span>
+    </div>
+    <form id="contactForm" novalidate>
+      <div class="cf-grid">
+        <div class="cf-field"><label for="cf-name">Name</label><input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="120"></div>
+        <div class="cf-field"><label for="cf-company">Company</label><input id="cf-company" name="company" type="text" autocomplete="organization" required maxlength="160"></div>
+        <div class="cf-field"><label for="cf-email">Email</label><input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200"></div>
+        <div class="cf-field"><label for="cf-phone">Phone</label><input id="cf-phone" name="phone" type="tel" autocomplete="tel" required maxlength="40"></div>
+        <div class="cf-field full"><label for="cf-message">What problem do you want to solve, or what would you like to ask?</label><textarea id="cf-message" name="message" required maxlength="4000" placeholder="e.g. We plan production in spreadsheets and lose hours every week reconciling inventory..."></textarea></div>
+      </div>
+      <div class="cf-hp" aria-hidden="true"><label for="cf-website">Website</label><input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+      <button class="cf-submit" type="submit">Request free consultation →</button>
+      <p class="cf-status" id="cfStatus" role="status"></p>
+    </form>
+  </section>
+
 </div>
 
 <script>
@@ -243,6 +297,30 @@
     try { f.contentDocument.documentElement.dataset.theme = 'light'; } catch (err) {}
     fit(f, parseFloat(f.style.height));
   }));
+
+  // Contact form -> /api/contact (emails the team).
+  const form = document.getElementById('contactForm');
+  const statusEl = document.getElementById('cfStatus');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const btn = form.querySelector('.cf-submit');
+    const payload = Object.fromEntries(new FormData(form));
+    payload.source = 'portfolio automations';
+    btn.disabled = true; statusEl.className = 'cf-status'; statusEl.textContent = 'Sending…';
+    try {
+      const r = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!r.ok) throw new Error();
+      form.reset();
+      statusEl.className = 'cf-status ok';
+      statusEl.textContent = 'Thanks! Your request was sent. We\'ll get back to you soon.';
+    } catch (err) {
+      statusEl.className = 'cf-status err';
+      statusEl.innerHTML = 'Something went wrong. Please email us at <a href="mailto:zaizai.admin@gmail.com">zaizai.admin@gmail.com</a>.';
+    } finally {
+      btn.disabled = false;
+    }
+  });
 </script>
 </body>
 </html>
