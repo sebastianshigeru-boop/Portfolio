@@ -93,12 +93,84 @@
   .tl-bullets li::before{content:'—'; position:absolute; left:0; color:#C7CCF5;}
 
   /* ---- skills ---- */
-  .skill-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px; margin-bottom:36px;}
-  .skill-card{background:var(--card); border-radius:var(--radius-md); box-shadow:var(--shadow); padding:22px;}
-  .skill-card h4{font-size:15px; font-weight:700; margin-bottom:6px;}
+  .skill-hint{font-size:13px; color:var(--ink-soft); margin-bottom:14px;}
+  .skill-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:18px;}
+  .skill-card{
+    background:var(--card); border-radius:var(--radius-md); box-shadow:var(--shadow); padding:20px 20px 18px;
+    border:1.5px solid transparent; text-align:left; cursor:pointer; font-family:'Inter', sans-serif; color:var(--ink);
+    display:flex; flex-direction:column; gap:6px; transition:all 0.2s ease;
+  }
+  .skill-card h4{font-size:15px; font-weight:700;}
   .skill-card p{font-size:13px; color:var(--ink-soft);}
+  .skill-card .more{margin-top:auto; padding-top:8px; font-size:12.5px; font-weight:700; color:var(--accent);}
+  .skill-card:hover{border-color:var(--accent); transform:translateY(-2px);}
+  .skill-card.active{border-color:var(--accent); background:var(--accent-soft);}
+  .skill-card:focus-visible{outline:3px solid rgba(61,90,241,0.35); outline-offset:2px;}
+
+  .viewer{background:var(--card); border-radius:var(--radius-lg); box-shadow:var(--shadow); padding:26px 28px; margin-bottom:32px;}
+  .viewer-top{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px;}
+  .viewer-title{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint);}
+  .viewer-nav{display:flex; align-items:center; gap:10px;}
+  .viewer-nav button{
+    font-family:'Inter', sans-serif; font-size:14px; font-weight:700; border-radius:12px; padding:10px 16px; cursor:pointer;
+    border:1.5px solid #DDE1F6; background:var(--card); color:var(--ink);
+  }
+  .viewer-nav button.next{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .viewer-nav button:hover{transform:translateY(-1px);}
+  .viewer-count{font-size:13px; font-weight:600; color:var(--ink-soft); min-width:40px; text-align:center;}
+  .dots{display:flex; gap:6px; justify-content:center; margin-top:16px;}
+  .dots span{width:8px; height:8px; border-radius:50%; background:#DDE1F6;}
+  .dots span.on{background:var(--accent);}
+
+  .slides{display:none;}
+  .slides.active{display:block;}
+  .slide{display:none; cursor:pointer;}
+  .slide.active{display:grid; grid-template-columns:1fr 1.25fr; gap:24px; align-items:center; animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateX(8px);} to{opacity:1; transform:none;}}
+  .slide h5{font-family:'Plus Jakarta Sans', sans-serif; font-size:19px; font-weight:800; margin:8px 0 8px;}
+  .slide p{font-size:14px; color:var(--ink-soft); line-height:1.6;}
+  .badge{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 11px; border-radius:100px;}
+  .badge.py{background:#E4F7EC; color:var(--green, #12A150);}
+  .badge.method{background:#FEF3E2; color:#B45309;}
+  .viz{min-width:0; overflow-x:auto; background:var(--bg); border-radius:var(--radius-md); padding:18px; min-height:190px; font-size:12px;}
+
+  /* mini visuals */
+  .gantt-row{display:grid; grid-template-columns:62px 1fr; align-items:center; gap:8px; margin-bottom:8px;}
+  .gantt-row span{font-weight:600; color:var(--ink-soft);}
+  .gantt-track{position:relative; height:16px; background:#fff; border-radius:4px;}
+  .gantt-bar{position:absolute; top:0; bottom:0; border-radius:4px; background:linear-gradient(90deg,#B8A4F7 80%,#5DCAA5 80%);}
+  .bars{display:flex; align-items:flex-end; gap:10px; height:130px; position:relative; padding-bottom:18px;}
+  .bars .b{flex:1; background:var(--accent); border-radius:5px 5px 0 0; position:relative;}
+  .bars .b i{position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-style:normal; color:var(--ink-soft); font-size:11px;}
+  .pareto-line{position:absolute; left:0; top:0; width:100%; height:calc(100% - 18px); overflow:visible;}
+  .abc{display:flex; flex-direction:column; gap:8px;}
+  .abc-row{display:grid; grid-template-columns:24px 1fr 70px; align-items:center; gap:10px;}
+  .abc-row b{font-size:14px;}
+  .abc-bar{height:18px; border-radius:5px;}
+  .kanban{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+  .kanban .col{background:#fff; border-radius:10px; padding:8px;}
+  .kanban .col b{display:block; font-size:11px; color:var(--ink-faint); text-transform:uppercase; margin-bottom:6px;}
+  .kanban .k{background:var(--accent-soft); color:var(--accent); border-radius:6px; padding:6px; margin-bottom:6px; font-weight:600;}
+  .flow{display:flex; align-items:center; gap:4px; flex-wrap:wrap;}
+  .flow .n{background:#fff; border-radius:8px; padding:8px 10px; font-weight:700; text-align:center;}
+  .flow .n small{display:block; font-weight:500; color:var(--ink-soft);}
+  .flow .a{color:var(--accent); font-weight:700;}
+  .mini-table{width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden;}
+  .mini-table th,.mini-table td{padding:7px 8px; text-align:left; border-bottom:1px solid #EEF0F7;}
+  .mini-table th{font-size:11px; color:var(--ink-faint); text-transform:uppercase;}
+  .ok{color:var(--green, #12A150); font-weight:700;} .bad{color:#C0392B; font-weight:700;} .warn{color:#B45309; font-weight:700;}
+  .whys{display:flex; flex-direction:column; gap:6px;}
+  .whys div{background:#fff; border-radius:8px; padding:7px 10px; border-left:3px solid var(--accent);}
+  .whys div:last-child{border-left-color:var(--green, #12A150); font-weight:700;}
+  .hub{position:relative; height:200px;}
+  .hub .c,.hub .s{position:absolute; transform:translate(-50%,-50%); border-radius:100px; padding:7px 12px; font-weight:700; white-space:nowrap;}
+  .hub .c{left:50%; top:50%; background:var(--accent); color:#fff;}
+  .hub .s{background:#fff; color:var(--ink);}
+  .hub svg{position:absolute; inset:0; width:100%; height:100%;}
+
   .tool-tags{display:flex; flex-wrap:wrap; gap:8px;}
-  .tool-tag{font-size:12.5px; font-weight:600; background:var(--accent-soft); color:var(--accent); padding:7px 14px; border-radius:100px;}
+  .tool-tag{font-size:12.5px; font-weight:600; background:#E4F7EC; color:#12A150; padding:7px 14px; border-radius:100px;}
+  .tools-label{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); margin-bottom:12px;}
 
   /* ---- education ---- */
   .edu-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:16px;}
@@ -130,6 +202,9 @@
 
   @media (max-width:680px){
     .stat-strip{grid-template-columns:1fr;}
+    .skill-grid{grid-template-columns:1fr 1fr;}
+    .slide.active{grid-template-columns:1fr;}
+    .viewer{padding:20px;}
     .tool-nav{display:grid; grid-template-columns:1fr 1fr;}
     .tool-btn{justify-content:center; padding:16px 14px;}
     .zaizai-links{margin-left:0;}
@@ -223,12 +298,41 @@
 
   <!-- ================= SKILLS ================= -->
   <div class="panel" id="panel-skills">
-    <div class="skill-grid">
-      <div class="skill-card"><h4>Production Analysis</h4><p>Gantt, Kanban, Pareto, ABC</p></div>
-      <div class="skill-card"><h4>Inventory Reconciliation</h4><p>Flow-conservation solvers</p></div>
-      <div class="skill-card"><h4>Root Cause Analysis</h4><p>Bottleneck diagnosis</p></div>
-      <div class="skill-card"><h4>Cross-functional Coordination</h4><p>Marketing, finance, teams, coaches</p></div>
+    <p class="skill-hint">Pick a skill to see real examples. Click the example or “Next” to move through them.</p>
+    <div class="skill-grid" id="skillGrid">
+      <button class="skill-card active" data-skill="production"><h4>Production Analysis</h4><p>Gantt, Kanban, Pareto, ABC</p><span class="more">4 examples →</span></button>
+      <button class="skill-card" data-skill="inventory"><h4>Inventory Reconciliation</h4><p>Flow-conservation solvers</p><span class="more">2 examples →</span></button>
+      <button class="skill-card" data-skill="rootcause"><h4>Root Cause Analysis</h4><p>Bottleneck diagnosis</p><span class="more">3 examples →</span></button>
+      <button class="skill-card" data-skill="crossfn"><h4>Cross-functional Coordination</h4><p>Marketing, finance, teams, coaches</p><span class="more">3 examples →</span></button>
     </div>
+    <div class="viewer">
+      <div class="viewer-top"><div class="viewer-title" id="viewerTitle">Production Analysis</div><div class="viewer-nav"><button class="prev" id="prevEx" aria-label="Previous example">←</button><span class="viewer-count" id="exCount">1 / 4</span><button class="next" id="nextEx">Next →</button></div></div>
+      <div class="slides active" id="slides-production" data-title="Production Analysis">
+          <div class="slide"><div><span class="badge py">🐍 Built by me in Python</span><h5>Weekly production planner (Gantt)</h5><p>Desktop app I built in Python (pywebview, SQLite, Plotly.js) to schedule 12,000+ MEMS units per week and reschedule orders when capacity changes.</p></div><div class="viz"><div class="gantt-row"><span>PO 4471</span><div class="gantt-track"><div class="gantt-bar" style="left:0%;width:22%"></div></div></div><div class="gantt-row"><span>PO 4502</span><div class="gantt-track"><div class="gantt-bar" style="left:18%;width:30%"></div></div></div><div class="gantt-row"><span>PO 4519</span><div class="gantt-track"><div class="gantt-bar" style="left:40%;width:26%"></div></div></div><div class="gantt-row"><span>PO 4533</span><div class="gantt-track"><div class="gantt-bar" style="left:60%;width:22%"></div></div></div><div class="gantt-row"><span>PO 4540</span><div class="gantt-track"><div class="gantt-bar" style="left:74%;width:24%"></div></div></div></div></div>
+          <div class="slide"><div><span class="badge method">Pareto analysis</span><h5>Pareto of delay causes</h5><p>Ranked delay causes to focus on the few that drive most late orders. Document preparation came out on top.</p></div><div class="viz"><div class="bars"><div class="b" style="height:100%"><i>Docs</i></div><div class="b" style="height:62%"><i>Material</i></div><div class="b" style="height:38%"><i>Capacity</i></div><div class="b" style="height:20%"><i>QA hold</i></div><div class="b" style="height:10%"><i>Other</i></div><svg class="pareto-line" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="10,58 30,30 50,14 70,6 90,2" fill="none" stroke="#F5670A" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div></div></div>
+          <div class="slide"><div><span class="badge method">ABC classification</span><h5>ABC inventory classification</h5><p>Classified 15,000+ pharmacy SKUs by value so the A items got the tightest control and reorder attention.</p></div><div class="viz"><div class="abc"><div class="abc-row"><b>A</b><div class="abc-bar" style="width:80%;background:#3D5AF1"></div><span>20% SKUs · 80% value</span></div><div class="abc-row"><b>B</b><div class="abc-bar" style="width:15%;background:#8B9DF5"></div><span>30% SKUs · 15%</span></div><div class="abc-row"><b>C</b><div class="abc-bar" style="width:5%;background:#C7CEF8"></div><span>50% SKUs · 5%</span></div></div><p style="margin-top:12px;color:var(--ink-soft)">15,000+ SKUs · pharmaceutical, chemical, personal care</p></div></div>
+          <div class="slide"><div><span class="badge method">Kanban</span><h5>Kanban order tracking</h5><p>Visual board to follow orders from planned to shipped, so every team sees the same status.</p></div><div class="viz"><div class="kanban"><div class="col"><b>To do</b><div class="k">PO 4551</div><div class="k">PO 4560</div></div><div class="col"><b>In progress</b><div class="k">PO 4519</div></div><div class="col"><b>Done</b><div class="k">PO 4471</div><div class="k">PO 4502</div></div></div></div></div>
+      </div>
+      <div class="slides" id="slides-inventory" data-title="Inventory Reconciliation">
+          <div class="slide"><div><span class="badge py">🐍 Built by me in Python</span><h5>Flow-conservation reconciliation</h5><p>Python tool I built that balances every inventory stage between two monthly snapshots, so every unit is explained.</p></div><div class="viz"><div class="flow"><div class="n">Receipts<small>2,000</small></div><span class="a">→</span><div class="n">Inspection<small>1,200→800</small></div><span class="a">→</span><div class="n">OQA<small>300→250</small></div><span class="a">→</span><div class="n">ATP<small>900→1,100</small></div><span class="a">→</span><div class="n">Shipped<small>2,230</small></div></div><p style="margin-top:14px">Unexplained units: <span class="ok">0 ✓</span></p></div></div>
+          <div class="slide"><div><span class="badge py">🐍 Built by me in Python</span><h5>Discrepancy report</h5><p>The same tool flags lots where system and physical counts differ, and traces each gap to its source.</p></div><div class="viz"><table class="mini-table"><tr><th>Lot</th><th>System</th><th>Counted</th><th>Diff</th><th>Traced to</th></tr><tr><td>W2281</td><td>500</td><td>500</td><td class="ok">0</td><td>—</td></tr><tr><td>W2287</td><td>320</td><td>300</td><td class="bad">−20</td><td>Scrap not logged</td></tr><tr><td>W2291</td><td>40</td><td>40</td><td class="warn">Hold</td><td>21 days on Hold</td></tr></table></div></div>
+      </div>
+      <div class="slides" id="slides-rootcause" data-title="Root Cause Analysis">
+          <div class="slide"><div><span class="badge method">Ishikawa diagram</span><h5>Fishbone: late shipments</h5><p>Mapped possible causes by method, material, people, and machine before touching any process.</p></div><div class="viz"><svg viewBox="0 0 320 170" style="width:100%;height:auto"><line x1="20" y1="85" x2="235" y2="85" stroke="#3D5AF1" stroke-width="3"/><rect x="238" y="66" width="78" height="38" rx="8" fill="#3D5AF1"/><text x="277" y="82" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Late</text><text x="277" y="95" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">shipments</text>
+<g stroke="#8B9DF5" stroke-width="2"><line x1="60" y1="25" x2="95" y2="85"/><line x1="150" y1="25" x2="185" y2="85"/><line x1="60" y1="145" x2="95" y2="85"/><line x1="150" y1="145" x2="185" y2="85"/></g>
+<g font-size="10" font-weight="700" fill="#181A22"><text x="40" y="18">Method</text><text x="130" y="18">Material</text><text x="40" y="162">People</text><text x="130" y="162">Machine</text></g>
+<g font-size="9" fill="#5B5E6B"><text x="86" y="44">manual docs</text><text x="176" y="44">late supplier</text><text x="86" y="132">handoffs</text><text x="176" y="132">capacity</text></g></svg></div></div>
+          <div class="slide"><div><span class="badge method">5 Whys</span><h5>5 Whys: from symptom to cause</h5><p>Kept asking why until the real cause appeared: two systems with no link between them.</p></div><div class="viz"><div class="whys"><div>Why late? Export docs not ready</div><div>Why? Data re-typed by hand from 3 files</div><div>Why? Sales and planning use separate sheets</div><div>Why? No link between systems</div><div>Root cause: no sync → built a Python sync tool</div></div></div></div>
+          <div class="slide"><div><span class="badge method">Bottleneck diagnosis</span><h5>Finding the bottleneck</h5><p>Measured time per step, found document prep was the constraint, and automated it with Python tools.</p></div><div class="viz"><div class="bars"><div class="b" style="height:35%;"><i>Receive</i></div><div class="b" style="height:50%;"><i>Inspect</i></div><div class="b" style="height:100%;background:#C0392B"><i>Docs</i></div><div class="b" style="height:40%;"><i>Pack</i></div><div class="b" style="height:30%;"><i>Ship</i></div></div><p style="margin-top:10px">Bottleneck: <span class="bad">document prep</span> → automated → <span class="ok">43% faster process</span></p></div></div>
+      </div>
+      <div class="slides" id="slides-crossfn" data-title="Cross-functional Coordination">
+          <div class="slide"><div><span class="badge method">Stakeholder coordination</span><h5>Production at the center</h5><p>Coordinated weekly between sales, finance, quality, logistics, and customers to deliver on time.</p></div><div class="viz"><div class="hub"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="50" y1="50" x2="50" y2="12" stroke="#C7CEF8" stroke-width="0.8"/><line x1="50" y1="50" x2="86" y2="38" stroke="#C7CEF8" stroke-width="0.8"/><line x1="50" y1="50" x2="72" y2="81" stroke="#C7CEF8" stroke-width="0.8"/><line x1="50" y1="50" x2="28" y2="81" stroke="#C7CEF8" stroke-width="0.8"/><line x1="50" y1="50" x2="14" y2="38" stroke="#C7CEF8" stroke-width="0.8"/></svg><div class="s" style="left:50%;top:12%">Sales</div><div class="s" style="left:86%;top:38%">Finance</div><div class="s" style="left:72%;top:81%">Quality</div><div class="s" style="left:28%;top:81%">Logistics</div><div class="s" style="left:14%;top:38%">Customers</div><div class="c">Production</div></div></div></div>
+          <div class="slide"><div><span class="badge py">🐍 Built by me in Python</span><h5>Sales ↔ Planning sync</h5><p>Python script I built so sales and planning always work from the same data, with no re-typing.</p></div><div class="viz"><div class="flow"><div class="n">Sales<small>shipping summary</small></div><span class="a">→</span><div class="n" style="background:#E4F7EC;color:#12A150">Python sync</div><span class="a">→</span><div class="n">Planning<small>work plan</small></div><span class="a">→</span><div class="n">Production</div></div><p style="margin-top:14px">2 rows added · 3 duplicates skipped · <span class="ok">0 manual typing</span></p></div></div>
+          <div class="slide"><div><span class="badge method">Client liaison</span><h5>One contact for 260+ clients</h5><p>Main link between clients and internal teams for rentals, sales, and calibration.</p></div><div class="viz"><div class="hub"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="50" y1="50" x2="50" y2="12" stroke="#C7CEF8" stroke-width="0.8"/><line x1="50" y1="50" x2="86" y2="38" stroke="#C7CEF8" stroke-width="0.8"/><line x1="50" y1="50" x2="72" y2="81" stroke="#C7CEF8" stroke-width="0.8"/><line x1="50" y1="50" x2="28" y2="81" stroke="#C7CEF8" stroke-width="0.8"/><line x1="50" y1="50" x2="14" y2="38" stroke="#C7CEF8" stroke-width="0.8"/></svg><div class="s" style="left:50%;top:12%">Clients</div><div class="s" style="left:86%;top:38%">Calibration</div><div class="s" style="left:72%;top:81%">Rentals</div><div class="s" style="left:28%;top:81%">Sales</div><div class="s" style="left:14%;top:38%">Warehouse</div><div class="c">Client liaison</div></div><p style="margin-top:6px;color:var(--ink-soft);text-align:center">260+ clients · 200+ orders/month</p></div></div>
+      </div>
+      <div class="dots" id="exDots"></div>
+    </div>
+    <div class="tools-label">Tools</div>
     <div class="tool-tags">
       <span class="tool-tag">Python</span>
       <span class="tool-tag">SQL / SQLite</span>
@@ -261,7 +365,6 @@
       </div>
       <div class="zaizai-links">
         <a class="zaizai-link" href="https://zaizai.ca" target="_blank" rel="noopener">Visit site ↗</a>
-        <a class="zaizai-link primary" href="automations.html#zaizai">Full case study →</a>
       </div>
     </div>
   </div>
@@ -280,6 +383,31 @@
       document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
     });
   });
+
+  // Skills: pick a skill card, then click through its examples.
+  const skillCards = document.querySelectorAll('.skill-card');
+  const exCount = document.getElementById('exCount');
+  const exDots = document.getElementById('exDots');
+  let current = document.querySelector('.slides.active'), idx = 0;
+  function showSlide(i) {
+    const list = current.querySelectorAll('.slide');
+    idx = (i + list.length) % list.length;
+    list.forEach((el, j) => el.classList.toggle('active', j === idx));
+    exCount.textContent = (idx + 1) + ' / ' + list.length;
+    exDots.innerHTML = [...list].map((_, j) => '<span' + (j === idx ? ' class="on"' : '') + '></span>').join('');
+  }
+  skillCards.forEach(card => card.addEventListener('click', () => {
+    skillCards.forEach(c => c.classList.toggle('active', c === card));
+    document.querySelectorAll('.slides').forEach(sl => sl.classList.remove('active'));
+    current = document.getElementById('slides-' + card.dataset.skill);
+    current.classList.add('active');
+    document.getElementById('viewerTitle').textContent = current.dataset.title;
+    showSlide(0);
+  }));
+  document.getElementById('nextEx').addEventListener('click', () => showSlide(idx + 1));
+  document.getElementById('prevEx').addEventListener('click', () => showSlide(idx - 1));
+  document.querySelectorAll('.slide').forEach(el => el.addEventListener('click', () => showSlide(idx + 1)));
+  showSlide(0);
 </script>
 </body>
 </html>
