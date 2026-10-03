@@ -91,6 +91,103 @@
   .demo-caption{font-size:12.5px; color:var(--ink-faint); margin-top:10px;}
 
 
+  /* ---- AI integration ---- */
+  .ai{margin-top:56px; scroll-margin-top:24px;}
+  .ai h2{font-size:28px; font-weight:800; margin-bottom:8px;}
+  .ai .ai-lede{color:var(--ink-soft); font-size:15px; line-height:1.6; max-width:620px; margin-bottom:22px;}
+  .ai-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:18px;}
+  .ai-card{
+    background:var(--card); border:1.5px solid transparent; border-radius:var(--radius-md); box-shadow:var(--shadow);
+    padding:20px; text-align:left; cursor:pointer; display:flex; flex-direction:column; gap:6px;
+    font-family:'Inter', sans-serif; color:var(--ink); transition:all 0.2s ease;
+  }
+  .ai-card .ico{font-size:22px;}
+  .ai-card h3{font-size:16px; font-weight:700;}
+  .ai-card p{font-size:13px; color:var(--ink-soft); line-height:1.5;}
+  .ai-card .more{margin-top:auto; padding-top:8px; font-size:12.5px; font-weight:700; color:var(--accent);}
+  .ai-card:hover{border-color:var(--accent); transform:translateY(-2px);}
+  .ai-card.active{border-color:var(--accent); background:var(--accent-soft);}
+  .ai-card:focus-visible{outline:3px solid rgba(139,92,246,0.35); outline-offset:2px;}
+
+  .ai-viewer{background:var(--card); border-radius:var(--radius-lg); box-shadow:var(--shadow); padding:26px 28px; margin-bottom:28px;}
+  .ai-top{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px;}
+  .ai-title{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint);}
+  .ai-nav{display:flex; align-items:center; gap:10px;}
+  .ai-nav button{background:#fff; border:1.5px solid #E6E3F0; border-radius:12px; padding:9px 16px; font-family:'Inter', sans-serif; font-size:14px; font-weight:700; color:var(--ink); cursor:pointer; transition:transform 0.2s ease;}
+  .ai-nav button.next{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .ai-nav button:hover{transform:translateY(-1px);}
+  .ai-count{font-size:13px; font-weight:600; color:var(--ink-soft); min-width:40px; text-align:center;}
+  .ai-dots{display:flex; gap:6px; justify-content:center; margin-top:16px;}
+  .ai-dots span{width:8px; height:8px; border-radius:50%; background:#E4DDFB;}
+  .ai-dots span.on{background:var(--accent);}
+
+  .ai-set{display:none;}
+  .ai-set.active{display:block;}
+  .ai-slide{display:none; cursor:pointer;}
+  .ai-slide.active{display:grid; grid-template-columns:1fr 1.25fr; gap:24px; align-items:center; animation:aiIn 0.3s ease;}
+  @keyframes aiIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  .ai-slide h4{font-size:19px; font-weight:800; margin:8px 0;}
+  .ai-slide p{font-size:14px; color:var(--ink-soft); line-height:1.6;}
+  .ai-link{display:inline-flex; margin-top:12px; font-size:13px; font-weight:700; color:var(--accent); background:none; border:none; padding:0; cursor:pointer; font-family:'Inter', sans-serif;}
+  .ai-link:hover{text-decoration:underline;}
+  .tag{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 11px; border-radius:100px;}
+  .tag.ai{background:var(--accent-soft); color:var(--accent);}
+  .tag.py{background:#E4F7EC; color:#12A150;}
+  .tag.live{background:#E6F0FF; color:#2563EB;}
+  .tag.svc{background:#FEF3E2; color:#B45309;}
+
+  .viz{min-width:0; background:var(--bg); border-radius:var(--radius-md); padding:18px; min-height:200px; font-size:12px; display:flex; flex-direction:column; justify-content:center;}
+  .viz .note{margin-top:12px; color:var(--ink-soft);}
+  .ok{color:#12A150; font-weight:700;} .bad{color:#C0392B; font-weight:700;}
+  .flow{display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+  .flow .n{background:#fff; border-radius:10px; padding:9px 11px; font-weight:700; text-align:center;}
+  .flow .n small{display:block; font-weight:500; color:var(--ink-soft);}
+  .flow .n.hl{background:var(--accent); color:#fff;}
+  .flow .n.hl small{color:rgba(255,255,255,0.8);}
+  .flow .a{color:var(--accent); font-weight:700;}
+  .ai-slide.active .flow .n{animation:pop 0.4s ease both;}
+  .ai-slide.active .flow .n:nth-of-type(2){animation-delay:0.12s;} .ai-slide.active .flow .n:nth-of-type(3){animation-delay:0.24s;}
+  .ai-slide.active .flow .n:nth-of-type(4){animation-delay:0.36s;} .ai-slide.active .flow .n:nth-of-type(5){animation-delay:0.48s;}
+  @keyframes pop{from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:none;}}
+  .g-row{display:grid; grid-template-columns:58px 1fr; gap:10px; align-items:center; margin-bottom:9px; font-weight:600; color:var(--ink-soft);}
+  .g-track{position:relative; height:16px; background:#fff; border-radius:6px;}
+  .g-bar{position:absolute; top:0; height:100%; border-radius:6px; background:var(--accent);}
+  .ai-slide.active .g-bar{animation:grow 0.6s ease both;}
+  @keyframes grow{from{transform:scaleX(0); transform-origin:left;} to{transform:scaleX(1); transform-origin:left;}}
+  .mini{width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden;}
+  .mini th, .mini td{padding:7px 9px; text-align:left; border-bottom:1px solid #F0EEF6;}
+  .mini th{font-size:11px; text-transform:uppercase; color:var(--ink-faint);}
+  .files{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+  .files span{background:#fff; border-radius:8px; padding:7px 10px; font-weight:600;}
+  .files span.warn{background:#FEF3E2; color:#B45309;}
+  .tailor{display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center;}
+  .doc{background:#fff; border-radius:10px; padding:10px; line-height:1.7;}
+  .doc b{display:block; font-size:11px; text-transform:uppercase; color:var(--ink-faint); margin-bottom:4px;}
+  .kw{background:var(--accent-soft); color:var(--accent); border-radius:4px; padding:1px 5px; font-weight:700;}
+  .hub{position:relative; height:200px;}
+  .hub svg{position:absolute; inset:0; width:100%; height:100%;}
+  .hub .s, .hub .c{position:absolute; transform:translate(-50%,-50%); border-radius:10px; font-weight:700; white-space:nowrap;}
+  .hub .s{background:#fff; padding:7px 10px;}
+  .hub .c{left:50%; top:50%; background:var(--accent); color:#fff; padding:10px 14px;}
+  .chat{display:flex; flex-direction:column; gap:8px;}
+  .chat .m{max-width:82%; padding:9px 12px; border-radius:14px; line-height:1.45;}
+  .chat .m.in{background:#fff; align-self:flex-start; border-bottom-left-radius:4px;}
+  .chat .m.out{background:var(--accent); color:#fff; align-self:flex-end; border-bottom-right-radius:4px;}
+  .chat .m.wa{background:#DCF8C6; color:#1F2C1A; align-self:flex-start; border-bottom-left-radius:4px;}
+  .chat .who{font-size:11px; font-weight:700; color:var(--ink-faint);}
+  .ai-slide.active .chat .m{animation:pop 0.4s ease both;}
+  .ai-slide.active .chat .m:nth-child(2){animation-delay:0.25s;} .ai-slide.active .chat .m:nth-child(3){animation-delay:0.5s;} .ai-slide.active .chat .m:nth-child(4){animation-delay:0.75s;}
+
+  .chips-label{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); margin-bottom:12px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chips span{font-size:12.5px; font-weight:600; background:var(--card); color:var(--ink-soft); box-shadow:var(--shadow); padding:8px 14px; border-radius:100px;}
+
+  @media (max-width:820px){
+    .ai-grid{grid-template-columns:1fr;}
+    .ai-slide.active{grid-template-columns:1fr;}
+    .ai-viewer{padding:20px;}
+  }
+
   /* ---- contact form ---- */
   .contact{background:var(--card); border-radius:var(--radius-lg); box-shadow:var(--shadow); padding:40px; margin-top:44px; scroll-margin-top:24px;}
   .contact-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:24px;}
@@ -243,6 +340,47 @@
     </div>
   </div>
 
+  <!-- ================= AI INTEGRATION ================= -->
+  <section class="ai" id="ai">
+    <h2>AI Integration</h2>
+    <p class="ai-lede">How I put AI and automation to work in three areas. Pick one to see real examples. Click the example or “Next” to move through them.</p>
+    <div class="ai-grid">
+      <button class="ai-card active" data-set="production"><span class="ico">🏭</span><h3>Production</h3><p>Planning, inventory, and documents, with tools built through AI-assisted development.</p><span class="more">5 examples →</span></button>
+      <button class="ai-card" data-set="products"><span class="ico">🧠</span><h3>AI for Business Products</h3><p>AI inside websites and products: APIs, integrations, and full builds.</p><span class="more">3 examples →</span></button>
+      <button class="ai-card" data-set="marketing"><span class="ico">💬</span><h3>Marketing</h3><p>Customer service on autopilot: smart forms, WhatsApp alerts, chatbots, and voice agents.</p><span class="more">4 examples →</span></button>
+    </div>
+
+    <div class="ai-viewer">
+      <div class="ai-top"><div class="ai-title" id="aiTitle">Production</div><div class="ai-nav"><button id="aiPrev" aria-label="Previous example">←</button><span class="ai-count" id="aiCount">1 / 5</span><button class="next" id="aiNext">Next →</button></div></div>
+
+      <div class="ai-set active" id="set-production" data-title="Production">
+        <div class="ai-slide"><div><span class="tag ai">🤖 AI-assisted build</span><h4>Production planner (Gantt)</h4><p>Python desktop app that plans 12,000+ MEMS units per week and reschedules orders when capacity changes.</p><button class="ai-link" data-demo="scheduling">See live demo ↑</button></div><div class="viz"><div class="g-row"><span>PO 4471</span><div class="g-track"><div class="g-bar" style="left:0%;width:24%"></div></div></div><div class="g-row"><span>PO 4502</span><div class="g-track"><div class="g-bar" style="left:18%;width:30%"></div></div></div><div class="g-row"><span>PO 4519</span><div class="g-track"><div class="g-bar" style="left:42%;width:26%"></div></div></div><div class="g-row"><span>PO 4533</span><div class="g-track"><div class="g-bar" style="left:62%;width:22%"></div></div></div><div class="g-row"><span>PO 4540</span><div class="g-track"><div class="g-bar" style="left:76%;width:24%"></div></div></div><p class="note">12,000+ units planned per week</p></div></div>
+        <div class="ai-slide"><div><span class="tag ai">🤖 AI-assisted build</span><h4>Inventory reconciliation</h4><p>Balances every inventory stage between two snapshots with a flow-conservation solver, and traces each gap to its source.</p><button class="ai-link" data-demo="inventory">See live demo ↑</button></div><div class="viz"><div class="flow"><div class="n">Receipts<small>2,000</small></div><span class="a">→</span><div class="n">Inspection<small>1,200→800</small></div><span class="a">→</span><div class="n">OQA<small>300→250</small></div><span class="a">→</span><div class="n">Shipped<small>2,230</small></div></div><p class="note">Unexplained units: <span class="ok">0 ✓</span></p></div></div>
+        <div class="ai-slide"><div><span class="tag ai">🤖 AI-assisted build</span><h4>Automatic order generator</h4><p>Turns pending shipments into ready-to-send paperwork and flags when an export declaration is needed.</p><button class="ai-link" data-demo="orders">See live demo ↑</button></div><div class="viz"><div class="flow"><div class="n">Pending shipments<small>3 POs</small></div><span class="a">→</span><div class="n hl">Generator<small>Python</small></div></div><div class="files"><span>📄 PO_4471_invoice.pdf</span><span>📦 PO_4471_packing.pdf</span><span class="warn">⚠ Export declaration</span></div></div></div>
+        <div class="ai-slide"><div><span class="tag ai">🤖 AI-assisted build</span><h4>Sales ↔ Planning sync</h4><p>Keeps the shipping summary and the work plan aligned automatically, with no re-typing between teams.</p><button class="ai-link" data-demo="sync">See live demo ↑</button></div><div class="viz"><div class="flow"><div class="n">Sales<small>shipping summary</small></div><span class="a">→</span><div class="n hl">Sync<small>Python</small></div><span class="a">→</span><div class="n">Planning<small>work plan</small></div></div><p class="note">2 rows added · 3 duplicates skipped · <span class="ok">0 manual typing</span></p></div></div>
+        <div class="ai-slide"><div><span class="tag py">🐍 Built in Python</span><h4>Document data extraction</h4><p>Pulls the key fields out of business documents into a clean, structured sheet, so nobody has to re-type them.</p></div><div class="viz"><div class="flow"><div class="n">📄 Documents</div><span class="a">→</span><div class="n hl">Extractor<small>Python</small></div><span class="a">→</span><div class="n">📊 Sheet</div></div><table class="mini" style="margin-top:12px"><tr><th>Doc</th><th>PO</th><th>Qty</th><th>Date</th></tr><tr><td>invoice_118.pdf</td><td>4471</td><td>1,200</td><td>Mar 04</td></tr><tr><td>invoice_119.pdf</td><td>4502</td><td>800</td><td>Mar 06</td></tr></table></div></div>
+      </div>
+
+      <div class="ai-set" id="set-products" data-title="AI for Business Products">
+        <div class="ai-slide"><div><span class="tag ai">🤖 OpenAI API</span><h4>ZaiZai: resumes tailored by AI</h4><p>Reads the job posting and the user's resume, then rewrites the resume to match that specific job.</p><a class="ai-link" href="https://zaizai.ca" target="_blank" rel="noopener">Visit zaizai.ca ↗</a></div><div class="viz"><div class="tailor"><div class="doc"><b>Job posting</b>Needs <span class="kw">ERP</span>, <span class="kw">Python</span>, <span class="kw">inventory control</span></div><span class="flow"><span class="a">→</span></span><div class="doc"><b>Tailored resume</b>Built <span class="kw">Python</span> tools for <span class="kw">inventory control</span> in <span class="kw">ERP</span></div></div><p class="note">One resume per job, generated in seconds</p></div></div>
+        <div class="ai-slide"><div><span class="tag ai">🔗 Integrations</span><h4>ZaiZai: connected through APIs</h4><p>The product links AI with the tools people already use through API integration platforms and webhooks.</p></div><div class="viz"><div class="hub"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><g stroke="#DCD3FB" stroke-width="0.8"><line x1="50" y1="50" x2="50" y2="12"/><line x1="50" y1="50" x2="86" y2="36"/><line x1="50" y1="50" x2="74" y2="84"/><line x1="50" y1="50" x2="26" y2="84"/><line x1="50" y1="50" x2="14" y2="36"/></g></svg><div class="s" style="left:50%;top:12%">OpenAI</div><div class="s" style="left:84%;top:36%">Google APIs</div><div class="s" style="left:74%;top:86%">Microsoft Office</div><div class="s" style="left:26%;top:86%">Webhooks</div><div class="s" style="left:16%;top:36%">Integration platforms</div><div class="c">ZaiZai</div></div></div></div>
+        <div class="ai-slide"><div><span class="tag live">🌐 Live: this site</span><h4>Websites built and shipped with AI</h4><p>This portfolio is built and maintained with an AI coding agent: describe the change, review it, publish it.</p></div><div class="viz"><div class="flow"><div class="n">Request<small>plain language</small></div><span class="a">→</span><div class="n hl">AI agent<small>writes the code</small></div><span class="a">→</span><div class="n">Review<small>pull request</small></div><span class="a">→</span><div class="n">Live site</div></div><p class="note">Changes go from idea to published <span class="ok">in minutes</span></p></div></div>
+      </div>
+
+      <div class="ai-set" id="set-marketing" data-title="Marketing">
+        <div class="ai-slide"><div><span class="tag live">✉ Live on this page</span><h4>Smart contact forms</h4><p>Every request lands in your inbox instantly, already formatted, with spam filtered out before it reaches you.</p><a class="ai-link" href="#contact">Try it below ↓</a></div><div class="viz"><div class="flow"><div class="n">Form<small>website</small></div><span class="a">→</span><div class="n hl">API<small>validates + filters spam</small></div><span class="a">→</span><div class="n">✉ Email<small>instant</small></div></div><p class="note">No request gets lost in a spreadsheet</p></div></div>
+        <div class="ai-slide"><div><span class="tag ai">📲 WhatsApp alerts</span><h4>Requests straight to WhatsApp</h4><p>The same form can send an alert to WhatsApp through a webhook, so you can answer new clients from your phone.</p></div><div class="viz"><div class="chat"><span class="who">WhatsApp · Business alerts</span><div class="m wa"><b>New consultation request</b><br>Ana Ruiz · Acme Foods<br>“We lose hours reconciling inventory…”</div><div class="m out">Hi Ana! Thanks for reaching out. Does Thursday at 10 work for a call?</div></div></div></div>
+        <div class="ai-slide"><div><span class="tag ai">🎙 AI voice agent</span><h4>AI agent that answers calls</h4><p>Picks up the phone, answers common questions, captures the caller's details, and sends a summary so no lead is missed.</p></div><div class="viz"><div class="flow"><div class="n">📞 Call</div><span class="a">→</span><div class="n hl">AI voice agent<small>talks + listens</small></div><span class="a">→</span><div class="n">Details captured</div><span class="a">→</span><div class="n">✉ Summary</div></div><p class="note">Available 24/7, even when nobody is at the desk</p></div></div>
+        <div class="ai-slide"><div><span class="tag svc">Available service</span><h4>Website chatbot</h4><p>A chat assistant on your site that answers frequent questions and collects contact details for follow-up.</p></div><div class="viz"><div class="chat"><div class="m in">Do you deliver to Burnaby?</div><div class="m out">Yes! Delivery to Burnaby takes 1–2 days. Want a quote?</div><div class="m in">Sure, for 200 units</div><div class="m out">Great, what's the best email to send it to?</div></div></div></div>
+      </div>
+
+      <div class="ai-dots" id="aiDots"></div>
+    </div>
+
+    <div class="chips-label">AI & integration tools</div>
+    <div class="chips"><span>Python</span><span>OpenAI API</span><span>Google APIs</span><span>Microsoft Office</span><span>Webhooks</span><span>API integration platforms</span><span>WhatsApp</span><span>AI voice agents</span><span>Resend</span><span>React</span><span>Supabase</span><span>Vercel</span></div>
+  </section>
+
 
   <!-- ================= CONTACT ================= -->
   <section class="contact" id="contact">
@@ -297,6 +435,39 @@
     try { f.contentDocument.documentElement.dataset.theme = 'light'; } catch (err) {}
     fit(f, parseFloat(f.style.height));
   }));
+
+  // AI integration: pick an area, then click through its examples.
+  const aiCards = document.querySelectorAll('.ai-card');
+  const aiCount = document.getElementById('aiCount');
+  const aiDots = document.getElementById('aiDots');
+  let aiSet = document.querySelector('.ai-set.active'), aiIdx = 0;
+  function showAi(i) {
+    const list = aiSet.querySelectorAll('.ai-slide');
+    aiIdx = (i + list.length) % list.length;
+    list.forEach((el, j) => el.classList.toggle('active', j === aiIdx));
+    aiCount.textContent = (aiIdx + 1) + ' / ' + list.length;
+    aiDots.innerHTML = [...list].map((_, j) => '<span' + (j === aiIdx ? ' class="on"' : '') + '></span>').join('');
+  }
+  aiCards.forEach(card => card.addEventListener('click', () => {
+    aiCards.forEach(c => c.classList.toggle('active', c === card));
+    document.querySelectorAll('.ai-set').forEach(el => el.classList.remove('active'));
+    aiSet = document.getElementById('set-' + card.dataset.set);
+    aiSet.classList.add('active');
+    document.getElementById('aiTitle').textContent = aiSet.dataset.title;
+    showAi(0);
+  }));
+  document.getElementById('aiNext').addEventListener('click', () => showAi(aiIdx + 1));
+  document.getElementById('aiPrev').addEventListener('click', () => showAi(aiIdx - 1));
+  document.querySelectorAll('.ai-slide').forEach(el => el.addEventListener('click', e => {
+    if (e.target.closest('a, button')) return;
+    showAi(aiIdx + 1);
+  }));
+  // "See live demo" opens that tool's tab above.
+  document.querySelectorAll('.ai-link[data-demo]').forEach(link => link.addEventListener('click', () => {
+    document.querySelector('.tool-btn[data-panel="' + link.dataset.demo + '"]').click();
+    document.getElementById('toolNav').scrollIntoView({ behavior: 'smooth' });
+  }));
+  showAi(0);
 
   // Contact form -> /api/contact (emails the team).
   const form = document.getElementById('contactForm');
