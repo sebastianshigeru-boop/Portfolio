@@ -140,7 +140,8 @@
   }
 
   /* ---- contact menu (top of card) ---- */
-  .contact-menu{position:absolute; top:18px; right:18px; z-index:5;}
+  /* pinned to the viewport so it stays visible while scrolling; lines up with the card's right edge */
+  .contact-menu{position:fixed; top:58px; right:max(16px, calc(50% - 215px + 18px)); z-index:50;}
   .contact-menu summary{
     list-style:none; cursor:pointer; user-select:none;
     display:inline-flex; align-items:center; gap:8px;
@@ -151,6 +152,11 @@
     transition:background 0.2s ease;
   }
   .contact-menu summary:hover{background:var(--pill-hover);}
+  .contact-menu summary svg{width:16px; height:16px;}
+  @media (max-width:520px){
+    .contact-menu{top:calc(14px + env(safe-area-inset-top)); right:14px;}
+    .contact-menu summary{padding:12px 20px; font-size:15px; box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+  }
   .contact-menu summary::-webkit-details-marker{display:none;}
   .contact-menu summary::after{content:""; width:6px; height:6px; border-right:2px solid currentColor; border-bottom:2px solid currentColor; transform:translateY(-2px) rotate(45deg); transition:transform 0.2s ease;}
   .contact-menu[open] summary::after{transform:translateY(1px) rotate(-135deg);}
@@ -169,7 +175,7 @@
 <body>
 <main class="card">
   <details class="contact-menu">
-    <summary>Contact</summary>
+    <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Contact</summary>
     <div class="cm-pop">
       <a class="cm-item" data-contact="sms" href="sms:+12369784744"><span class="cm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>Phone</a>
       <a class="cm-item" data-contact="mail" href="mailto:sebastian.shigeru@gmail.com?subject=Hello"><span class="cm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></span>Email</a>
