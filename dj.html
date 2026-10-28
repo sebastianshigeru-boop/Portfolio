@@ -230,7 +230,8 @@
     <details class="contact-menu">
       <summary>Contact</summary>
       <div class="cm-pop">
-        <a class="cm-item" href="sms:+12369784744?&body=Hello!%20I%27d%20like%20information%20about%20DJ%20services.%20My%20name%20is%20"><span class="cm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>Phone</a>
+        <a class="cm-item" data-contact="sms" href="sms:+12369784744"><span class="cm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>Phone</a>
+        <a class="cm-item" data-contact="ig" href="https://ig.me/m/dj_zech" target="_blank" rel="noopener"><span class="cm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg></span>Instagram</a>
       </div>
     </details>
   </div>
@@ -438,9 +439,27 @@
   });
 </script>
 <script>
-  // close the contact menu on outside click or Escape
+  // contact menu: prefill messages with the page the visitor came from,
+  // and close on outside click or Escape
   (function(){
     var m=document.querySelector('.contact-menu'); if(!m) return;
+    var slug=location.pathname.split('/').pop().replace(/\.html$/,'').replace(/^index$/,'');
+    var page=(/^https?:$/.test(location.protocol) ? location.origin : 'https://sebastianhiga.com')+'/'+slug;
+    var msg='Hello, I come from '+page+'. My name is ';
+    var mailMsg='Hello, I come from '+page+'.\nMy name is ';
+    m.querySelectorAll('[data-contact]').forEach(function(a){
+      var t=a.dataset.contact;
+      if(t==='sms') a.href='sms:+12369784744?&body='+encodeURIComponent(msg);
+      if(t==='mail') a.href='mailto:sebastian.shigeru@gmail.com?subject=Hello&body='+encodeURIComponent(mailMsg);
+      if(t==='ig') a.addEventListener('click',function(){
+        // Instagram can't prefill DMs, so copy the message for the visitor to paste
+        if(navigator.clipboard) navigator.clipboard.writeText(msg).catch(function(){});
+        var n=document.createElement('div');
+        n.textContent='Message copied, paste it in the chat';
+        n.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:100;background:#111;color:#fff;padding:12px 18px;border-radius:100px;font:600 14px Inter,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35)';
+        document.body.appendChild(n); setTimeout(function(){ n.remove(); },3500);
+      });
+    });
     document.addEventListener('click',function(e){ if(m.open && !m.contains(e.target)) m.open=false; });
     document.addEventListener('keydown',function(e){ if(e.key==='Escape') m.open=false; });
   })();
