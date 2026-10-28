@@ -1,3 +1,7 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/engineering", "destination": "/resume", "permanent": true },
+    { "source": "/engineering.html", "destination": "/resume", "permanent": true }
+  ]
 }
