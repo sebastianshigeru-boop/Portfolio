@@ -86,11 +86,48 @@
   @media (max-width:680px){
     .panel{padding:0;}
   }
+
+  /* ---- contact menu ---- */
+  .topbar{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:36px;}
+  .topbar .back{margin-bottom:0;}
+  .contact-menu{position:relative;}
+  .contact-menu summary{
+    list-style:none; cursor:pointer; user-select:none;
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13.5px; font-weight:600; border-radius:100px; padding:8px 18px;
+    transition:background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .contact-menu summary::-webkit-details-marker{display:none;}
+  .contact-menu summary::after{content:""; width:6px; height:6px; border-right:2px solid currentColor; border-bottom:2px solid currentColor; transform:translateY(-2px) rotate(45deg); transition:transform 0.2s ease;}
+  .contact-menu[open] summary::after{transform:translateY(1px) rotate(-135deg);}
+  .cm-pop{
+    position:absolute; right:0; top:calc(100% + 8px); z-index:50;
+    min-width:180px; padding:8px; border-radius:18px;
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .cm-item{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; font-size:14px; font-weight:600;}
+  .cm-ico{width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .cm-ico svg{width:15px; height:15px;}
+  .contact-menu summary{background:var(--accent); color:#fff; box-shadow:var(--shadow);}
+  .contact-menu summary:hover{filter:brightness(1.08);}
+  .cm-pop{background:var(--card); box-shadow:0 8px 20px rgba(24,26,34,0.08), 0 20px 48px rgba(24,26,34,0.12);}
+  .cm-item{color:var(--ink);}
+  .cm-item:hover{background:var(--accent-soft); color:var(--accent);}
+  .cm-ico{background:var(--accent-soft); color:var(--accent);}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="index.html">← back to portfolio</a>
+  <div class="topbar">
+    <a class="back" href="/">← back to portfolio</a>
+    <details class="contact-menu">
+      <summary>Contact</summary>
+      <div class="cm-pop">
+        <a class="cm-item" href="sms:+12369784744?&body=Hello!%20My%20name%20is%20"><span class="cm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>Phone</a>
+        <a class="cm-item" href="mailto:sebastian.shigeru@gmail.com?subject=Hello&body=Hello!%0AMy%20name%20is%20"><span class="cm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></span>Email</a>
+      </div>
+    </details>
+  </div>
 
   <div class="hero-icon">◆</div>
   <h1>Marketing</h1>
@@ -199,6 +236,14 @@
       document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
     });
   });
+</script>
+<script>
+  // close the contact menu on outside click or Escape
+  (function(){
+    var m=document.querySelector('.contact-menu'); if(!m) return;
+    document.addEventListener('click',function(e){ if(m.open && !m.contains(e.target)) m.open=false; });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') m.open=false; });
+  })();
 </script>
 </body>
 </html>
