@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Wedding Program | DJ Zech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b16;
+  --panel:rgba(255,255,255,.035);
+  --panel-2:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.09);
+  --text:#e9eef8;
+  --muted:#8b98b4;
+  --blue:#2f6bff;
+  --teal:#22b8cf;
+  --gold:#f5b94a;
+  --rose:#ff6f9e;
+  --ok:#3ddc97;
+  --warn:#ffb347;
+  --radius:18px;
+  --grad:linear-gradient(135deg,var(--blue),var(--teal));
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--text);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:
+    radial-gradient(1100px 600px at 0% -10%,rgba(47,107,255,.22),transparent 60%),
+    radial-gradient(900px 500px at 100% 0%,rgba(34,184,207,.16),transparent 60%),
+    radial-gradient(800px 600px at 50% 110%,rgba(255,111,158,.08),transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+svg{display:block}
+
+/* Toolbar */
+.toolbar{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:rgba(7,11,22,.72);border-bottom:1px solid var(--line);
+}
+.toolbar-in{max-width:980px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:"Space Grotesk",sans-serif;font-weight:700;letter-spacing:.06em}
+.logo{width:34px;height:34px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:16px;box-shadow:0 0 0 3px rgba(47,107,255,.18)}
+.saved{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;margin-left:4px}
+.saved i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block;box-shadow:0 0 8px var(--ok)}
+.spacer{flex:1}
+.btn{
+  border:1px solid var(--line);background:var(--panel-2);border-radius:12px;padding:9px 14px;
+  display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;transition:.18s;white-space:nowrap
+}
+.btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
+.btn.primary{background:var(--grad);border-color:transparent;font-weight:600;box-shadow:0 8px 24px rgba(47,107,255,.35)}
+.btn.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.ghost{background:transparent}
+.btn svg{width:16px;height:16px}
+@media (max-width:640px){.btn .lbl{display:none}.btn{padding:9px 11px}.saved span{display:none}}
+
+/* Layout */
+main{max-width:980px;margin:0 auto;padding:28px 16px 80px}
+
+/* Hero */
+.hero{
+  position:relative;overflow:hidden;border:1px solid var(--line);border-radius:26px;padding:34px 30px;
+  background:linear-gradient(160deg,rgba(47,107,255,.16),rgba(34,184,207,.06) 55%,rgba(255,255,255,.02));
+}
+.hero:after{content:"";position:absolute;right:-80px;top:-80px;width:260px;height:260px;border-radius:50%;
+  background:conic-gradient(from 90deg,var(--blue),var(--teal),var(--rose),var(--blue));filter:blur(70px);opacity:.35;pointer-events:none}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.hero h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(32px,6vw,52px);line-height:1.05;margin:10px 0 12px;letter-spacing:-.01em}
+.hero .facts{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:15px}
+.hero .facts span{display:flex;align-items:center;gap:7px}
+.hero .facts svg{width:15px;height:15px;opacity:.8}
+.intro{margin-top:22px;padding:16px 18px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid var(--line);line-height:1.6;font-size:15px;color:#cdd6e8}
+.intro b{color:var(--text)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 8px}
+.stat{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:14px 16px}
+.stat small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.stat input[type=time]{background:transparent;border:0;font-size:20px;font-weight:600;font-family:"Space Grotesk",sans-serif;padding:0;width:100%;color-scheme:dark}
+.stat .big{font-size:20px;font-weight:600;font-family:"Space Grotesk",sans-serif}
+.stat .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.stat .sub.over{color:var(--warn)}
+.bar{height:5px;border-radius:9px;background:rgba(255,255,255,.08);margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--grad);border-radius:9px;transition:width .4s}
+.bar.rose i{background:linear-gradient(90deg,var(--rose),var(--gold))}
+@media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* Legend */
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:34px 0 14px;flex-wrap:wrap}
+.section-head h2{font-family:"Space Grotesk",sans-serif;font-size:24px;margin:0}
+.section-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
+
+/* Timeline */
+.list{list-style:none;margin:0;padding:0;position:relative}
+.item{display:grid;grid-template-columns:86px 22px 1fr;gap:0 12px;position:relative}
+.item .time{text-align:right;padding-top:20px}
+.t-start{display:block;font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px}
+.t-end{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.rail{position:relative;display:flex;justify-content:center}
+.rail:before{content:"";position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(var(--line),var(--line))}
+.item:first-child .rail:before{top:26px}
+.item:last-child .rail:before{bottom:calc(100% - 26px)}
+.dot{position:relative;margin-top:22px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--teal);box-shadow:0 0 0 4px rgba(34,184,207,.12)}
+.item.special .dot{border-color:var(--rose);box-shadow:0 0 0 4px rgba(255,111,158,.15),0 0 14px rgba(255,111,158,.6)}
+.card{
+  margin:8px 0;border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);
+  padding:14px 14px 12px 10px;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s
+}
+.card:hover{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.05)}
+.item.special .card{
+  border-color:rgba(255,111,158,.35);
+  background:linear-gradient(160deg,rgba(255,111,158,.10),rgba(245,185,74,.04) 60%,rgba(255,255,255,.02));
+}
+.card-top{display:flex;gap:6px;align-items:flex-start}
+.grip{border:0;background:transparent;color:var(--muted);padding:6px 4px;border-radius:8px;cursor:grab;touch-action:none;margin-top:2px}
+.grip:hover{color:var(--text);background:var(--panel-2)}
+.grip:active{cursor:grabbing}
+.grip svg{width:18px;height:18px}
+.titles{flex:1;min-width:0}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin:2px 0 4px}
+.badge svg{width:13px;height:13px}
+.title{font-family:"Space Grotesk",sans-serif;font-size:18px;font-weight:600;margin:2px 0 4px;outline:none;border-radius:6px;padding:1px 4px;margin-left:-4px}
+.desc{margin:0;color:#b7c2d8;font-size:14.5px;line-height:1.55;outline:none;border-radius:6px;padding:1px 4px;margin-left:-4px}
+[contenteditable]:hover{background:rgba(255,255,255,.04)}
+[contenteditable]:focus{background:rgba(47,107,255,.12);box-shadow:0 0 0 1px rgba(47,107,255,.5)}
+[contenteditable]:empty:before{content:attr(data-placeholder);color:var(--muted);opacity:.7}
+.actions{display:flex;gap:2px;opacity:.55;transition:opacity .2s}
+.card:hover .actions,.card:focus-within .actions{opacity:1}
+.icon{border:0;background:transparent;color:var(--muted);width:32px;height:32px;border-radius:9px;display:grid;place-items:center;transition:.15s}
+.icon:hover{background:var(--panel-2);color:var(--text)}
+.icon.danger:hover{color:#ff7a7a;background:rgba(255,90,90,.12)}
+.icon.on{color:var(--rose)}
+.icon svg{width:16px;height:16px}
+@media (max-width:640px){
+  .item{grid-template-columns:1fr;gap:0}
+  .rail{display:none}
+  .item .time{text-align:left;padding:14px 4px 0;display:flex;align-items:baseline;gap:8px}
+  .t-start{font-size:15px;color:var(--teal)}
+  .item.special .t-start{color:var(--rose)}
+  .t-end{margin:0}
+  .card-top{flex-wrap:wrap}
+  .titles{flex-basis:100%;order:2;padding:0 4px}
+  .actions{opacity:1;margin-left:auto;order:1}
+  .icon{width:34px;height:34px}
+  .meta{margin-left:4px}
+}
+
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0 30px}
+.dur{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.2);overflow:hidden}
+.dur button{border:0;background:transparent;width:28px;height:30px;color:var(--muted)}
+.dur button:hover{color:var(--text);background:var(--panel-2)}
+.dur button svg{width:14px;height:14px;margin:auto}
+.dur input{width:38px;border:0;background:transparent;text-align:center;font-weight:600;font-size:14px;-moz-appearance:textfield;appearance:textfield}
+.dur input::-webkit-inner-spin-button,.dur input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.dur span{font-size:12px;color:var(--muted);padding-right:4px}
+.energy{
+  appearance:none;-webkit-appearance:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px 6px 24px;
+  font-size:12.5px;font-weight:600;background:rgba(0,0,0,.2);position:relative;cursor:pointer;
+}
+.energy-wrap{position:relative;display:inline-flex}
+.energy-wrap:before{content:"";position:absolute;left:11px;top:50%;width:7px;height:7px;border-radius:50%;transform:translateY(-50%);background:var(--c,#999);box-shadow:0 0 8px var(--c,#999);pointer-events:none}
+.energy option{background:#0f1629;color:var(--text)}
+
+/* Song request */
+.song{margin:14px 0 2px 30px;padding:14px;border-radius:14px;background:rgba(0,0,0,.28);border:1px dashed rgba(255,111,158,.35)}
+.song-head{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;margin-bottom:10px}
+.song-head svg{width:16px;height:16px;color:var(--rose)}
+.song-head .st{margin-left:auto;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:rgba(255,179,71,.14);color:var(--warn)}
+.song-head .st.ok{background:rgba(61,220,151,.14);color:var(--ok)}
+.song-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:8px;transition:opacity .2s}
+.song-grid.off{opacity:.4;pointer-events:none}
+.field{display:flex;flex-direction:column;gap:4px}
+.field span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.field input,.song textarea,.notes textarea{
+  width:100%;border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:10px;padding:9px 11px;font-size:14px;outline:none;transition:.15s
+}
+.field input:focus,.song textarea:focus,.notes textarea:focus{border-color:rgba(47,107,255,.7);background:rgba(47,107,255,.08)}
+.song textarea{margin-top:8px;resize:none;min-height:38px}
+.toggle{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:13.5px;color:#cdd6e8;cursor:pointer;user-select:none}
+.toggle input{position:absolute;opacity:0;pointer-events:none}
+.sw{flex:none;width:36px;height:20px;border-radius:999px;background:rgba(255,255,255,.14);position:relative;transition:.2s}
+.sw:after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:.2s}
+.toggle input:checked + .sw{background:var(--grad)}
+.toggle input:checked + .sw:after{left:19px}
+.toggle input:focus-visible + .sw{box-shadow:0 0 0 3px rgba(47,107,255,.4)}
+@media (max-width:640px){.song-grid{grid-template-columns:1fr}.meta,.song{margin-left:0}}
+
+/* Drag states */
+.ghost .card{opacity:.35;border-style:dashed}
+.chosen .card{box-shadow:0 18px 40px rgba(0,0,0,.45);transform:scale(1.01);border-color:rgba(47,107,255,.6)}
+.flash .card{animation:flash 1s ease}
+@keyframes flash{0%{box-shadow:0 0 0 2px rgba(34,184,207,.9)}100%{box-shadow:0 0 0 2px rgba(34,184,207,0)}}
+
+.add{
+  margin:14px 0 0 120px;width:calc(100% - 120px);border:1.5px dashed rgba(255,255,255,.18);background:transparent;border-radius:var(--radius);
+  padding:14px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;transition:.2s
+}
+.add:hover{color:var(--text);border-color:var(--teal);background:rgba(34,184,207,.06)}
+.add svg{width:18px;height:18px}
+@media (max-width:640px){.add{margin-left:0;width:100%}}
+
+.notes{margin-top:34px;border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);padding:18px}
+.notes h3{margin:0 0 4px;font-family:"Space Grotesk",sans-serif}
+.notes p{margin:0 0 12px;color:var(--muted);font-size:14px}
+.notes textarea{min-height:110px;resize:vertical;line-height:1.5}
+
+.send-cta{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.send-cta p{color:var(--muted);font-size:14px;margin:0}
+.send-cta .btn{padding:14px 26px;font-size:16px}
+
+footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 16px 40px;border-top:1px solid var(--line)}
+footer a{color:var(--muted)}
+.reset{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:13px;margin-top:8px}
+
+/* Modal */
+.modal{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;background:rgba(3,6,14,.7);backdrop-filter:blur(6px)}
+.modal.open{display:grid;animation:fade .2s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{width:100%;max-width:620px;max-height:90vh;overflow:auto;background:#0d1428;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.sheet h3{margin:0 0 6px;font-family:"Space Grotesk",sans-serif;font-size:22px}
+.sheet p{margin:0 0 14px;color:var(--muted);font-size:14px;line-height:1.5}
+.sheet textarea{width:100%;height:260px;border:1px solid var(--line);background:rgba(0,0,0,.3);border-radius:12px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;resize:vertical}
+.sheet .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.sheet .row .btn{flex:1;justify-content:center}
+.x{float:right;margin:-6px -6px 0 0}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(30px);opacity:0;z-index:120;
+  background:#141d36;border:1px solid var(--line);border-radius:14px;padding:11px 14px 11px 16px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 14px 40px rgba(0,0,0,.5);transition:.25s;font-size:14px;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.toast button{border:0;background:rgba(47,107,255,.2);color:#9fc0ff;border-radius:8px;padding:5px 10px;font-weight:600}
+
+/* Print */
+@media print{
+  body{background:#fff;color:#111}
+  .toolbar,.actions,.grip,.add,.dur button,.modal,.toast,.send-cta,.reset,.intro{display:none!important}
+  .hero,.card,.stat,.notes,.song{background:#fff!important;border:1px solid #ddd!important;box-shadow:none!important}
+  .hero:after{display:none}
+  .desc,.toggle,.hero .facts,.t-end,.stat .sub{color:#444!important}
+  input,select,textarea{color:#111!important;border-color:#ddd!important;background:#fff!important}
+  .item{break-inside:avoid}
+  .rail:before{background:#ddd}
+}
+</style>
+</head>
+<body>
+
+<header class="toolbar">
+  <div class="toolbar-in">
+    <div class="brand"><div class="logo">Z</div>DJ ZECH</div>
+    <div class="saved" id="saved"><i></i><span>Saved on this device</span></div>
+    <div class="spacer"></div>
+    <button class="btn ghost" id="printBtn" title="Print or save as PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+      <span class="lbl">Print</span>
+    </button>
+    <button class="btn primary" id="sendBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+      <span class="lbl">Send to DJ Zech</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">Wedding Program · Draft</div>
+    <h1 contenteditable data-h="couple" data-placeholder="Couple names" spellcheck="false"></h1>
+    <div class="facts">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><b contenteditable data-h="date" data-placeholder="Date"></b></span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 0 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><b contenteditable data-h="venue" data-placeholder="Venue"></b></span>
+    </div>
+    <div class="intro">
+      Hi! Here is the first draft of your wedding program. <b>Everything is editable:</b> drag any moment to reorder it, click any text to change it, adjust durations, add new moments or remove the ones you don't want. Times update automatically.<br><br>
+      Please check the <b>four highlighted Special Moments</b> and tell me your songs. <b>No song in mind? That's totally fine.</b> Just switch on "Let DJ Zech choose" and I'll find the perfect song for that moment. When you're done, press <b>Send to DJ Zech</b>.
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><small>Event starts</small><input type="time" id="startT"></div>
+    <div class="stat"><small>Event ends</small><input type="time" id="endT"></div>
+    <div class="stat"><small>Program ends</small><div class="big" id="progEnd">0:00</div><div class="sub" id="progSub"></div><div class="bar"><i id="progBar"></i></div></div>
+    <div class="stat"><small>Special songs</small><div class="big" id="songCount">0 / 0</div><div class="sub" id="songSub">ready</div><div class="bar rose"><i id="songBar"></i></div></div>
+  </div>
+
+  <div class="section-head">
+    <div>
+      <h2>The Night, Moment by Moment</h2>
+      <p>Drag the handle to reorder. Tap the heart to turn any moment into a song request.</p>
+    </div>
+  </div>
+
+  <ol class="list" id="list"></ol>
+
+  <button class="add" id="addBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Add a moment
+  </button>
+
+  <section class="notes">
+    <h3>Notes for DJ Zech</h3>
+    <p>Songs to avoid, special announcements, surprises, who gives the toasts, anything you'd like me to know.</p>
+    <textarea id="notes" placeholder="Write anything here..."></textarea>
+  </section>
+
+  <div class="send-cta">
+    <button class="btn primary" id="sendBtn2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+      Send my program to DJ Zech
+    </button>
+    <p>Your changes are saved on this device until you send them.</p>
+    <button class="reset" id="resetBtn">Start over with the original draft</button>
+  </div>
+</main>
+
+<footer>DJ Zech · DJ, Entertainment and MC Services</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="sheet">
+    <button class="icon x" id="closeModal" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h3 id="mTitle">Send your program</h3>
+    <p>Choose how you'd like to send it. The private link opens your exact version, with every change you made.</p>
+    <textarea id="summary" readonly></textarea>
+    <div class="row">
+      <button class="btn primary" id="emailBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>Email it</button>
+      <button class="btn" id="linkBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Copy private link</button>
+      <button class="btn" id="copyBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy text</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastMsg"></span><button id="toastBtn" hidden>Undo</button></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+<script>
+/* ============ SETTINGS: put your email here ============ */
+const DJ_EMAIL = "djzecheventos@gmail.com";
+const STORAGE_KEY = "djzech_program_henry_sara_v1";
+/* ======================================================= */
+
+const ENERGY = {
+  calm:{label:"Calm",c:"#7aa2ff"},
+  medium:{label:"Medium",c:"#22b8cf"},
+  rising:{label:"Rising",c:"#3ddc97"},
+  high:{label:"High energy",c:"#f5b94a"},
+  peak:{label:"Peak",c:"#ff6a3d"},
+  emotional:{label:"Emotional",c:"#ff6f9e"},
+  soft:{label:"Soft",c:"#b48cff"}
+};
+
+const DEFAULT = {
+  couple:"Henry and Sara",
+  date:"Saturday, October 31, 2026",
+  venue:"Association of United Ukrainian Canadians",
+  start:"17:00", end:"23:00", notes:"",
+  items:[
+    {title:"Cocktail Hour", desc:"Guests arrive and mingle with relaxed background music.", dur:60, energy:"medium"},
+    {title:"Grand Entrance", desc:"Henry and Sara make their entrance as a married couple.", dur:3, energy:"high"},
+    {title:"Welcome and Party Intro", desc:"DJ Zech introduces himself as your MC and warms up the crowd for the night.", dur:7, energy:"high"},
+    {title:"Toasts", desc:"Short speeches from family and friends, ending with a cheers. Let me know who will speak.", dur:20, energy:"calm"},
+    {title:"Dinner", desc:"Soft music while everyone enjoys dinner.", dur:60, energy:"calm"},
+    {title:"First Dance", desc:"Your first dance as a married couple.", dur:5, energy:"emotional", special:true},
+    {title:"Parent Dances", desc:"Dances with your parents. Tell me if you'd like one shared song or one song per parent.", dur:10, energy:"emotional", special:true},
+    {title:"Anniversary Dance", desc:"All couples on the floor. Couples leave by years together until the longest married couple remains and shares some advice with you.", dur:8, energy:"rising"},
+    {title:"Blindfold Game", desc:"You sit back to back with fun blindfolds and answer questions by raising a photo of who you think it is. Recorded for memories.", dur:10, energy:"medium"},
+    {title:"Team USA vs Team Peru", desc:"Each team dances its own music, then they switch: Team Peru dances an American classic and Team USA dances cumbia.", dur:6, energy:"high"},
+    {title:"Dance Circle", desc:"Guests form a big circle and take turns showing their best moves to a mix of Latin and English hits.", dur:12, energy:"high"},
+    {title:"Sing Along", desc:"Everyone sings the biggest hits together.", dur:12, energy:"high"},
+    {title:"Party Hits", desc:"Nonstop English party hits.", dur:32, energy:"high"},
+    {title:"Latin Set featuring Pitbull", desc:"Reggaeton, salsa, cumbia and the Pitbull set you requested.", dur:35, energy:"high"},
+    {title:"Hora Loca", desc:"The famous Peruvian crazy hour with props, costumes and maximum energy.", dur:30, energy:"peak"},
+    {title:"Thriller Group Dance", desc:"Halloween special! A quick 4 step Thriller routine with everyone facing the camera for a group video.", dur:8, energy:"high"},
+    {title:"Party Set", desc:"One more round of dancing.", dur:12, energy:"high"},
+    {title:"Special Song for the Couple", desc:"A romantic moment just for the two of you. Halfway through, all couples join you on the floor.", dur:4, energy:"emotional", special:true, song:"Make You Feel My Love", artist:"Adele", songNote:"Suggested by DJ Zech. Feel free to change it."},
+    {title:"Romantic Songs for Couples", desc:"Slow songs for every couple on the dance floor.", dur:16, energy:"soft"},
+    {title:"Wind Down", desc:"Calm songs to gently close the night.", dur:7, energy:"soft"},
+    {title:"Last Song of the Night", desc:"You two in the center, with all your guests around you holding up their phone lights.", dur:3, energy:"emotional", special:true}
+  ]
+};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const uid = () => Math.random().toString(36).slice(2,10);
+const clone = o => JSON.parse(JSON.stringify(o));
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toMin = t => { const [h,m] = String(t||"0:0").split(":").map(Number); return (h||0)*60 + (m||0); };
+const fmt = m => { m = ((m % 1440) + 1440) % 1440; let h = Math.floor(m/60), mm = m % 60; const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; return h + ":" + String(mm).padStart(2,"0") + " " + ap; };
+const norm = it => Object.assign({id:uid(), title:"", desc:"", dur:5, energy:"medium", special:false, song:"", artist:"", djPick:false, songNote:""}, it);
+
+const PT_SUPPORT = (() => { const d = document.createElement("div"); d.contentEditable = "plaintext-only"; return d.contentEditable === "plaintext-only"; })();
+const CE = PT_SUPPORT ? "plaintext-only" : "true";
+
+function encodeState(s){ return btoa(unescape(encodeURIComponent(JSON.stringify(s)))); }
+function decodeState(str){ return JSON.parse(decodeURIComponent(escape(atob(str)))); }
+
+/* ---------- state ---------- */
+let state;
+function freshState(){ const s = clone(DEFAULT); s.items = s.items.map(norm); return s; }
+function load(){
+  try{
+    const h = location.hash;
+    if(h.startsWith("#p=")){
+      const s = decodeState(decodeURIComponent(h.slice(3)));
+      s.items = (s.items||[]).map(norm);
+      setTimeout(()=>toast("Loaded the shared version of this program"), 400);
+      return s;
+    }
+  }catch(e){}
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ const s = JSON.parse(raw); s.items = (s.items||[]).map(norm); return s; }
+  }catch(e){}
+  return freshState();
+}
+let saveTimer;
+function save(){
+  clearTimeout(saveTimer);
+  const el = $("#saved"); el.style.opacity = .5;
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+    el.style.opacity = 1;
+  }, 250);
+}
+
+/* ---------- icons ---------- */
+const I = {
+  grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>',
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+  heartF:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>',
+  minus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  music:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>'
+};
+
+/* ---------- render ---------- */
+function songReady(it){ return it.djPick || (it.song||"").trim().length > 0; }
+
+function itemHTML(it){
+  const opts = Object.entries(ENERGY).map(([k,v]) => `<option value="${k}" ${k===it.energy?"selected":""}>${v.label}</option>`).join("");
+  const song = it.special ? `
+    <div class="song">
+      <div class="song-head">${I.music}Your song for this moment<span class="st ${songReady(it)?"ok":""}">${it.djPick?"DJ Zech will choose":songReady(it)?"Song added":"Waiting for your song"}</span></div>
+      <div class="song-grid ${it.djPick?"off":""}">
+        <label class="field"><span>Song</span><input data-f="song" value="${esc(it.song)}" placeholder="Song title"></label>
+        <label class="field"><span>Artist</span><input data-f="artist" value="${esc(it.artist)}" placeholder="Artist"></label>
+      </div>
+      <label class="toggle"><input type="checkbox" data-f="djPick" ${it.djPick?"checked":""}><span class="sw"></span><span>No song in mind? That's totally fine. Let DJ Zech choose one for you.</span></label>
+      <textarea data-f="songNote" rows="1" placeholder="Anything else? A specific version, where the song should start, who will dance...">${esc(it.songNote)}</textarea>
+    </div>` : "";
+  return `
+  <li class="item ${it.special?"special":""}" data-id="${it.id}">
+    <div class="time"><span class="t-start"></span><span class="t-end"></span></div>
+    <div class="rail"><span class="dot"></span></div>
+    <div class="card">
+      <div class="card-top">
+        <button class="grip" aria-label="Drag to reorder" title="Drag to reorder">${I.grip}</button>
+        <div class="titles">
+          ${it.special?`<div class="badge">${I.heartF}Special moment</div>`:""}
+          <h3 class="title" contenteditable="${CE}" data-f="title" data-placeholder="Moment name">${esc(it.title)}</h3>
+          <p class="desc" contenteditable="${CE}" data-f="desc" data-placeholder="Add a short description">${esc(it.desc)}</p>
+        </div>
+        <div class="actions">
+          <button class="icon" data-a="up" title="Move up" aria-label="Move up">${I.up}</button>
+          <button class="icon" data-a="down" title="Move down" aria-label="Move down">${I.down}</button>
+          <button class="icon ${it.special?"on":""}" data-a="special" title="${it.special?"Remove song request":"Add a song request"}" aria-label="Toggle song request">${it.special?I.heartF:I.heart}</button>
+          <button class="icon" data-a="dup" title="Duplicate" aria-label="Duplicate">${I.copy}</button>
+          <button class="icon danger" data-a="del" title="Remove" aria-label="Remove">${I.trash}</button>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="dur" title="Duration">
+          <button data-a="minus" aria-label="Less time">${I.minus}</button>
+          <input type="number" min="1" max="240" data-f="dur" value="${it.dur}" aria-label="Minutes">
+          <span>min</span>
+          <button data-a="plus" aria-label="More time">${I.plus}</button>
+        </div>
+        <span class="energy-wrap" style="--c:${(ENERGY[it.energy]||ENERGY.medium).c}"><select class="energy" data-f="energy" aria-label="Energy">${opts}</select></span>
+      </div>
+      ${song}
+    </div>
+  </li>`;
+}
+
+function renderList(){
+  $("#list").innerHTML = state.items.map(itemHTML).join("");
+  document.querySelectorAll(".song textarea").forEach(autosize);
+  updateTimes();
+}
+function renderHeader(){
+  document.querySelectorAll("[data-h]").forEach(el => { el.setAttribute("contenteditable", CE); el.textContent = state[el.dataset.h] || ""; });
+  $("#startT").value = state.start; $("#endT").value = state.end;
+  $("#notes").value = state.notes || "";
+  autosize($("#notes"));
+}
+
+function updateTimes(){
+  let t = toMin(state.start);
+  const lis = document.querySelectorAll("#list .item");
+  state.items.forEach((it,i) => {
+    const li = lis[i]; if(!li) return;
+    const d = Math.max(0, Number(it.dur)||0);
+    li.querySelector(".t-start").textContent = fmt(t);
+    li.querySelector(".t-end").textContent = "to " + fmt(t + d);
+    t += d;
+  });
+  const start = toMin(state.start);
+  let end = toMin(state.end); if(end <= start) end += 1440;
+  const total = t - start, avail = end - start, diff = total - avail;
+  $("#progEnd").textContent = fmt(t);
+  const sub = $("#progSub");
+  sub.classList.toggle("over", diff > 0);
+  sub.textContent = diff > 0 ? `${diff} min over the event time` : diff < 0 ? `${-diff} min of free time` : "Right on time";
+  $("#progBar").style.width = Math.min(100, avail ? total/avail*100 : 0) + "%";
+  updateSongs();
+}
+function updateSongs(){
+  const sp = state.items.filter(i => i.special), ok = sp.filter(songReady).length;
+  $("#songCount").textContent = `${ok} / ${sp.length}`;
+  $("#songSub").textContent = sp.length === 0 ? "No song requests" : ok === sp.length ? "All set, thank you!" : `${sp.length - ok} still to choose`;
+  $("#songBar").style.width = (sp.length ? ok/sp.length*100 : 0) + "%";
+}
+function autosize(t){ if(!t) return; t.style.height = "auto"; t.style.height = (t.scrollHeight + 2) + "px"; }
+
+/* ---------- events ---------- */
+const list = $("#list");
+const findItem = el => { const li = el.closest(".item"); return li ? [state.items.findIndex(i => i.id === li.dataset.id), li] : [-1,null]; };
+
+list.addEventListener("input", e => {
+  const f = e.target.dataset.f; if(!f) return;
+  const [i, li] = findItem(e.target); if(i < 0) return;
+  const it = state.items[i];
+  if(e.target.isContentEditable) it[f] = e.target.innerText.replace(/\n+$/,"");
+  else if(f === "dur"){ it.dur = Math.max(1, Math.min(240, parseInt(e.target.value)||1)); updateTimes(); }
+  else if(f === "djPick"){ it.djPick = e.target.checked; refreshSong(li, it); }
+  else if(f === "energy"){ it.energy = e.target.value; e.target.parentElement.style.setProperty("--c", ENERGY[it.energy].c); }
+  else { it[f] = e.target.value; if(e.target.tagName === "TEXTAREA") autosize(e.target); if(f === "song") refreshSong(li, it); }
+  save();
+});
+list.addEventListener("change", e => {
+  if(e.target.dataset.f === "dur") e.target.value = state.items[findItem(e.target)[0]].dur;
+});
+function refreshSong(li, it){
+  li.querySelector(".song-grid").classList.toggle("off", it.djPick);
+  const st = li.querySelector(".song-head .st");
+  st.classList.toggle("ok", songReady(it));
+  st.textContent = it.djPick ? "DJ Zech will choose" : songReady(it) ? "Song added" : "Waiting for your song";
+  updateSongs();
+}
+
+let lastDeleted = null;
+list.addEventListener("click", e => {
+  const b = e.target.closest("[data-a]"); if(!b) return;
+  const [i, li] = findItem(b); if(i < 0) return;
+  const a = b.dataset.a, items = state.items;
+  if(a === "up" && i > 0){ [items[i-1], items[i]] = [items[i], items[i-1]]; renderList(); flash(items[i-1].id); }
+  else if(a === "down" && i < items.length-1){ [items[i+1], items[i]] = [items[i], items[i+1]]; renderList(); flash(items[i+1].id); }
+  else if(a === "minus" || a === "plus"){
+    const it = items[i]; it.dur = Math.max(1, Math.min(240, (Number(it.dur)||0) + (a === "plus" ? 1 : -1)));
+    li.querySelector('[data-f="dur"]').value = it.dur; updateTimes();
+  }
+  else if(a === "special"){ items[i].special = !items[i].special; renderList(); flash(items[i].id); toast(items[i].special ? "Song request added to this moment" : "Song request removed"); }
+  else if(a === "dup"){ const c = Object.assign(clone(items[i]), {id:uid()}); items.splice(i+1, 0, c); renderList(); flash(c.id); }
+  else if(a === "del"){
+    lastDeleted = {item: items[i], index: i}; items.splice(i,1); renderList();
+    toast(`"${lastDeleted.item.title || "Moment"}" removed`, "Undo", () => { if(!lastDeleted) return; items.splice(lastDeleted.index, 0, lastDeleted.item); renderList(); flash(lastDeleted.item.id); lastDeleted = null; save(); });
+  }
+  save();
+});
+list.addEventListener("keydown", e => {
+  if(e.target.isContentEditable && e.key === "Enter" && e.target.dataset.f === "title"){ e.preventDefault(); e.target.blur(); }
+});
+document.addEventListener("paste", e => {
+  if(!e.target.isContentEditable || PT_SUPPORT) return;
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData("text");
+  document.execCommand("insertText", false, text);
+});
+
+function flash(id){
+  const li = list.querySelector(`[data-id="${id}"]`); if(!li) return;
+  li.classList.remove("flash"); void li.offsetWidth; li.classList.add("flash");
+}
+
+document.querySelectorAll("[data-h]").forEach(el => el.addEventListener("input", () => { state[el.dataset.h] = el.innerText.trim(); save(); }));
+document.querySelectorAll("[data-h]").forEach(el => el.addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); el.blur(); } }));
+$("#startT").addEventListener("input", e => { state.start = e.target.value || "17:00"; updateTimes(); save(); });
+$("#endT").addEventListener("input", e => { state.end = e.target.value || "23:00"; updateTimes(); save(); });
+$("#notes").addEventListener("input", e => { state.notes = e.target.value; autosize(e.target); save(); });
+
+$("#addBtn").addEventListener("click", () => {
+  const it = norm({title:"New moment", desc:"", dur:10, energy:"high"});
+  state.items.push(it); renderList(); save(); flash(it.id);
+  const t = list.querySelector(`[data-id="${it.id}"] .title`);
+  t.scrollIntoView({behavior:"smooth", block:"center"});
+  setTimeout(() => { t.focus(); document.getSelection().selectAllChildren(t); }, 350);
+});
+
+$("#resetBtn").addEventListener("click", () => {
+  if(!confirm("Start over with the original draft? Your changes on this device will be replaced.")) return;
+  state = freshState(); history.replaceState(null, "", location.pathname + location.search);
+  renderHeader(); renderList(); save(); toast("Original draft restored");
+});
+
+/* ---------- drag and drop ---------- */
+if(window.Sortable){
+  Sortable.create(list, {
+    handle: ".grip", animation: 200, easing: "cubic-bezier(.2,.8,.2,1)",
+    ghostClass: "ghost", chosenClass: "chosen", delayOnTouchOnly: true, delay: 80,
+    onEnd(e){
+      if(e.oldIndex === e.newIndex) return;
+      const [m] = state.items.splice(e.oldIndex, 1);
+      state.items.splice(e.newIndex, 0, m);
+      updateTimes(); save(); flash(m.id);
+    }
+  });
+} else {
+  document.documentElement.classList.add("no-drag");
+}
+
+/* ---------- send ---------- */
+function summaryText(){
+  const L = [];
+  L.push(`WEDDING PROGRAM: ${state.couple}`);
+  L.push(`${state.date}`);
+  L.push(`${state.venue}`);
+  L.push(`Event: ${fmt(toMin(state.start))} to ${fmt(toMin(state.end))}`);
+  L.push("");
+  let t = toMin(state.start);
+  state.items.forEach((it, n) => {
+    L.push(`${fmt(t)}  ${it.title}  (${it.dur} min, ${(ENERGY[it.energy]||ENERGY.medium).label})`);
+    if(it.special){
+      const s = it.djPick ? "DJ Zech will choose" : (it.song ? `${it.song}${it.artist ? " by " + it.artist : ""}` : "No song yet");
+      L.push(`      Song: ${s}`);
+      if(it.songNote) L.push(`      Note: ${it.songNote}`);
+    }
+    t += Number(it.dur)||0;
+  });
+  L.push(`${fmt(t)}  End of program`);
+  if(state.notes && state.notes.trim()){ L.push(""); L.push("NOTES FOR DJ ZECH:"); L.push(state.notes.trim()); }
+  return L.join("\n");
+}
+function shareLink(){ return location.href.split("#")[0] + "#p=" + encodeURIComponent(encodeState(state)); }
+
+function openModal(){ $("#summary").value = summaryText(); $("#modal").classList.add("open"); }
+function closeModal(){ $("#modal").classList.remove("open"); }
+$("#sendBtn").addEventListener("click", openModal);
+$("#sendBtn2").addEventListener("click", openModal);
+$("#closeModal").addEventListener("click", closeModal);
+$("#modal").addEventListener("click", e => { if(e.target.id === "modal") closeModal(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeModal(); });
+
+async function copy(text, msg){
+  try{ await navigator.clipboard.writeText(text); }
+  catch(e){ const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); }catch(_){} ta.remove(); }
+  toast(msg);
+}
+$("#copyBtn").addEventListener("click", () => copy(summaryText(), "Program copied"));
+$("#linkBtn").addEventListener("click", () => copy(shareLink(), "Private link copied. Paste it in a message to DJ Zech"));
+$("#emailBtn").addEventListener("click", () => {
+  const body = summaryText() + "\n\nOpen my edited version:\n" + shareLink();
+  const href = `mailto:${DJ_EMAIL}?subject=${encodeURIComponent("Wedding program: " + state.couple)}&body=${encodeURIComponent(body)}`;
+  window.location.href = href;
+});
+$("#printBtn").addEventListener("click", () => window.print());
+
+/* ---------- toast ---------- */
+let toastTimer;
+function toast(msg, action, fn){
+  const t = $("#toast"), b = $("#toastBtn");
+  $("#toastMsg").textContent = msg;
+  b.hidden = !action; if(action){ b.textContent = action; b.onclick = () => { fn(); t.classList.remove("show"); }; }
+  t.classList.add("show"); clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), action ? 5000 : 2600);
+}
+
+/* ---------- init ---------- */
+state = load();
+renderHeader();
+renderList();
+</script>
+</body>
+</html>
