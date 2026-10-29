@@ -218,6 +218,7 @@ main{max-width:980px;margin:0 auto;padding:28px 16px 80px}
 .send-cta{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
 .send-cta p{color:var(--muted);font-size:14px;margin:0}
 .send-cta .btn{padding:14px 26px;font-size:16px}
+.send-cta .btn:not(.primary){padding:11px 20px;font-size:14px}
 
 footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 16px 40px;border-top:1px solid var(--line)}
 footer a{color:var(--muted)}
@@ -266,6 +267,10 @@ footer a{color:var(--muted)}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
       <span class="lbl">Print</span>
     </button>
+    <button class="btn" id="pdfBtn" title="Download the program as a PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+      <span class="lbl">Download PDF</span>
+    </button>
     <button class="btn primary" id="sendBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
       <span class="lbl">Send to DJ Zech</span>
@@ -283,7 +288,7 @@ footer a{color:var(--muted)}
     </div>
     <div class="intro">
       Hi! Here is the first draft of your wedding program. <b>Everything is editable:</b> drag any moment to reorder it, click any text to change it, adjust durations, add new moments or remove the ones you don't want. Times update automatically.<br><br>
-      Please check the <b>four highlighted Special Moments</b> and tell me your songs. <b>No song in mind? That's totally fine.</b> Just switch on "Let DJ Zech choose" and I'll find the perfect song for that moment. When you're done, press <b>Send to DJ Zech</b>.
+      Please check the <b>four highlighted Special Moments</b> and tell me your songs. <b>No song in mind? That's totally fine.</b> Just switch on "Let DJ Zech choose" and I'll find the perfect song for that moment. When you're done, press <b>Send to DJ Zech</b>: your program goes straight to me as a PDF and you get a copy downloaded too.
     </div>
   </section>
 
@@ -319,7 +324,11 @@ footer a{color:var(--muted)}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
       Send my program to DJ Zech
     </button>
-    <p>Your changes are saved on this device until you send them.</p>
+    <button class="btn" id="pdfBtn2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+      Download as PDF
+    </button>
+    <p>Sending emails me your program as a PDF and downloads a copy for you. Your changes are saved on this device until then.</p>
     <button class="reset" id="resetBtn">Start over with the original draft</button>
   </div>
 </main>
@@ -335,6 +344,7 @@ footer a{color:var(--muted)}
     <div class="row">
       <button class="btn primary" id="emailBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>Email it</button>
       <button class="btn" id="linkBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Copy private link</button>
+      <button class="btn" id="pdfBtn3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>PDF</button>
       <button class="btn" id="copyBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy text</button>
     </div>
   </div>
@@ -343,6 +353,7 @@ footer a{color:var(--muted)}
 <div class="toast" id="toast"><span id="toastMsg"></span><button id="toastBtn" hidden>Undo</button></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 /* ============ SETTINGS: put your email here ============ */
 const DJ_EMAIL = "djzecheventos@gmail.com";
@@ -658,8 +669,35 @@ function shareLink(){ return location.href.split("#")[0] + "#p=" + encodeURIComp
 
 function openModal(){ $("#summary").value = summaryText(); $("#modal").classList.add("open"); }
 function closeModal(){ $("#modal").classList.remove("open"); }
-$("#sendBtn").addEventListener("click", openModal);
-$("#sendBtn2").addEventListener("click", openModal);
+let sending = false;
+async function sendProgram(){
+  if(sending) return;
+  if(!window.jspdf){ openModal(); return; }
+  sending = true;
+  const btns = [$("#sendBtn"), $("#sendBtn2")];
+  btns.forEach(b => { b.disabled = true; b.style.opacity = .6; });
+  toast("Sending your program to DJ Zech...");
+  try{
+    const {doc, name} = buildPDF();
+    doc.save(name);
+    const pdf = doc.output("datauristring").split(",")[1];
+    const r = await fetch("/api/wedding-program", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({couple: state.couple, summary: summaryText(), link: shareLink(), filename: name, pdf})
+    });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    toast("Sent! DJ Zech got your program. A PDF copy was downloaded for you.");
+  }catch(e){
+    console.error(e);
+    openModal();
+    toast("Couldn't send automatically. Please email it with the options below.");
+  }finally{
+    sending = false;
+    btns.forEach(b => { b.disabled = false; b.style.opacity = ""; });
+  }
+}
+$("#sendBtn").addEventListener("click", sendProgram);
+$("#sendBtn2").addEventListener("click", sendProgram);
 $("#closeModal").addEventListener("click", closeModal);
 $("#modal").addEventListener("click", e => { if(e.target.id === "modal") closeModal(); });
 document.addEventListener("keydown", e => { if(e.key === "Escape") closeModal(); });
@@ -677,6 +715,118 @@ $("#emailBtn").addEventListener("click", () => {
   window.location.href = href;
 });
 $("#printBtn").addEventListener("click", () => window.print());
+
+/* ---------- PDF ---------- */
+const hexRGB = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16));
+function buildPDF(){
+  const doc = new window.jspdf.jsPDF({unit:"pt", format:"letter"});
+  const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+  const M = 48, TW = 74, CX = M + TW + 14, CW = W - CX - M;
+  const NAVY = [7,11,22], TEAL = [34,184,207], ROSE = [255,111,158], INK = [28,34,48], GRAY = [104,114,135], LINE = [226,230,238];
+  let y;
+
+  // Header band
+  doc.setFillColor(...NAVY); doc.rect(0, 0, W, 128, "F");
+  doc.setFillColor(...TEAL); doc.rect(0, 128, W, 3, "F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(...TEAL);
+  doc.text("DJ ZECH  \u00B7  WEDDING PROGRAM", M, 40, {charSpace:1.2});
+  doc.setFontSize(26); doc.setTextColor(255,255,255);
+  doc.text(state.couple || "Wedding Program", M, 74);
+  doc.setFont("helvetica","normal"); doc.setFontSize(10.5); doc.setTextColor(200,210,230);
+  const facts = [state.date, state.venue, `${fmt(toMin(state.start))} to ${fmt(toMin(state.end))}`].filter(Boolean).join("   \u00B7   ");
+  doc.text(doc.splitTextToSize(facts, W - 2*M), M, 98);
+  y = 162;
+
+  const newPage = () => { doc.addPage(); y = 56; };
+  const ensure = h => { if(y + h > H - 56) newPage(); };
+
+  // Timeline
+  let t = toMin(state.start);
+  state.items.forEach(it => {
+    const d = Math.max(0, Number(it.dur)||0);
+    doc.setFont("helvetica","bold"); doc.setFontSize(12);
+    const titleL = doc.splitTextToSize(it.title || "Moment", CW - 90);
+    doc.setFont("helvetica","normal"); doc.setFontSize(9.5);
+    const descL = it.desc ? doc.splitTextToSize(it.desc, CW) : [];
+    let songL = [], noteL = [];
+    if(it.special){
+      const s = it.djPick ? "DJ Zech will choose" : (it.song ? `${it.song}${it.artist ? " by " + it.artist : ""}` : "No song yet");
+      doc.setFont("helvetica","bold"); songL = doc.splitTextToSize("Song: " + s, CW - 16);
+      doc.setFont("helvetica","italic"); noteL = it.songNote ? doc.splitTextToSize(it.songNote, CW - 16) : [];
+    }
+    const songH = it.special ? 14 + (songL.length + noteL.length) * 12 : 0;
+    const h = titleL.length * 15 + descL.length * 12.5 + (songH ? songH + 6 : 0) + 18;
+    ensure(h);
+    const top = y;
+
+    if(it.special){ doc.setFillColor(255,242,247); doc.roundedRect(M - 8, top - 14, W - 2*M + 16, h - 4, 6, 6, "F"); }
+
+    doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(...(it.special ? ROSE : TEAL));
+    doc.text(fmt(t), M + TW, top, {align:"right"});
+    doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(...GRAY);
+    doc.text("to " + fmt(t + d), M + TW, top + 12, {align:"right"});
+
+    doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.setTextColor(...INK);
+    doc.text(titleL, CX, top);
+    const en = ENERGY[it.energy] || ENERGY.medium;
+    doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(...GRAY);
+    const tag = `${d} min  \u00B7  ${en.label}`;
+    doc.text(tag, W - M, top, {align:"right"});
+    doc.setFillColor(...hexRGB(en.c)); doc.circle(W - M - doc.getTextWidth(tag) - 7, top - 3, 2.6, "F");
+
+    let yy = top + titleL.length * 15 - 2;
+    if(descL.length){ doc.setFont("helvetica","normal"); doc.setFontSize(9.5); doc.setTextColor(...GRAY); doc.text(descL, CX, yy, {lineHeightFactor:1.3}); yy += descL.length * 12.5; }
+
+    if(it.special){
+      yy += 4;
+      doc.setDrawColor(...ROSE); doc.setLineWidth(1.5); doc.line(CX, yy - 6, CX, yy - 6 + songH - 4);
+      doc.setFont("helvetica","bold"); doc.setFontSize(9.5); doc.setTextColor(...ROSE);
+      doc.text("SPECIAL MOMENT", CX + 9, yy + 2, {charSpace:.6});
+      yy += 14;
+      doc.setTextColor(...INK); doc.text(songL, CX + 9, yy); yy += songL.length * 12;
+      if(noteL.length){ doc.setFont("helvetica","italic"); doc.setTextColor(...GRAY); doc.text(noteL, CX + 9, yy); }
+    }
+
+    y = top + h;
+    if(!it.special){ doc.setDrawColor(...LINE); doc.setLineWidth(.6); doc.line(CX, y - 14, W - M, y - 14); }
+    t += d;
+  });
+
+  ensure(30);
+  doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(...TEAL);
+  doc.text(fmt(t), M + TW, y, {align:"right"});
+  doc.setTextColor(...INK); doc.text("End of program", CX, y);
+  y += 30;
+
+  if(state.notes && state.notes.trim()){
+    doc.setFont("helvetica","normal"); doc.setFontSize(10);
+    const nl = doc.splitTextToSize(state.notes.trim(), W - 2*M - 28);
+    ensure(48 + Math.min(nl.length, 6) * 13);
+    doc.setFont("helvetica","bold"); doc.setFontSize(13); doc.setTextColor(...INK);
+    doc.text("Notes for DJ Zech", M, y); y += 18;
+    doc.setFont("helvetica","normal"); doc.setFontSize(10); doc.setTextColor(...GRAY);
+    nl.forEach(line => { ensure(14); doc.text(line, M + 14, y); y += 13; });
+  }
+
+  const pages = doc.getNumberOfPages();
+  for(let p = 1; p <= pages; p++){
+    doc.setPage(p);
+    doc.setDrawColor(...LINE); doc.setLineWidth(.6); doc.line(M, H - 36, W - M, H - 36);
+    doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(...GRAY);
+    doc.text("DJ Zech  \u00B7  DJ, Entertainment and MC Services  \u00B7  djzecheventos@gmail.com", M, H - 22);
+    doc.text(`${p} / ${pages}`, W - M, H - 22, {align:"right"});
+  }
+
+  const name = "Wedding Program - " + ((state.couple || "DJ Zech").replace(/[\\/:*?"<>|]+/g, "").trim() || "DJ Zech") + ".pdf";
+  return {doc, name};
+}
+function downloadPDF(){
+  if(!window.jspdf){ toast("PDF tool didn't load. Use Print and choose Save as PDF"); return; }
+  const {doc, name} = buildPDF();
+  doc.save(name);
+  toast("PDF downloaded");
+}
+["#pdfBtn","#pdfBtn2","#pdfBtn3"].forEach(s => $(s).addEventListener("click", downloadPDF));
 
 /* ---------- toast ---------- */
 let toastTimer;
