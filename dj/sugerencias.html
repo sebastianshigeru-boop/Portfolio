@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suggestions | DJ Zech</title>
+<meta name="description" content="Send DJ Zech your song requests and suggestions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0D0C; --surface:#141715; --surface-2:#1B1F1C; --line:#2A2F28;
+    --ink:#F3F5F3; --ink-soft:#A9B0AA; --ink-faint:#6F766F;
+    --neon:#39FF6E; --neon-dim:#1FA34A; --neon-tint:rgba(57,255,110,0.10);
+    --err:#FF6B6B;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    min-height:100vh; background:var(--bg); color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(57,255,110,0.10), transparent 45%),
+      radial-gradient(circle at 90% 25%, rgba(57,255,110,0.05), transparent 40%);
+  }
+  .wrap{max-width:520px; margin:0 auto; padding:28px 20px 60px;}
+  .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:28px;}
+  .brand{display:flex; align-items:center; gap:12px;}
+  .logo{width:48px; height:48px; border-radius:14px; overflow:hidden; box-shadow:0 0 22px rgba(57,255,110,0.28); background:var(--surface);}
+  .logo img{width:100%; height:100%; object-fit:cover; display:block;}
+  .brand b{font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; letter-spacing:.04em;}
+  h1{font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(30px,8vw,40px); font-weight:800; letter-spacing:-.02em; line-height:1.1; text-shadow:0 0 18px rgba(57,255,110,0.30);}
+  .event{display:inline-block; margin-top:12px; font-size:13px; font-weight:600; color:var(--neon); background:var(--neon-tint); border:1px solid rgba(57,255,110,.25); border-radius:100px; padding:5px 12px;}
+  .lede{color:var(--ink-soft); font-size:15.5px; line-height:1.6; margin:14px 0 26px;}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:22px; padding:22px;}
+  .field{margin-bottom:18px;}
+  label{display:block; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-bottom:8px;}
+  label .opt{color:var(--ink-faint); font-weight:600; text-transform:none; letter-spacing:0;}
+  input,textarea{
+    width:100%; background:var(--surface-2); border:1.5px solid var(--line); border-radius:12px;
+    padding:13px 14px; color:var(--ink); font:16px 'Inter',sans-serif; outline:none; transition:border-color .15s, box-shadow .15s;
+  }
+  textarea{min-height:110px; resize:vertical; line-height:1.5;}
+  input::placeholder,textarea::placeholder{color:var(--ink-faint);}
+  input:focus,textarea:focus{border-color:var(--neon-dim); box-shadow:0 0 0 3px rgba(57,255,110,.15);}
+  .bad{border-color:var(--err) !important;}
+  .pair{border:1px dashed var(--line); border-radius:16px; padding:14px 14px 2px; margin-bottom:18px;}
+  .pair.bad{border-style:solid;}
+  .pair-hint{font-size:13px; color:var(--ink-soft); margin-bottom:12px;}
+  .pair .field{margin-bottom:12px;}
+  .err{display:none; color:var(--err); font-size:13px; margin-top:6px;}
+  .err.show{display:block;}
+  .hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;}
+  .send{
+    width:100%; border:0; border-radius:14px; padding:16px; cursor:pointer;
+    background:var(--neon); color:#06170B; font:700 16px 'Inter',sans-serif;
+    box-shadow:0 0 24px rgba(57,255,110,.30); transition:transform .15s, opacity .15s;
+  }
+  .send:active{transform:scale(.98);}
+  .send:disabled{opacity:.6; cursor:default;}
+  .msg{display:none; margin-top:14px; font-size:14px; text-align:center;}
+  .msg.show{display:block;}
+  .msg.error{color:var(--err);}
+  .done{display:none; text-align:center; padding:18px 4px 6px;}
+  .done.show{display:block;}
+  .check{width:64px; height:64px; margin:0 auto 14px; border-radius:50%; background:var(--neon-tint); border:2px solid var(--neon); display:grid; place-items:center; color:var(--neon); font-size:30px; box-shadow:0 0 26px rgba(57,255,110,.3);}
+  .done h2{font-family:'Plus Jakarta Sans',sans-serif; font-size:24px; margin-bottom:8px;}
+  .done p{color:var(--ink-soft); font-size:15px; line-height:1.55; margin-bottom:20px;}
+  .again{background:none; border:1.5px solid var(--neon-dim); color:var(--neon); border-radius:12px; padding:12px 18px; font:600 15px 'Inter',sans-serif; cursor:pointer;}
+  .foot{margin-top:26px; text-align:center; font-size:13px; color:var(--ink-faint);}
+  .foot a{color:var(--ink-soft); text-decoration:none;}
+  .foot a:hover{color:var(--neon);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <div class="logo"><img src="/assets/dj/logo.png" alt="DJ Zech"></div>
+      <b>DJ ZECH</b>
+    </div>
+  </div>
+
+  <h1 data-i18n="title">Request a song</h1>
+  <div class="event" id="eventTag" hidden></div>
+  <p class="lede" data-i18n="lede">Tell me what you want to hear tonight, or any idea to make the party better.</p>
+
+  <div class="card">
+    <form id="form" novalidate>
+      <div class="field">
+        <label for="name" data-i18n="name">Your name</label>
+        <input id="name" name="name" autocomplete="name" maxlength="120" required>
+        <div class="err" id="nameErr" data-i18n="nameErr">Please enter your name.</div>
+      </div>
+
+      <div class="pair" id="pair">
+        <div class="pair-hint" data-i18n="pairHint">Phone or email: fill in at least one.</div>
+        <div class="field">
+          <label for="phone"><span data-i18n="phone">Phone</span> <span class="opt" data-i18n="optional">(optional)</span></label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="40">
+        </div>
+        <div class="field">
+          <label for="email"><span data-i18n="email">Email</span> <span class="opt" data-i18n="optional">(optional)</span></label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="200">
+        </div>
+        <div class="err" id="pairErr" style="margin:-4px 0 12px"></div>
+      </div>
+
+      <div class="field">
+        <label for="suggestion" data-i18n="suggestion">Your suggestion</label>
+        <textarea id="suggestion" name="suggestion" maxlength="2000" data-i18n-ph="suggestionPh" placeholder="Song and artist, or your idea"></textarea>
+        <div class="err" id="suggestionErr" data-i18n="suggestionErr">Please write your suggestion.</div>
+      </div>
+
+      <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+
+      <button class="send" id="send" type="submit" data-i18n="send">Send to DJ Zech</button>
+      <div class="msg" id="msg"></div>
+    </form>
+
+    <div class="done" id="done">
+      <div class="check">✓</div>
+      <h2 data-i18n="doneTitle">Got it!</h2>
+      <p data-i18n="doneText">Thanks! Your suggestion went straight to DJ Zech.</p>
+      <button class="again" id="again" type="button" data-i18n="again">Send another</button>
+    </div>
+  </div>
+
+  <div class="foot"><a href="https://instagram.com/dj_zech">@dj_zech</a> · <a href="/dj">sebastianhiga.com/dj</a></div>
+</div>
+
+<script>
+const T = {
+  en:{
+    title:"Request a song", lede:"Tell me what you want to hear tonight, or any idea to make the party better.",
+    name:"Your name", nameErr:"Please enter your name.",
+    pairHint:"Phone or email: fill in at least one.", phone:"Phone", email:"Email", optional:"(optional)",
+    pairErr:"Add a phone number or an email.", phoneErr:"That phone number doesn't look right.", emailErr:"That email doesn't look right.",
+    suggestion:"Your suggestion", suggestionPh:"Song and artist, or your idea", suggestionErr:"Please write your suggestion.",
+    send:"Send to DJ Zech", sending:"Sending...", fail:"Couldn't send it. Check your connection and try again.",
+    doneTitle:"Got it!", doneText:"Thanks! Your suggestion went straight to DJ Zech.", again:"Send another"
+  }
+};
+const $ = s => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+const lang = "en";
+const event = (params.get("event") || params.get("e") || "").slice(0,120).trim();
+if(event){ const tag = $("#eventTag"); tag.textContent = event; tag.hidden = false; }
+
+
+const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+const phoneOk = v => /^[0-9+()\s.-]+$/.test(v) && v.replace(/\D/g,"").length >= 7;
+
+function show(id, on, text){ const el = $(id); if(text) el.textContent = text; el.classList.toggle("show", on); }
+function validate(){
+  const name = $("#name").value.trim(), phone = $("#phone").value.trim(),
+        email = $("#email").value.trim(), sug = $("#suggestion").value.trim();
+  let ok = true;
+  $("#name").classList.toggle("bad", !name); show("#nameErr", !name); if(!name) ok = false;
+
+  let pairMsg = "";
+  if(!phone && !email) pairMsg = T[lang].pairErr;
+  else if(phone && !phoneOk(phone)) pairMsg = T[lang].phoneErr;
+  else if(email && !emailOk(email)) pairMsg = T[lang].emailErr;
+  $("#pair").classList.toggle("bad", !!pairMsg);
+  $("#phone").classList.toggle("bad", !!phone && !phoneOk(phone));
+  $("#email").classList.toggle("bad", !!email && !emailOk(email));
+  show("#pairErr", !!pairMsg, pairMsg || " "); if(pairMsg) ok = false;
+
+  $("#suggestion").classList.toggle("bad", !sug); show("#suggestionErr", !sug); if(!sug) ok = false;
+  return ok;
+}
+["#name","#phone","#email","#suggestion"].forEach(id => $(id).addEventListener("input", () => {
+  if(document.querySelector(".err.show")) validate();
+}));
+
+let sending = false;
+$("#form").addEventListener("submit", async e => {
+  e.preventDefault();
+  if(sending) return;
+  show("#msg", false);
+  if(!validate()){ const bad = document.querySelector(".bad"); if(bad && bad.focus) bad.focus(); return; }
+  sending = true;
+  const btn = $("#send"); btn.disabled = true; btn.textContent = T[lang].sending;
+  try{
+    const r = await fetch("/api/suggestions", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        name:$("#name").value.trim(), phone:$("#phone").value.trim(), email:$("#email").value.trim(),
+        suggestion:$("#suggestion").value.trim(), event, website:$("#form").website.value
+      })
+    });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    $("#form").style.display = "none"; $("#done").classList.add("show");
+  }catch(err){
+    console.error(err);
+    $("#msg").className = "msg error show"; $("#msg").textContent = T[lang].fail;
+  }finally{
+    sending = false; btn.disabled = false; btn.textContent = T[lang].send;
+  }
+});
+$("#again").addEventListener("click", () => {
+  $("#suggestion").value = "";
+  $("#done").classList.remove("show"); $("#form").style.display = "";
+  $("#suggestion").focus();
+});
+</script>
+</body>
+</html>
