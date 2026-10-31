@@ -121,7 +121,7 @@
     <div class="done" id="done">
       <div class="check">✓</div>
       <h2 data-i18n="doneTitle">Got it!</h2>
-      <p data-i18n="doneText">Thanks! Your suggestion went straight to DJ Zech.</p>
+      <p data-i18n="doneText">Thanks! DJ Zech got your suggestion.</p>
       <button class="again" id="again" type="button" data-i18n="again">Send another</button>
     </div>
   </div>
@@ -138,7 +138,7 @@ const T = {
     pairErr:"Add a phone number or an email.", phoneErr:"That phone number doesn't look right.", emailErr:"That email doesn't look right.",
     suggestion:"Your suggestion", suggestionPh:"Song and artist, or your idea", suggestionErr:"Please write your suggestion.",
     send:"Send to DJ Zech", sending:"Sending...", fail:"Couldn't send it. Check your connection and try again.",
-    doneTitle:"Got it!", doneText:"Thanks! Your suggestion went straight to DJ Zech.", again:"Send another"
+    doneTitle:"Got it!", doneText:"Thanks! DJ Zech got your suggestion.", again:"Send another"
   }
 };
 const $ = s => document.querySelector(s);
@@ -174,20 +174,25 @@ function validate(){
   if(document.querySelector(".err.show")) validate();
 }));
 
+// Public anon key: it can only call submit_dj_suggestion (suggestions are not readable with it).
+const SB_URL = "https://wfxbssoxsxmvlrwnyfai.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmeGJzc294c3htdmxyd255ZmFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1NjUyNDksImV4cCI6MjEwODE0MTI0OX0.tCeI61A3FDUAiP40Q7GDu9VeOc5x3-9yZ5COZPjrLiQ";
 let sending = false;
 $("#form").addEventListener("submit", async e => {
   e.preventDefault();
   if(sending) return;
   show("#msg", false);
   if(!validate()){ const bad = document.querySelector(".bad"); if(bad && bad.focus) bad.focus(); return; }
+  if($("#form").website.value){ $("#form").style.display = "none"; $("#done").classList.add("show"); return; }
   sending = true;
   const btn = $("#send"); btn.disabled = true; btn.textContent = T[lang].sending;
   try{
-    const r = await fetch("/api/suggestions", {
-      method:"POST", headers:{"Content-Type":"application/json"},
+    const r = await fetch(SB_URL + "/rest/v1/rpc/submit_dj_suggestion", {
+      method:"POST",
+      headers:{"Content-Type":"application/json", apikey:SB_KEY, Authorization:"Bearer " + SB_KEY},
       body: JSON.stringify({
-        name:$("#name").value.trim(), phone:$("#phone").value.trim(), email:$("#email").value.trim(),
-        suggestion:$("#suggestion").value.trim(), event, website:$("#form").website.value
+        p_name:$("#name").value.trim(), p_phone:$("#phone").value.trim(), p_email:$("#email").value.trim(),
+        p_suggestion:$("#suggestion").value.trim(), p_event:event
       })
     });
     if(!r.ok) throw new Error("HTTP " + r.status);
