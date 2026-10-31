@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Suggestions inbox | DJ Zech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0B0D0C; --surface:#141715; --surface-2:#1B1F1C; --line:#2A2F28; --ink:#F3F5F3; --ink-soft:#A9B0AA; --ink-faint:#6F766F; --neon:#39FF6E; --neon-dim:#1FA34A; --neon-tint:rgba(57,255,110,0.10); --err:#FF6B6B;}
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{min-height:100vh; background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 15% 0%, rgba(57,255,110,0.08), transparent 45%);}
+  .wrap{max-width:720px; margin:0 auto; padding:24px 16px 60px;}
+  header{display:flex; align-items:center; gap:12px; margin-bottom:18px;}
+  .logo{width:42px; height:42px; border-radius:12px; overflow:hidden; box-shadow:0 0 18px rgba(57,255,110,0.25);}
+  .logo img{width:100%; height:100%; object-fit:cover; display:block;}
+  h1{font-family:'Plus Jakarta Sans',sans-serif; font-size:24px; font-weight:800;}
+  .count{margin-left:auto; font:700 14px 'Inter'; color:#06170B; background:var(--neon); border-radius:100px; padding:5px 12px; min-width:34px; text-align:center;}
+  .bar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px;}
+  select,input,button{font:500 14px 'Inter',sans-serif; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:9px 12px;}
+  input{flex:1; min-width:140px;}
+  button{cursor:pointer;}
+  button:hover{border-color:var(--neon-dim); color:var(--neon);}
+  .status{font-size:12.5px; color:var(--ink-faint); margin-bottom:14px; display:flex; align-items:center; gap:6px;}
+  .dot{width:7px; height:7px; border-radius:50%; background:var(--neon); box-shadow:0 0 8px var(--neon);}
+  .dot.off{background:var(--err); box-shadow:0 0 8px var(--err);}
+  .item{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:10px;}
+  .item.new{border-color:var(--neon-dim); box-shadow:0 0 0 1px rgba(57,255,110,.25);}
+  .row{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
+  .name{font-weight:700; font-size:15.5px;}
+  .time{margin-left:auto; font-size:12.5px; color:var(--ink-faint);}
+  .ev{font-size:11.5px; font-weight:600; color:var(--neon); background:var(--neon-tint); border-radius:100px; padding:2px 8px;}
+  .sug{font-size:17px; line-height:1.45; margin:8px 0 8px; white-space:pre-wrap; word-break:break-word;}
+  .contact{display:flex; gap:14px; flex-wrap:wrap; font-size:13.5px;}
+  .contact a{color:var(--ink-soft); text-decoration:none;}
+  .contact a:hover{color:var(--neon);}
+  .empty,.lock{text-align:center; color:var(--ink-soft); padding:50px 10px; line-height:1.6;}
+  .lock b{display:block; color:var(--ink); font-size:18px; margin-bottom:6px;}
+  .toast{position:fixed; left:50%; bottom:22px; transform:translateX(-50%); background:var(--neon); color:#06170B; font-weight:700; font-size:14px; padding:10px 16px; border-radius:100px; opacity:0; transition:opacity .2s; pointer-events:none;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><img src="/assets/dj/logo.png" alt="DJ Zech"></div>
+    <h1>Suggestions</h1>
+    <div class="count" id="count">0</div>
+  </header>
+
+  <div id="app" hidden>
+    <div class="bar">
+      <select id="eventSel"><option value="">All events</option></select>
+      <input id="q" type="search" placeholder="Search">
+      <button id="copy" type="button">Copy list</button>
+    </div>
+    <div class="status"><span class="dot" id="dot"></span><span id="status">Loading…</span></div>
+    <div id="list"></div>
+  </div>
+  <div class="lock" id="lock" hidden><b>Private page</b>Open it with your private link.</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL = "https://wfxbssoxsxmvlrwnyfai.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmeGJzc294c3htdmxyd255ZmFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1NjUyNDksImV4cCI6MjEwODE0MTI0OX0.tCeI61A3FDUAiP40Q7GDu9VeOc5x3-9yZ5COZPjrLiQ";
+const $ = s => document.querySelector(s);
+
+// The private key lives in the #hash so it is never sent to the web server; it is remembered on this device.
+let key = (location.hash.match(/k=([^&]+)/) || [])[1];
+try{ if(key) localStorage.setItem("djzech_sug_key", key); else key = localStorage.getItem("djzech_sug_key"); }catch(e){}
+
+let rows = [], seen = null, lastOk = null;
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = d => new Date(d).toLocaleString([], {month:"short", day:"numeric", hour:"numeric", minute:"2-digit"});
+
+async function load(){
+  try{
+    const r = await fetch(SB_URL + "/rest/v1/rpc/list_dj_suggestions", {
+      method:"POST",
+      headers:{"Content-Type":"application/json", apikey:SB_KEY, Authorization:"Bearer " + SB_KEY},
+      body: JSON.stringify({p_key:key})
+    });
+    if(r.status === 400 || r.status === 401 || r.status === 403){ const t = await r.text(); if(/not allowed/.test(t)) return lock(); throw new Error(t); }
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    const data = await r.json();
+    const prevSeen = seen;
+    seen = new Set(data.map(x => x.id));
+    rows = data.map(x => ({...x, isNew: prevSeen && !prevSeen.has(x.id)}));
+    lastOk = new Date();
+    $("#dot").classList.remove("off");
+    $("#app").hidden = false;
+    fillEvents(); render();
+  }catch(e){
+    console.error(e);
+    $("#dot").classList.add("off");
+    $("#status").textContent = "Can't reach the server. Retrying…" + (lastOk ? " Last update " + lastOk.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"}) : "");
+    $("#app").hidden = false;
+  }
+}
+function lock(){ $("#app").hidden = true; $("#lock").hidden = false; clearInterval(timer); }
+
+function fillEvents(){
+  const sel = $("#eventSel"), cur = sel.value;
+  const evs = [...new Set(rows.map(r => r.event).filter(Boolean))];
+  sel.innerHTML = '<option value="">All events</option>' + evs.map(e => `<option>${esc(e)}</option>`).join("");
+  if(evs.includes(cur)) sel.value = cur;
+}
+function filtered(){
+  const ev = $("#eventSel").value, q = $("#q").value.trim().toLowerCase();
+  return rows.filter(r => (!ev || r.event === ev) &&
+    (!q || [r.name, r.suggestion, r.phone, r.email].join(" ").toLowerCase().includes(q)));
+}
+function render(){
+  const list = filtered();
+  $("#count").textContent = list.length;
+  $("#status").textContent = "Live · updates every 15 seconds";
+  if(!list.length){ $("#list").innerHTML = '<div class="empty">No suggestions yet.</div>'; return; }
+  $("#list").innerHTML = list.map(r => {
+    const tel = r.phone ? `<a href="tel:${esc(r.phone.replace(/[^0-9+]/g,""))}">📞 ${esc(r.phone)}</a>` : "";
+    const mail = r.email ? `<a href="mailto:${esc(r.email)}">✉️ ${esc(r.email)}</a>` : "";
+    return `<div class="item${r.isNew ? " new" : ""}">
+      <div class="row"><span class="name">${esc(r.name)}</span>${r.event ? `<span class="ev">${esc(r.event)}</span>` : ""}<span class="time">${fmt(r.created_at)}</span></div>
+      <div class="sug">${esc(r.suggestion)}</div>
+      <div class="contact">${tel}${mail}</div>
+    </div>`;
+  }).join("");
+}
+$("#eventSel").addEventListener("change", render);
+$("#q").addEventListener("input", render);
+$("#copy").addEventListener("click", async () => {
+  const text = filtered().map(r => `${r.suggestion}  (${r.name}${r.phone ? ", " + r.phone : ""}${r.email ? ", " + r.email : ""})`).join("\n");
+  try{ await navigator.clipboard.writeText(text); toast("List copied"); }catch(e){ toast("Couldn't copy"); }
+});
+function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1600); }
+
+let timer;
+if(!key){ lock(); }
+else { load(); timer = setInterval(load, 15000); }
+</script>
+</body>
+</html>
