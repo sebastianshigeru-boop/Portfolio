@@ -11,15 +11,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F6F3ED; --panel:#FFFFFF; --panel-2:#F2EEE6; --line:#E9E3D7; --text:#2B2722; --muted:#7A7264;
-  --accent:#EF7A4E; --accent-2:#F2A25C; --accent-soft:#FDECE0; --accent-ink:#B84A22;
+  --bg:#F1F5FC; --panel:#FFFFFF; --panel-2:#ECF1FA; --line:#DDE5F2; --text:#0E1A33; --muted:#55668A;
+  --accent:#2563EB; --accent-2:#60A5FA; --accent-soft:#E3ECFE; --accent-ink:#1D4ED8;
   --green:#5FAE6C; --green-ink:#2F7A3D; --green-soft:#E6F3E8;
   --red:#E0625F; --red-ink:#B03B38; --red-soft:#FCE8E7;
   --amber:#E2A33B; --amber-ink:#8F5F0A; --amber-soft:#FBF0DA;
   --display:'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --body:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --shadow:0 1px 2px rgba(43,39,34,.04), 0 8px 24px rgba(43,39,34,.06);
+  --shadow:0 1px 2px rgba(14,26,51,.04), 0 12px 32px rgba(14,26,51,.07);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -159,6 +159,41 @@ tbody tr.selected{background:var(--accent-soft)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#2B2722;color:#fff;padding:12px 18px;border-radius:14px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:all .25s ease;z-index:100;max-width:calc(100% - 32px);box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* modern demo nav */
+.demo-nav{background:rgba(9,17,33,.92);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+.demo-brand em{color:#7DD3FC}
+.demo-links a{color:#C9D3E6}
+.demo-links a[aria-current="page"]{background:#fff;color:#0B1630}
+
+/* modern blue theme */
+.head{position:relative;overflow:hidden;background:linear-gradient(135deg,#081A45 0%,#0F3BA8 50%,#2563EB 100%);color:#fff;padding:40px 16px 96px}
+.head::before{content:"";position:absolute;width:520px;height:520px;right:-140px;top:-260px;border-radius:50%;background:radial-gradient(circle,rgba(125,211,252,.4),transparent 65%);pointer-events:none}
+.head::after{content:"";position:absolute;width:360px;height:360px;left:30%;bottom:-260px;border-radius:50%;background:radial-gradient(circle,rgba(129,140,248,.35),transparent 65%);pointer-events:none}
+.head .inner{position:relative;z-index:1}
+.head .eyebrow{color:#BFDBFE;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+.head h1{color:#fff;letter-spacing:-.01em}
+.head p,.today{color:#D6E4FF}
+main.inner{margin-top:-72px;position:relative;z-index:2}
+.stat{border-radius:22px;border-color:rgba(14,26,51,.06)}
+.stat.hl{background:linear-gradient(135deg,#1D4ED8,#3B82F6);border:0;box-shadow:0 14px 30px rgba(37,99,235,.3)}
+.stat.hl .n,.stat.hl .l,.stat.hl .s{color:#fff}
+.stat.hl .s,.stat.hl .l{opacity:.88}
+.card{border-radius:24px;border-color:rgba(14,26,51,.06)}
+tbody tr:hover{background:#F6F9FF}
+tbody tr.selected{background:#EAF1FF}
+.select{background:#F8FAFF}
+.btn-primary{background:linear-gradient(135deg,#1D4ED8,#3B82F6)}
+.rev-cut{background:linear-gradient(135deg,#1D4ED8,#3B82F6);color:#fff}
+.rev-cut .mono{color:#fff}
+.rev-cut .muted{color:#DBE7FF!important}
+.d-head{background:linear-gradient(135deg,#0F3BA8,#2563EB);color:#fff}
+.d-head .muted{color:#D6E4FF}
+.d-head .tag{background:rgba(255,255,255,.16);color:#fff}
+.close{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff}
+.d-body > .muted:first-child{margin-top:14px}
+.prep{background:linear-gradient(135deg,#EAF1FF,#fff 70%)}
+.scrim{background:rgba(8,26,69,.35)}
 </style>
 </head>
 <body>
@@ -275,12 +310,12 @@ const METHOD = {
   },
   commission: 0.20
 };
-const PALETTES = { ember:'#EF7A4E', ocean:'#3B8FC4', forest:'#4E9A64', plum:'#9A5AAE', slate:'#5B7189' };
+const PALETTES = { ember:'#E8693A', ocean:'#2F8FD8', forest:'#22A35A', plum:'#9A5AAE', slate:'#55708C' };
 const PAYER_TIER = { company:'company', self:'professional', talk:'access' };
 
 // Example clients. Andrea matches the default client app.
 const CLIENTS = [
-  { id:'andrea', name:'Andrea Lin', role:'VP Operations', program:'leadership', tier:'company', phase:'learn', payment:'Active', palette:'ocean',
+  { id:'andrea', name:'Andrea Lin', role:'VP Operations', program:'leadership', tier:'company', phase:'learn', payment:'Active', palette:'forest',
     lastReviewDays:1, streak:9, nextSession:{ days:3, time:'10:00' },
     vision:'In 3 years I lead operations for a company I believe in, with energy for my family and myself.',
     objectives:[ { title:'Delegate 3 recurring reports to my team', area:'Leadership', progress:65, dueDays:34 },
@@ -319,7 +354,7 @@ const CLIENTS = [
     notes:[ { text:'Quarter end is in two weeks and I feel the pull to take everything back #control', daysAgo:9 } ],
     reviewText:{ wins:'My deputy ran the budget meeting on her own.', obstacles:'I reread the whole forecast at midnight.', focus:'Only review the summary page this week.' } },
 
-  { id:'sofia', name:'Sofia Reyes', role:'Starting a wellness business', program:'impact', tier:'access', phase:'face', payment:'Active', palette:'forest',
+  { id:'sofia', name:'Sofia Reyes', role:'Starting a wellness business', program:'impact', tier:'access', phase:'face', payment:'Active', palette:'ocean',
     lastReviewDays:6, streak:3, nextSession:{ days:4, time:'11:00' },
     vision:'In 3 years I run a wellness studio that pays my bills and helps 200 women a year.',
     objectives:[ { title:'Define my ideal client in one page', area:'Business', progress:60, dueDays:-4 },
@@ -502,7 +537,7 @@ function renderRevenue(){
     return { id, t, n:cs.length, active:act.length, paused:cs.length - act.length, total:act.length * t.monthly };
   });
   const total = rows.reduce((a, r) => a + r.total, 0), cut = Math.round(total * METHOD.commission);
-  const colors = { company:'var(--accent)', professional:'#3B8FC4', access:'#4E9A64' };
+  const colors = { company:'#1D4ED8', professional:'#38BDF8', access:'#34D399' };
   $('#monthLbl').textContent = new Date().toLocaleDateString('en-CA', { month:'long', year:'numeric' });
   $('#revenue').innerHTML = `
     <div class="stack" role="img" aria-label="Active monthly fees by tier">${rows.filter(r => r.total).map(r => `<span style="width:${r.total / total * 100}%;background:${colors[r.id]}"></span>`).join('')}</div>
@@ -630,7 +665,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Tab'){ const f = Array.from($('#drawer').querySelectorAll('button, a[href], input, [tabindex]:not([tabindex="-1"])')); if (!f.length) return; const first = f[0], last = f[f.length - 1];
     if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); } }
 });
-$('#resetData').addEventListener('click', () => { if (!confirm('Remove the client created in the form and reset the client app?')) return; drop('cp_demo_client'); drop('cp_app_state_v1'); renderAll(); toast('Demo data reset. Showing the 5 example clients.'); });
+$('#resetData').addEventListener('click', () => { if (!confirm('Remove the client created in the form and reset the client app?')) return; drop('cp_demo_client'); drop('cp_app_state_v2'); renderAll(); toast('Demo data reset. Showing the 5 example clients.'); });
 window.addEventListener('storage', renderAll);
 </script>
 </body>

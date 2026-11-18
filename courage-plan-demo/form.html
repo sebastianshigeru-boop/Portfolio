@@ -11,13 +11,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F6F3ED; --panel:#FFFFFF; --panel-2:#F2EEE6; --line:#E9E3D7; --text:#2B2722; --muted:#7A7264;
-  --accent:#EF7A4E; --accent-2:#F2A25C; --accent-soft:#FDECE0; --accent-ink:#B84A22;
+  --bg:#F1F5FD; --panel:#FFFFFF; --panel-2:#EDF2FB; --line:#DCE5F3; --text:#0E1B34; --muted:#56678A;
+  --accent:#2563EB; --accent-2:#60A5FA; --accent-soft:#E3ECFE; --accent-ink:#1D4ED8;
   --green:#5FAE6C; --red:#E0625F; --amber:#C98A1B;
   --display:'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --body:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --shadow:0 1px 2px rgba(43,39,34,.04), 0 8px 24px rgba(43,39,34,.06);
+  --shadow:0 1px 2px rgba(14,27,52,.04), 0 12px 32px rgba(14,27,52,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -174,6 +174,42 @@ textarea.input{resize:vertical;min-height:84px}
 .modal .big{font-size:40px}
 .modal h2{font-family:var(--display);font-size:22px;margin:8px 0}
 .modal p{color:var(--muted);margin-bottom:18px}
+
+/* modern demo nav */
+.demo-nav{background:rgba(9,17,33,.92);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+.demo-brand em{color:#7DD3FC}
+.demo-links a{color:#C9D3E6}
+.demo-links a[aria-current="page"]{background:#fff;color:#0B1630}
+
+/* modern blue theme */
+.head{position:relative;overflow:hidden;background:linear-gradient(135deg,#0B2A6F 0%,#1D4ED8 55%,#3B82F6 100%);color:#fff;padding:40px 16px 88px}
+.head::before,.head::after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+.head::before{width:420px;height:420px;right:-120px;top:-200px;background:radial-gradient(circle,rgba(125,211,252,.45),transparent 65%)}
+.head::after{width:300px;height:300px;left:-80px;bottom:-180px;background:radial-gradient(circle,rgba(167,139,250,.35),transparent 65%)}
+.head-inner{position:relative;z-index:1}
+.head .eyebrow{color:#BFDBFE}
+.head h1{color:#fff;letter-spacing:-.01em}
+.head p{color:#DBE7FF}
+.head .btn-ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);color:#fff;backdrop-filter:blur(6px)}
+.head .btn-ghost:hover{background:rgba(255,255,255,.22)}
+.wrap{margin-top:-64px;position:relative;z-index:2}
+.card{border-radius:24px;border-color:rgba(14,27,52,.06)}
+.wizard{padding:28px}
+.side{top:72px}
+.side h3{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.btn-primary{background:linear-gradient(135deg,#1D4ED8,#3B82F6);box-shadow:0 8px 20px rgba(37,99,235,.28)}
+.btn-primary:hover{filter:brightness(1.07)}
+.bar{height:10px}
+.opt .box{border-radius:18px}
+.opt input:checked + .box{background:linear-gradient(135deg,#EEF4FF,#E3ECFE)}
+.steps-dots button[aria-current="step"]{background:var(--accent-ink);color:#fff;box-shadow:0 4px 12px rgba(29,78,216,.25)}
+.input{border-radius:14px;background:#FBFCFF}
+.mini{border-color:#0B1630}
+.mini-head{background:linear-gradient(135deg,var(--accent-ink) 0%,var(--accent-ink) 35%,var(--accent) 100%);color:#fff}
+.mini-head .hi{color:rgba(255,255,255,.85)}
+.mini-body{padding-top:12px}
+.style-preview{display:none;margin-top:8px;max-width:300px}
+@media (max-width:999px){.style-preview{display:block}}
 </style>
 </head>
 <body>
@@ -294,13 +330,14 @@ textarea.input{resize:vertical;min-height:84px}
       <!-- 7 -->
       <section class="step" data-step="7" aria-labelledby="s7h">
         <h2 id="s7h">Style</h2>
-        <p class="lead">Pick your colors and the voice your app speaks with. The page previews your palette live.</p>
+        <p class="lead">Pick the colors of your app and the voice it speaks with. The preview updates live.</p>
         <fieldset style="border:0" class="field"><legend class="label">Palette</legend>
           <div class="palettes" id="paletteOpts"></div>
         </fieldset>
         <fieldset style="border:0" class="field"><legend class="label">Tone</legend>
           <div class="options cols3" id="toneOpts"></div>
         </fieldset>
+        <div class="style-preview" id="stylePreview" aria-hidden="true"></div>
       </section>
 
       <!-- 8 -->
@@ -403,11 +440,11 @@ const METHOD = {
 };
 
 const PALETTES = {
-  ember:  { name:'Ember',  accent:'#EF7A4E', accent2:'#F2A25C', soft:'#FDECE0', ink:'#B84A22' },
-  ocean:  { name:'Ocean',  accent:'#3B8FC4', accent2:'#5EB5D6', soft:'#E2F0F8', ink:'#1F5F8B' },
-  forest: { name:'Forest', accent:'#4E9A64', accent2:'#8DBF6A', soft:'#E4F2E6', ink:'#2E6B44' },
-  plum:   { name:'Plum',   accent:'#9A5AAE', accent2:'#C985BE', soft:'#F3E6F4', ink:'#6E3A7C' },
-  slate:  { name:'Slate',  accent:'#5B7189', accent2:'#8EA3B8', soft:'#E7ECF1', ink:'#3A4C5E' }
+  ember:  { name:'Ember',  accent:'#EF7A4E', accent2:'#F6A66B', soft:'#FDE9DC', ink:'#B84A22', bg:'#FFF3EA' },
+  ocean:  { name:'Ocean',  accent:'#2F8FD8', accent2:'#5FC0EE', soft:'#DDEFFC', ink:'#1A5E9E', bg:'#ECF5FD' },
+  forest: { name:'Forest', accent:'#22A35A', accent2:'#6FD38E', soft:'#D9F5E3', ink:'#13773E', bg:'#E9F8EF' },
+  plum:   { name:'Plum',   accent:'#9A5AAE', accent2:'#CC8CC2', soft:'#F2E3F5', ink:'#6E3A7C', bg:'#F7EEF9' },
+  slate:  { name:'Slate',  accent:'#55708C', accent2:'#8FA7BF', soft:'#E3EAF2', ink:'#3A4C5E', bg:'#EEF2F7' }
 };
 const TONES = {
   motivating: { name:'Motivating', desc:'Energy and encouragement' },
@@ -428,7 +465,7 @@ const EXAMPLE = {
     { title:'Protect 2 family evenings every week', area:'Family' }
   ],
   checkin:'07:30', reviewDay:'Sunday', reminders:{ checkin:true, review:true, session:true },
-  palette:'ocean', tone:'calm', privacy:{ progress:true, values:true, review:false }, payer:'company'
+  palette:'forest', tone:'calm', privacy:{ progress:true, values:true, review:false }, payer:'company'
 };
 const BLANK = {
   v:1, name:'', role:'', program:'', appName:'', phase:'', areas:[], vision:'', objectives:[{ title:'', area:'' }],
@@ -448,6 +485,7 @@ function load(key){ try { const v = localStorage.getItem(key); return v ? JSON.p
 function firstName(n){ return (String(n || '').trim().split(/\s+/)[0]) || 'You'; }
 function phaseById(id){ return METHOD.phases.find(p => p.id === id); }
 function applyPalette(id){
+  return; // the form keeps its blue theme, the palette only colors the app preview
   const p = PALETTES[id] || PALETTES.ember, r = document.documentElement.style;
   r.setProperty('--accent', p.accent); r.setProperty('--accent-2', p.accent2); r.setProperty('--accent-soft', p.soft); r.setProperty('--accent-ink', p.ink);
 }
@@ -558,7 +596,7 @@ function miniPreview(){
   if (cfg.program === 'leadership' && !areas.includes('Leadership and EI')) areas.push('Leadership and EI');
   const objs = cfg.objectives.filter(o => o.title.trim());
   const pal = PALETTES[cfg.palette] || PALETTES.ember;
-  const style = `--accent:${pal.accent};--accent-2:${pal.accent2};--accent-soft:${pal.soft};--accent-ink:${pal.ink}`;
+  const style = `--accent:${pal.accent};--accent-2:${pal.accent2};--accent-soft:${pal.soft};--accent-ink:${pal.ink};--bg:${pal.bg};--panel-2:${pal.soft}`;
   return `<div class="mini" style="${style}" aria-label="Preview of ${esc(cfg.appName || 'your app')}">
     <div class="mini-head"><div class="hi">Good morning, ${esc(firstName(cfg.name))}</div><div class="app">${esc(cfg.appName || 'Your app')}</div></div>
     <div class="mini-body">
@@ -603,6 +641,7 @@ function renderAll(){
 }
 function refreshPreview(){
   $('#sidePreview').innerHTML = miniPreview();
+  $('#stylePreview').innerHTML = miniPreview();
   const url = 'app.html?cfg=' + encodeCfg(cleanCfg());
   $('#navApp').href = url; $('#openApp').href = url; $('#modalOpen').href = url;
 }

@@ -12,13 +12,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F6F3ED; --panel:#FFFFFF; --panel-2:#F2EEE6; --line:#E9E3D7; --text:#2B2722; --muted:#7A7264;
-  --accent:#EF7A4E; --accent-2:#F2A25C; --accent-soft:#FDECE0; --accent-ink:#B84A22;
+  --bg:#E9F8EF; --panel:#FFFFFF; --panel-2:#EEF5F0; --line:#DCE8E0; --text:#14231B; --muted:#56695E;
+  --accent:#22A35A; --accent-2:#6FD38E; --accent-soft:#D9F5E3; --accent-ink:#13773E;
   --green:#5FAE6C; --green-ink:#2F7A3D; --red:#E0625F; --red-ink:#B03B38; --amber:#E2A33B; --amber-ink:#8F5F0A;
   --display:'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --body:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --shadow:0 1px 2px rgba(43,39,34,.04), 0 6px 18px rgba(43,39,34,.06);
+  --shadow:0 1px 2px rgba(20,35,27,.04), 0 10px 26px rgba(20,35,27,.07);
   --nav-h:44px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -219,6 +219,39 @@ input[type=range]{width:100%;margin-top:8px;accent-color:var(--accent-ink);heigh
 @keyframes fall{to{transform:translateY(900px) rotate(540deg);opacity:0}}
 .empty{color:var(--muted);font-size:14px;padding:8px 0}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* modern demo nav */
+.demo-nav{background:rgba(9,17,33,.92);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+.demo-brand em{color:#7DD3FC}
+.demo-links a{color:#C9D3E6}
+.demo-links a[aria-current="page"]{background:#fff;color:#0B1630}
+
+/* modern light green theme (follows the client's palette) */
+body{background:radial-gradient(1200px 600px at 50% -10%, var(--accent-soft), transparent 70%), color-mix(in srgb, var(--bg) 70%, #DDE5E0)}
+.phone{border-color:#0D1712;border-radius:48px;box-shadow:0 40px 80px rgba(13,23,18,.28), 0 0 0 1px rgba(255,255,255,.4) inset}
+.app-head{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--accent-ink) 0%,var(--accent-ink) 30%,var(--accent) 100%);color:#fff;padding:20px 18px 22px;border-radius:0 0 28px 28px;box-shadow:0 10px 24px color-mix(in srgb, var(--accent-ink) 30%, transparent)}
+.app-head::after{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-110px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 65%);pointer-events:none}
+.app-head > *{position:relative;z-index:1}
+.app-title{font-size:22px}
+.app-sub{color:rgba(255,255,255,.85)}
+.app-head .pill-btn{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.35);color:#fff;backdrop-filter:blur(6px)}
+.app-head .pill-btn:hover{background:rgba(255,255,255,.26)}
+.screen{padding-top:10px}
+.card{border-radius:22px;border-color:rgba(20,35,27,.06)}
+.tile{border-radius:20px;border-color:rgba(20,35,27,.06)}
+.tile:first-child{background:linear-gradient(135deg,var(--accent-ink),var(--accent));color:#fff;border:0}
+.tile:first-child .l{color:rgba(255,255,255,.88)}
+.phase-card{background:linear-gradient(135deg,var(--accent-soft),#fff 75%);border:1px solid color-mix(in srgb, var(--accent) 25%, transparent)}
+.badge{background:var(--accent-soft);color:var(--accent-ink)}
+.btn-primary{background:linear-gradient(135deg,var(--accent-ink),var(--accent));box-shadow:0 8px 18px color-mix(in srgb, var(--accent-ink) 30%, transparent)}
+.tabbar{border-top:0;box-shadow:0 -8px 24px rgba(20,35,27,.06);border-radius:22px 22px 0 0}
+.tab[aria-selected="true"]{background:linear-gradient(135deg,var(--accent-ink),var(--accent));color:#fff}
+.seg button[aria-pressed="true"]{background:linear-gradient(135deg,var(--accent-ink),var(--accent));color:#fff}
+.check{border-radius:9px}
+.check:checked{background:var(--accent)}
+.vision{background:linear-gradient(135deg,#fff,var(--accent-soft))}
+.cal .m{background:linear-gradient(135deg,var(--accent-ink),var(--accent))}
+@media (max-width:520px){body{background:var(--bg)}.phone{border-radius:0}}
 </style>
 </head>
 <body>
@@ -296,11 +329,11 @@ const METHOD = {
 };
 
 const PALETTES = {
-  ember:  { name:'Ember',  accent:'#EF7A4E', accent2:'#F2A25C', soft:'#FDECE0', ink:'#B84A22' },
-  ocean:  { name:'Ocean',  accent:'#3B8FC4', accent2:'#5EB5D6', soft:'#E2F0F8', ink:'#1F5F8B' },
-  forest: { name:'Forest', accent:'#4E9A64', accent2:'#8DBF6A', soft:'#E4F2E6', ink:'#2E6B44' },
-  plum:   { name:'Plum',   accent:'#9A5AAE', accent2:'#C985BE', soft:'#F3E6F4', ink:'#6E3A7C' },
-  slate:  { name:'Slate',  accent:'#5B7189', accent2:'#8EA3B8', soft:'#E7ECF1', ink:'#3A4C5E' }
+  ember:  { name:'Ember',  accent:'#EF7A4E', accent2:'#F6A66B', soft:'#FDE9DC', ink:'#B84A22', bg:'#FFF3EA' },
+  ocean:  { name:'Ocean',  accent:'#2F8FD8', accent2:'#5FC0EE', soft:'#DDEFFC', ink:'#1A5E9E', bg:'#ECF5FD' },
+  forest: { name:'Forest', accent:'#22A35A', accent2:'#6FD38E', soft:'#D9F5E3', ink:'#13773E', bg:'#E9F8EF' },
+  plum:   { name:'Plum',   accent:'#9A5AAE', accent2:'#CC8CC2', soft:'#F2E3F5', ink:'#6E3A7C', bg:'#F7EEF9' },
+  slate:  { name:'Slate',  accent:'#55708C', accent2:'#8FA7BF', soft:'#E3EAF2', ink:'#3A4C5E', bg:'#EEF2F7' }
 };
 const PAYER_TIER = { company:'company', self:'professional', talk:'access' };
 const AREA_COLORS = { Career:'#4F7CC9', Leadership:'#D9822B', 'Leadership and EI':'#B5652A', Health:'#4E9F62', Family:'#D2667A', Relationships:'#B05FA8', Finances:'#2E9A8F', Growth:'#8A6FD1', Business:'#B8901F', Rest:'#6C8AA0' };
@@ -321,7 +354,7 @@ const EXAMPLE = {
     { title:'Protect 2 family evenings every week', area:'Family' }
   ],
   checkin:'07:30', reviewDay:'Sunday', reminders:{ checkin:true, review:true, session:true },
-  palette:'ocean', tone:'calm', privacy:{ progress:true, values:true, review:false }, payer:'company'
+  palette:'forest', tone:'calm', privacy:{ progress:true, values:true, review:false }, payer:'company'
 };
 
 // Andrea's detailed objectives, matched by title so they survive edits in the form
@@ -383,14 +416,14 @@ function areaColor(a){ if (AREA_COLORS[a]) return AREA_COLORS[a]; return EXTRA_C
 function phaseById(id){ return METHOD.phases.find(p => p.id === id) || METHOD.phases[3]; }
 function applyPalette(id){
   const p = PALETTES[id] || PALETTES.ember, r = document.documentElement.style;
-  r.setProperty('--accent', p.accent); r.setProperty('--accent-2', p.accent2); r.setProperty('--accent-soft', p.soft); r.setProperty('--accent-ink', p.ink);
+  r.setProperty('--accent', p.accent); r.setProperty('--accent-2', p.accent2); r.setProperty('--accent-soft', p.soft); r.setProperty('--accent-ink', p.ink); r.setProperty('--bg', p.bg);
 }
 function loadEmoji(pct){ return pct <= 80 ? '🟢' : pct <= 100 ? '🟡' : '🔴'; }
 function loadLabel(pct){ return pct <= 80 ? 'Sustainable' : pct <= 100 ? 'Near capacity' : 'Over capacity'; }
 function tagsOf(text){ return Array.from(new Set((text.match(/#[\w-]+/g) || []).map(t => t.slice(1).toLowerCase()))); }
 
 /* state */
-const KEY = 'cp_app_state_v1';
+const KEY = 'cp_app_state_v2';
 let S;            // persisted state
 const ui = { tab:'today', editObj:null, addObj:false, addTask:null, editTask:null, earlier:{}, noteFilter:null, editVision:false };
 
