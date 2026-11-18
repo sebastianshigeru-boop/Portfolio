@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Courage Plan · Client app</title>
+<meta name="description" content="Demo: a personal life organization app for a Courage Space client.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F6F3ED">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F3ED; --panel:#FFFFFF; --panel-2:#F2EEE6; --line:#E9E3D7; --text:#2B2722; --muted:#7A7264;
+  --accent:#EF7A4E; --accent-2:#F2A25C; --accent-soft:#FDECE0; --accent-ink:#B84A22;
+  --green:#5FAE6C; --green-ink:#2F7A3D; --red:#E0625F; --red-ink:#B03B38; --amber:#E2A33B; --amber-ink:#8F5F0A;
+  --display:'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --body:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --shadow:0 1px 2px rgba(43,39,34,.04), 0 6px 18px rgba(43,39,34,.06);
+  --nav-h:44px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:#E9E3D7;color:var(--text);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;transition:transform .12s ease, background .15s ease}
+button:active{transform:scale(.97)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mono{font-family:var(--mono);font-weight:500}
+.muted{color:var(--muted)}
+
+/* demo nav */
+.demo-nav{position:sticky;top:0;z-index:50;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;background:#2B2722;color:#F6F3ED;font-size:13px}
+.demo-brand{font-family:var(--display);font-weight:600;white-space:nowrap}
+.demo-brand em{font-style:normal;color:#F2A25C;margin-left:4px}
+.demo-links{display:flex;gap:4px;overflow-x:auto}
+.demo-links a{color:#E9E3D7;text-decoration:none;padding:6px 12px;border-radius:999px;white-space:nowrap;font-weight:500}
+.demo-links a:hover{background:rgba(255,255,255,.08)}
+.demo-links a[aria-current="page"]{background:#F6F3ED;color:#2B2722}
+@media (max-width:560px){.demo-brand{display:none}.demo-nav{justify-content:center}}
+
+/* phone frame */
+.stage{display:flex;justify-content:center;align-items:flex-start;padding:24px 16px}
+.phone{position:relative;width:100%;max-width:430px;height:min(900px, calc(100vh - var(--nav-h) - 48px));min-height:620px;background:var(--bg);border:10px solid #2B2722;border-radius:46px;overflow:hidden;overflow:clip;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(43,39,34,.25)}
+@media (max-width:520px){
+  body{background:var(--bg)}
+  .stage{padding:0}
+  .phone{max-width:none;border:0;border-radius:0;box-shadow:none;height:calc(100vh - var(--nav-h));height:calc(100dvh - var(--nav-h));min-height:0}
+}
+.app-head{background:linear-gradient(180deg,#FFF8F1 0%,var(--bg) 100%);padding:16px 16px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex:none}
+.app-title{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app-sub{font-size:12px;color:var(--muted)}
+.head-btns{display:flex;gap:6px;flex:none}
+.pill-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:600;font-size:13px;text-decoration:none;color:var(--text)}
+.pill-btn:hover{background:var(--panel-2)}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 16px 24px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+.tabbar{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:var(--panel);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+.tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:14px;font-family:var(--display);font-weight:600;font-size:11px;color:var(--muted)}
+.tab svg{width:22px;height:22px}
+.tab[aria-selected="true"]{color:var(--accent-ink);background:var(--accent-soft)}
+
+/* generic */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:16px;margin-top:12px}
+.card h3,.sec-title{font-family:var(--display);font-weight:600;font-size:16px}
+.sec-title{margin:22px 0 4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sec-title small{font-family:var(--body);font-weight:400;color:var(--muted);font-size:13px}
+.level{font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px;min-height:40px;text-decoration:none}
+.btn-primary{background:var(--accent-ink);color:#fff}
+.btn-ghost{background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.btn-soft{background:var(--accent-soft);color:var(--accent-ink)}
+.btn-danger{background:#FCE8E7;color:var(--red-ink)}
+.btn-sm{padding:6px 12px;min-height:32px;font-size:13px}
+.btn-block{width:100%}
+.icon-btn{width:32px;height:32px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);flex:none}
+.icon-btn:hover{background:var(--panel-2);color:var(--text)}
+.icon-btn svg{width:16px;height:16px}
+.input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);font-size:14px}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.input{resize:vertical;min-height:70px;line-height:1.45}
+.field{margin-top:10px}
+.field label,.flabel{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--display);font-weight:600;font-size:12px;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);white-space:nowrap}
+.badge.neutral{background:var(--panel-2);color:var(--text)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:var(--panel-2);font-size:13px;font-weight:500;border:1px solid transparent}
+.chip i{width:8px;height:8px;border-radius:50%;display:block}
+button.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+.pbar{height:8px;border-radius:999px;background:var(--panel-2);overflow:hidden}
+.pbar span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .4s ease}
+.due{font-size:13px;font-weight:500}
+.due.soon{color:var(--amber-ink)}
+.due.late{color:var(--red-ink)}
+
+/* today */
+.hero{padding:6px 2px 4px}
+.hero .hi{font-size:14px;color:var(--muted)}
+.hero h2{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.15;margin-top:2px}
+.hero p{margin-top:4px;color:var(--muted);font-size:14px}
+.phase-card{background:linear-gradient(135deg,var(--accent-soft),#fff 70%)}
+.phase-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:12px 0 10px}
+.phase-steps span{height:6px;border-radius:999px;background:var(--line)}
+.phase-steps span.on{background:var(--accent)}
+.prompt{font-family:var(--display);font-weight:600;font-size:16px;line-height:1.3;margin:4px 0 10px}
+.saved{font-size:12px;color:var(--muted);margin-top:4px;min-height:16px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--panel-2);padding:4px;border-radius:999px;margin-top:10px}
+.seg button{padding:8px 4px;border-radius:999px;font-family:var(--display);font-weight:600;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--accent-ink);box-shadow:0 1px 4px rgba(43,39,34,.1)}
+.task{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0}
+.task .body{flex:1;min-width:0}
+.task .t{font-weight:500;font-size:14px;overflow-wrap:anywhere}
+.task .s{font-size:12px;color:var(--muted)}
+.task.done .t{text-decoration:line-through;color:var(--muted)}
+.check{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:8px;border:2px solid #CFC7B8;background:#fff;flex:none;cursor:pointer;display:grid;place-content:center;transition:all .15s}
+.check:checked{background:var(--accent-ink);border-color:var(--accent-ink)}
+.check:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.hrs{font-family:var(--mono);font-size:12px;color:var(--muted);flex:none}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.duo .card{margin-top:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.ring-wrap{position:relative;width:104px;height:104px}
+.ring-wrap .v{position:absolute;inset:0;display:grid;place-content:center;font-family:var(--mono);font-size:20px}
+.big-num{font-family:var(--mono);font-size:34px;line-height:1;color:var(--accent-ink)}
+.small{font-size:12px;color:var(--muted)}
+
+/* goals */
+.vision{background:linear-gradient(135deg,#fff,var(--accent-soft))}
+.vision blockquote{font-family:var(--display);font-weight:600;font-size:17px;line-height:1.35;margin-top:6px}
+.load-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cap{display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.cap input{width:60px;padding:6px 8px;text-align:center}
+.obj{border-left:5px solid var(--area);padding-left:14px}
+.obj-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.area-tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text)}
+.area-tag i{width:9px;height:9px;border-radius:50%;background:var(--area);display:block}
+.obj h4{font-family:var(--display);font-weight:600;font-size:16px;line-height:1.3;margin:8px 0}
+.obj-meta{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin-top:8px;font-size:13px}
+.obj-meta .pct{font-family:var(--mono);font-size:13px}
+.obj-actions{display:flex;gap:2px}
+.sub-h{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.linkish{color:var(--accent-ink);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:2px}
+.inline-form{background:var(--panel-2);border-radius:14px;padding:12px;margin-top:10px}
+.inline-form .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.path{list-style:none;position:relative;margin-top:8px}
+.path li{position:relative;padding:0 0 14px 38px}
+.path li::before{content:"";position:absolute;left:13px;top:26px;bottom:0;width:2px;background:var(--line)}
+.path li:last-child::before{display:none}
+.path li.done::before{background:var(--accent)}
+.path .dot{position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:#fff;display:grid;place-content:center;font-family:var(--mono);font-size:12px}
+.path li.done .dot{background:var(--accent-ink);border-color:var(--accent-ink);color:#fff}
+.path li.current .dot{border-color:var(--accent);color:var(--accent-ink)}
+.path button{text-align:left;font-weight:500;font-size:14px;padding:4px 0}
+.path small{display:block;color:var(--muted);font-size:12px}
+
+/* review */
+.slider{margin-top:14px}
+.slider .top{display:flex;justify-content:space-between;align-items:baseline}
+.slider .top b{font-family:var(--display);font-weight:600}
+.slider .top .mono{font-size:18px;color:var(--accent-ink)}
+.slider small{color:var(--muted);font-size:12px;display:block}
+input[type=range]{width:100%;margin-top:8px;accent-color:var(--accent-ink);height:28px}
+.letgo li{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.letgo li span{flex:1}
+.letgo{list-style:none}
+.add-row{display:flex;gap:8px;margin-top:8px}
+
+/* progress */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+.tile .n{font-family:var(--mono);font-size:24px;line-height:1.1}
+.tile .l{font-size:12px;color:var(--muted);margin-top:4px}
+.chart{width:100%;height:auto;display:block;margin-top:8px;overflow:visible}
+.chart text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:block}
+.heat{display:grid;grid-template-columns:repeat(16,1fr);gap:3px;margin-top:10px}
+.heat .col{display:grid;grid-template-rows:repeat(7,1fr);gap:3px}
+.heat .c{aspect-ratio:1;border-radius:3px;background:var(--panel-2)}
+.heat .c.future{background:transparent;border:1px dashed var(--line)}
+.donut-wrap{display:flex;align-items:center;gap:16px}
+.donut-wrap .legend{flex-direction:column;gap:6px}
+
+/* coach */
+.session{display:flex;gap:14px;align-items:center}
+.cal{width:62px;flex:none;border-radius:14px;overflow:hidden;border:1px solid var(--line);text-align:center;background:#fff}
+.cal .m{background:var(--accent-ink);color:#fff;font-family:var(--display);font-weight:600;font-size:12px;padding:3px 0;text-transform:uppercase}
+.cal .d{font-family:var(--mono);font-size:24px;padding:4px 0}
+.note{padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:flex-start}
+.note:last-child{border-bottom:0}
+.note p{flex:1;font-size:14px;overflow-wrap:anywhere}
+.note .tag{color:var(--accent-ink);font-weight:600}
+.note .when{font-family:var(--mono);font-size:11px;color:var(--muted);display:block;margin-top:2px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.toggle-row:last-child{border-bottom:0}
+.toggle-row .t{font-size:14px;font-weight:500}
+.toggle-row .t small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.switch{position:relative;width:46px;height:26px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.switch span{position:absolute;inset:0;background:#D8D1C3;border-radius:999px;transition:background .2s}
+.switch span::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
+.switch input:checked + span{background:var(--accent-ink)}
+.switch input:checked + span::after{transform:translateX(20px)}
+.switch input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+.lock{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
+.sub-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sub-row:last-of-type{border-bottom:0}
+.status-active{color:var(--green-ink);font-weight:600}
+
+.toast{position:absolute;left:12px;right:12px;bottom:84px;background:#2B2722;color:#fff;padding:12px 14px;border-radius:14px;font-size:14px;font-weight:500;line-height:1.4;opacity:0;transform:translateY(12px);transition:all .25s ease;pointer-events:none;z-index:20;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.toast.show{opacity:1;transform:none}
+.toast.celebrate{background:linear-gradient(135deg,var(--accent-ink),var(--accent));}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:19}
+.confetti i{position:absolute;top:-10px;width:8px;height:12px;border-radius:2px;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(900px) rotate(540deg);opacity:0}}
+.empty{color:var(--muted);font-size:14px;padding:8px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="demo-nav" aria-label="Demo pages">
+  <span class="demo-brand">Courage Plan <em>demo</em></span>
+  <div class="demo-links">
+    <a href="form.html" id="navForm">Form</a>
+    <a href="app.html" aria-current="page">Client app</a>
+    <a href="coach.html">Dagmar's dashboard</a>
+  </div>
+</nav>
+
+<div class="stage">
+  <div class="phone" id="phone">
+    <header class="app-head">
+      <div style="min-width:0">
+        <div class="app-sub" id="appSub">Courage Space</div>
+        <div class="app-title" id="appTitle">Plan Andrea</div>
+      </div>
+      <div class="head-btns">
+        <a class="pill-btn" id="editApp" href="form.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          Edit my app
+        </a>
+      </div>
+    </header>
+    <main class="screen" id="screen" tabindex="-1"></main>
+    <nav class="tabbar" role="tablist" aria-label="App sections" id="tabbar">
+      <button class="tab" role="tab" data-tab="today" aria-selected="true" aria-controls="screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Today</button>
+      <button class="tab" role="tab" data-tab="goals" aria-selected="false" aria-controls="screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>Goals</button>
+      <button class="tab" role="tab" data-tab="review" aria-selected="false" aria-controls="screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Review</button>
+      <button class="tab" role="tab" data-tab="progress" aria-selected="false" aria-controls="screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Progress</button>
+      <button class="tab" role="tab" data-tab="coach" aria-selected="false" aria-controls="screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Coach</button>
+    </nav>
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+// Validate with Dagmar
+const METHOD = {
+  coach: 'Dagmar',
+  model: 'FALL Through Change',
+  phases: [
+    { id:'face', n:1, name:'Face the change', summary:'Name what is changing and what feels scary.', prompt:'What is changing, and what are you avoiding looking at?',
+      statement:'Something big is changing and I have not fully faced it yet.' },
+    { id:'accept', n:2, name:'Accept', summary:'Acknowledge reality without judging it.', prompt:'What is true right now that you can stop fighting?',
+      statement:'I can see the change clearly, but part of me is still fighting it.' },
+    { id:'letgo', n:3, name:'Let go', summary:'Release habits, beliefs or commitments that no longer serve you.', prompt:'What are you ready to put down this week?',
+      statement:'I know what I need to release, and I am working on letting it go.' },
+    { id:'learn', n:4, name:'Learn and grow', summary:'Goals, habits and measured progress.', prompt:'What did you learn this week that you will use next week?',
+      statement:'I have accepted the change and I am ready to build what comes next.' }
+  ],
+  values: [
+    { id:'courage', name:'Courage', desc:'Leading with vulnerability', color:'#D9822B' },
+    { id:'clarity', name:'Clarity', desc:'Defining purpose and path', color:'#3B8FC4' },
+    { id:'connection', name:'Connection', desc:'Building strong partnerships', color:'#B05FA8' },
+    { id:'commitment', name:'Commitment', desc:'Dedication to growth', color:'#4E9A64' }
+  ],
+  methodology: ['Deep listening', 'Co-created goal setting', 'Accountability and progress tracking', 'Tailored strategies'],
+  programs: {
+    leadership: { name:'Leadership Coaching', short:'Leadership', extraArea:'Leadership and EI' },
+    business:   { name:'Business Coaching', short:'Business' },
+    impact:     { name:'Idea to Impact', short:'Idea to Impact',
+                  steps:['Craft Your Vision','Define Your Ideal Client','Build Your Brand Identity','Uncover Your Why','Establish Your Differentiator','Create a Profitable Strategy'] }
+  },
+  tiers: {
+    company:      { name:'Company', setup:3000, monthly:250, note:'Paid by your company' },
+    professional: { name:'Professional', setup:2000, monthly:150, note:'Paid by you' },
+    access:       { name:'Access', setup:750, monthly:60, note:'Access plan, limited spots' }
+  },
+  commission: 0.20
+};
+
+const PALETTES = {
+  ember:  { name:'Ember',  accent:'#EF7A4E', accent2:'#F2A25C', soft:'#FDECE0', ink:'#B84A22' },
+  ocean:  { name:'Ocean',  accent:'#3B8FC4', accent2:'#5EB5D6', soft:'#E2F0F8', ink:'#1F5F8B' },
+  forest: { name:'Forest', accent:'#4E9A64', accent2:'#8DBF6A', soft:'#E4F2E6', ink:'#2E6B44' },
+  plum:   { name:'Plum',   accent:'#9A5AAE', accent2:'#C985BE', soft:'#F3E6F4', ink:'#6E3A7C' },
+  slate:  { name:'Slate',  accent:'#5B7189', accent2:'#8EA3B8', soft:'#E7ECF1', ink:'#3A4C5E' }
+};
+const PAYER_TIER = { company:'company', self:'professional', talk:'access' };
+const AREA_COLORS = { Career:'#4F7CC9', Leadership:'#D9822B', 'Leadership and EI':'#B5652A', Health:'#4E9F62', Family:'#D2667A', Relationships:'#B05FA8', Finances:'#2E9A8F', Growth:'#8A6FD1', Business:'#B8901F', Rest:'#6C8AA0' };
+const EXTRA_COLORS = ['#5E8C9A','#A0705A','#7A8B3C','#9C5B7A','#4D6FA8'];
+const TONE_LINES = {
+  motivating: ['Let\'s make today count.', 'Small wins add up. Go get one.', 'You are building something real.'],
+  calm:       ['One step at a time today.', 'Breathe. Start with what matters most.', 'Steady progress is still progress.'],
+  direct:     ['Here is what matters today.', 'Three priorities. Get them done.', 'Focus on the work that moves the needle.']
+};
+
+const EXAMPLE = {
+  v:1, name:'Andrea Lin', role:'VP Operations', program:'leadership', appName:'Plan Andrea', phase:'learn',
+  areas:['Leadership','Health','Family','Growth'],
+  vision:'In 3 years I lead operations for a company I believe in, with energy for my family and myself.',
+  objectives:[
+    { title:'Delegate 3 recurring reports to my team', area:'Leadership' },
+    { title:'Train 3 times a week', area:'Health' },
+    { title:'Protect 2 family evenings every week', area:'Family' }
+  ],
+  checkin:'07:30', reviewDay:'Sunday', reminders:{ checkin:true, review:true, session:true },
+  palette:'ocean', tone:'calm', privacy:{ progress:true, values:true, review:false }, payer:'company'
+};
+
+// Andrea's detailed objectives, matched by title so they survive edits in the form
+const ANDREA_OBJ = {
+  'delegate 3 recurring reports to my team': { dueDays:34, load:3, tasks:[
+    ['Map recurring reports and current owners', 1.5, true, false],
+    ['Delegate the weekly ops report to Maya', 2, true, false],
+    ['Write a one page handoff checklist', 1, true, false],
+    ['Delegate the monthly vendor report to Jordan', 2, true, true],
+    ['Delegate the quarterly board pack draft', 2.5, false, true],
+    ['Review handoffs in 1:1s without rewriting', 1, false, true] ] },
+  'train 3 times a week': { dueDays:41, load:3.5, tasks:[
+    ['Choose a gym near the office', 1, true, false],
+    ['Block Monday, Wednesday and Friday at 6:30 am', 0.5, true, false],
+    ['Finish weeks 1 to 4 of the training plan', 3, true, false],
+    ['Finish weeks 5 to 8 of the training plan', 3, true, false],
+    ['Training session on Monday', 1, true, true],
+    ['Training session on Wednesday', 1, false, true],
+    ['Training session on Friday', 1, false, true] ] },
+  'protect 2 family evenings every week': { dueDays:6, load:2, tasks:[
+    ['Agree on two family evenings with Tom', 0.5, true, false],
+    ['Set a hard stop at 6 pm on Tuesday and Thursday', 0.5, true, false],
+    ['Phone in a drawer during dinner for 4 weeks', 2, true, false],
+    ['Plan a weekend outing with the kids', 1.5, true, true],
+    ['Tuesday family evening', 1, false, true],
+    ['Thursday family evening', 1, false, true] ] }
+};
+
+/* helpers */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const money = n => '$' + Number(n).toLocaleString('en-CA');
+const uid = () => Math.random().toString(36).slice(2, 9);
+const round1 = n => Math.round(n * 10) / 10;
+function encodeCfg(c){ return encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(c))))); }
+function decodeCfg(s){ try { return JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(s))))); } catch(e){ try { return JSON.parse(decodeURIComponent(escape(atob(s)))); } catch(e2){ return null; } } }
+function store(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch(e){ return false; } }
+function load(key){ try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch(e){ return null; } }
+function drop(key){ try { localStorage.removeItem(key); } catch(e){} }
+function firstName(n){ return (String(n || '').trim().split(/\s+/)[0]) || 'there'; }
+function today0(){ const d = new Date(); d.setHours(0,0,0,0); return d; }
+function isoDay(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function addDays(n){ const d = today0(); d.setDate(d.getDate() + n); return isoDay(d); }
+function parseDay(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+function daysUntil(s){ return Math.round((parseDay(s) - today0()) / 86400000); }
+function plural(n, w){ return n + ' ' + w + (Math.abs(n) === 1 ? '' : 's'); }
+function dueInfo(s){
+  const n = daysUntil(s);
+  if (n < 0) return { text:'overdue by ' + plural(-n, 'day'), cls:'late' };
+  if (n === 0) return { text:'due today', cls:'soon' };
+  return { text:'due in ' + plural(n, 'day'), cls: n <= 7 ? 'soon' : '' };
+}
+function fmtDate(s, opts){ return parseDay(s).toLocaleDateString('en-CA', opts || { weekday:'short', month:'short', day:'numeric' }); }
+function fmtTime(t){ if (!t) return ''; const [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'pm' : 'am'; return (((h + 11) % 12) + 1) + ':' + String(m).padStart(2,'0') + ' ' + ap; }
+function hashStr(s){ let h = 2166136261; for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed){ let a = seed; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function areaColor(a){ if (AREA_COLORS[a]) return AREA_COLORS[a]; return EXTRA_COLORS[hashStr(a) % EXTRA_COLORS.length]; }
+function phaseById(id){ return METHOD.phases.find(p => p.id === id) || METHOD.phases[3]; }
+function applyPalette(id){
+  const p = PALETTES[id] || PALETTES.ember, r = document.documentElement.style;
+  r.setProperty('--accent', p.accent); r.setProperty('--accent-2', p.accent2); r.setProperty('--accent-soft', p.soft); r.setProperty('--accent-ink', p.ink);
+}
+function loadEmoji(pct){ return pct <= 80 ? '🟢' : pct <= 100 ? '🟡' : '🔴'; }
+function loadLabel(pct){ return pct <= 80 ? 'Sustainable' : pct <= 100 ? 'Near capacity' : 'Over capacity'; }
+function tagsOf(text){ return Array.from(new Set((text.match(/#[\w-]+/g) || []).map(t => t.slice(1).toLowerCase()))); }
+
+/* state */
+const KEY = 'cp_app_state_v1';
+let S;            // persisted state
+const ui = { tab:'today', editObj:null, addObj:false, addTask:null, editTask:null, earlier:{}, noteFilter:null, editVision:false };
+
+function isAndrea(cfg){ return String(cfg.name || '').trim().toLowerCase() === 'andrea lin'; }
+function makeTasks(rows){ return rows.map(r => ({ id:uid(), title:r[0], hours:r[1], done:r[2], week:r[3] })); }
+function makeObjective(o, i){
+  const tpl = ANDREA_OBJ[String(o.title).trim().toLowerCase()];
+  if (tpl) return { id:uid(), title:o.title, area:o.area, due:addDays(tpl.dueDays), load:tpl.load, coCreated:true, tasks:makeTasks(tpl.tasks) };
+  const dues = [34, 48, 62], loads = [3, 2.5, 2];
+  return { id:uid(), title:o.title, area:o.area, due:addDays(dues[i % 3]), load:loads[i % 3], coCreated:true, tasks:makeTasks([
+    ['Define what success looks like for this objective', 1, true, false],
+    ['Block weekly time for it in your calendar', 0.5, true, true],
+    ['Take the next concrete step', 1.5, false, true],
+    ['Share what you learned with Dagmar', 0.5, false, true] ]) };
+}
+function objProgress(o){
+  const tot = o.tasks.reduce((s, t) => s + (+t.hours || 0), 0);
+  if (!tot) return 0;
+  return Math.round(o.tasks.filter(t => t.done).reduce((s, t) => s + (+t.hours || 0), 0) / tot * 100);
+}
+function overall(){ return S.objectives.length ? Math.round(S.objectives.reduce((s, o) => s + objProgress(o), 0) / S.objectives.length) : 0; }
+
+function generateState(cfg){
+  const a = isAndrea(cfg);
+  const st = {
+    cfg: clone(cfg),
+    objectives: cfg.objectives.map(makeObjective),
+    capacity: 10,
+    energy: 'normal',
+    todayDone: { day: isoDay(today0()), ids: [] },
+    reflection: {},
+    letgo: a ? ['Rewriting my team\'s work at night', 'Saying yes to every meeting'] : ['Doing everything myself'],
+    notes: a ? [
+      { id:uid(), text:'Board pack handoff: I keep wanting to rewrite Jordan\'s draft #delegation', date:addDays(-2) },
+      { id:uid(), text:'Two family evenings held this week, it felt lighter #family', date:addDays(-4) },
+      { id:uid(), text:'How do I say no to the extra steering committee? #boundaries #delegation', date:addDays(-5) }
+    ] : [ { id:uid(), text:'First week with my app. Where should I focus first? #start', date:addDays(-1) } ],
+    valuesHist: a ? { courage:[6,6,7,7,7,8,8,8], clarity:[5,6,6,7,7,7,8,8], connection:[7,7,6,7,7,8,8,8], commitment:[7,7,8,8,8,8,9,9] }
+                  : { courage:[5,5,6,6,6,6,7,7], clarity:[4,5,5,5,6,6,6,7], connection:[6,6,6,6,7,7,7,7], commitment:[6,6,6,7,7,7,7,8] },
+    progressHist: null,
+    streak: a ? 9 : 3,
+    lastReview: addDays(a ? -1 : -2),
+    reviewedOn: null,
+    reviewText: a ? { wins:'Delegated the vendor report and did not touch it.', obstacles:'The board pack deadline makes me want to take it back.', focus:'Let Jordan own the board pack draft.' } : { wins:'', obstacles:'', focus:'' },
+    draft: null,
+    nextSession: { day:addDays(3), time:'10:00', n: a ? 9 : 2, of:12 },
+    impactDone: [true, true, false, false, false, false],
+    fromForm: false
+  };
+  S = st;
+  const live = overall();
+  st.progressHist = a ? [18,24,29,35,40,46,51,55,60,64,69]
+    : Array.from({ length:11 }, (_, i) => Math.round(live * (0.12 + 0.8 * i / 10)));
+  return st;
+}
+
+function mergeCfg(prev, cfg){
+  if (!prev || String(prev.cfg.name).trim().toLowerCase() !== String(cfg.name).trim().toLowerCase()) return generateState(cfg);
+  const st = prev;
+  st.cfg = clone(cfg);
+  st.objectives = cfg.objectives.map((o, i) => {
+    const hit = prev.objectives.find(p => p.title.trim().toLowerCase() === o.title.trim().toLowerCase());
+    if (hit){ hit.area = o.area; return hit; }
+    return makeObjective(o, i);
+  });
+  return st;
+}
+
+function currentCfg(){
+  const c = clone(S.cfg);
+  c.objectives = S.objectives.map(o => ({ title:o.title, area:o.area }));
+  return c;
+}
+
+function save(){
+  store(KEY, S);
+  if (S.fromForm) store('cp_demo_client', { cfg:currentCfg(), source:'app', updatedAt:new Date().toISOString(), snapshot:snapshot() });
+  const href = 'form.html?cfg=' + encodeCfg(currentCfg());
+  $('#editApp').href = href; $('#navForm').href = href;
+}
+function snapshot(){
+  const hist = S.progressHist.concat([overall()]);
+  return {
+    progress: overall(),
+    objectives: S.objectives.map(o => ({ title:o.title, area:o.area, progress:objProgress(o), due:o.due })),
+    history: hist,
+    values: S.valuesHist,
+    lastReview: S.lastReview,
+    streak: S.streak,
+    notes: S.notes.slice(0, 5).map(n => ({ text:n.text, date:n.date })),
+    reviewText: S.reviewText,
+    nextSession: S.nextSession
+  };
+}
+
+function boot(){
+  const params = new URLSearchParams(location.search);
+  const raw = params.get('cfg');
+  let prev = load(KEY);
+  if (prev && (!prev.cfg || !Array.isArray(prev.objectives))) prev = null;
+  if (raw){
+    const cfg = decodeCfg(raw);
+    if (cfg && cfg.name){
+      if (!Array.isArray(cfg.objectives)) cfg.objectives = [];
+      if (!Array.isArray(cfg.areas)) cfg.areas = [];
+      cfg.privacy = Object.assign({ progress:true, values:true, review:false }, cfg.privacy || {});
+      if (prev && prev.appliedCfg === raw){ S = prev; }
+      else { S = mergeCfg(prev, cfg); S.appliedCfg = raw; S.fromForm = true; }
+      try { history.replaceState(null, '', location.pathname); } catch(e){}
+    } else {
+      S = prev || generateState(clone(EXAMPLE));
+    }
+  } else {
+    S = prev || generateState(clone(EXAMPLE));
+  }
+  if (!S.todayDone || S.todayDone.day !== isoDay(today0())) S.todayDone = { day:isoDay(today0()), ids:[] };
+  applyPalette(S.cfg.palette);
+  save();
+  render();
+}
+
+/* derived */
+function areasList(){
+  const a = (S.cfg.areas || []).slice();
+  const extra = (METHOD.programs[S.cfg.program] || {}).extraArea;
+  if (extra && !a.includes(extra)) a.push(extra);
+  S.objectives.forEach(o => { if (o.area && !a.includes(o.area)) a.push(o.area); });
+  return a;
+}
+function weekTasks(){ const r = []; S.objectives.forEach(o => o.tasks.forEach(t => { if (t.week) r.push({ t, o }); })); return r; }
+function weekStats(){
+  const w = weekTasks(); const done = w.filter(x => x.t.done);
+  return { total:w.length, done:done.length, hours:round1(done.reduce((s, x) => s + (+x.t.hours || 0), 0)), pct: w.length ? Math.round(done.length / w.length * 100) : 0 };
+}
+function totalLoad(){ return round1(S.objectives.filter(o => objProgress(o) < 100).reduce((s, o) => s + (+o.load || 0), 0)); }
+
+/* render shell */
+function render(){
+  const tone = S.cfg.tone || 'calm';
+  $('#appTitle').textContent = S.cfg.appName || 'My app';
+  $('#appSub').textContent = 'Courage Space · ' + firstName(S.cfg.name);
+  document.title = (S.cfg.appName || 'My app') + ' · Courage Plan';
+  document.querySelectorAll('.tab').forEach(b => { const on = b.dataset.tab === ui.tab; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; });
+  const fn = { today:renderToday, goals:renderGoals, review:renderReview, progress:renderProgress, coach:renderCoach }[ui.tab];
+  const scr = $('#screen'); const keep = scr.scrollTop;
+  scr.innerHTML = fn(tone);
+  scr.scrollTop = keep;
+}
+function switchTab(t){ ui.tab = t; ui.editObj = ui.addTask = ui.editTask = null; ui.addObj = false; render(); $('#screen').scrollTop = 0; }
+
+/* TODAY */
+function greeting(){ const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'; }
+function priorities(){
+  const ids = S.todayDone.ids;
+  let c = weekTasks().filter(x => !x.t.done || ids.includes(x.t.id));
+  const order = S.objectives.map(o => o.id);
+  const byDue = (a, b) => daysUntil(a.o.due) - daysUntil(b.o.due) || order.indexOf(a.o.id) - order.indexOf(b.o.id);
+  if (S.energy === 'high') c.sort((a, b) => b.t.hours - a.t.hours || byDue(a, b));
+  else if (S.energy === 'low') c.sort((a, b) => a.t.hours - b.t.hours || byDue(a, b));
+  else c.sort(byDue);
+  return c.slice(0, 3);
+}
+function phaseContent(p){
+  if (p.id === 'letgo'){
+    return `<div class="prompt">${esc(p.prompt)}</div>
+      <div class="flabel" id="lgl">Letting go of</div>${letgoList('lgl')}`;
+  }
+  const extra = p.id === 'learn' ? 'Write one line. Bring it to your next session.' : p.id === 'face' ? 'No need to solve it. Just name it.' : 'Notice it without judging it.';
+  return `<div class="prompt" id="pp">${esc(p.prompt)}</div>
+    <textarea class="input" data-bind="reflection" aria-labelledby="pp" rows="2" placeholder="${esc(extra)}">${esc(S.reflection[p.id] || '')}</textarea>
+    <div class="saved" id="refSaved"></div>`;
+}
+function letgoList(labelId){
+  return `<ul class="letgo" aria-labelledby="${labelId}">${S.letgo.map((l, i) => `<li><span>${esc(l)}</span><button class="icon-btn" data-act="rmLetgo" data-i="${i}" aria-label="Remove ${esc(l)}">${ICON.x}</button></li>`).join('') || '<li class="empty">Nothing yet.</li>'}</ul>
+    <div class="add-row"><label class="sr-only" for="letgoIn_${labelId}">Add something to let go of</label><input class="input" id="letgoIn_${labelId}" data-enter="addLetgo" placeholder="Add something, press Enter" maxlength="80"><button class="btn btn-soft btn-sm" data-act="addLetgo" data-for="letgoIn_${labelId}">Add</button></div>`;
+}
+function renderToday(tone){
+  const p = phaseById(S.cfg.phase);
+  const lines = TONE_LINES[tone] || TONE_LINES.calm;
+  const line = lines[new Date().getDate() % lines.length];
+  const pr = priorities(); const ws = weekStats();
+  const ns = S.nextSession, nd = daysUntil(ns.day);
+  const energy = [['high','🔥 High'],['normal','🙂 Normal'],['low','😴 Low']];
+  const eNote = { high:'Big tasks first while your energy is high.', normal:'Ordered by deadline.', low:'Shorter tasks first. Small wins count.' }[S.energy];
+  return `
+  <section class="hero" aria-label="Greeting">
+    <div class="hi mono">${new Date().toLocaleDateString('en-CA', { weekday:'long', month:'short', day:'numeric' })}</div>
+    <h2>${greeting()}, ${esc(firstName(S.cfg.name))}</h2>
+    <p>${esc(line)} Welcome to ${esc(S.cfg.appName)}.</p>
+  </section>
+
+  <section class="card phase-card" aria-label="Your phase">
+    <span class="badge">Phase ${p.n} of 4: ${esc(p.name)}</span>
+    <div class="phase-steps" aria-hidden="true">${METHOD.phases.map(x => `<span class="${x.n <= p.n ? 'on' : ''}"></span>`).join('')}</div>
+    <div class="small" style="margin-bottom:6px">${esc(p.summary)}</div>
+    ${phaseContent(p)}
+  </section>
+
+  <section class="card" aria-labelledby="enh">
+    <h3 id="enh">How is your energy?</h3>
+    <div class="seg" role="group" aria-label="Energy level">${energy.map(e => `<button data-act="energy" data-v="${e[0]}" aria-pressed="${S.energy === e[0]}">${e[1]}</button>`).join('')}</div>
+    <div class="small" style="margin-top:8px">${eNote}</div>
+  </section>
+
+  <section class="card" aria-labelledby="prh">
+    <h3 id="prh">Today's 3 priorities</h3>
+    ${pr.length ? pr.map(x => taskRow(x.t, x.o, true)).join('') : '<p class="empty">All of this week\'s tasks are done. Enjoy it, or add a task in Goals.</p>'}
+  </section>
+
+  <div class="duo">
+    <section class="card" aria-label="Week progress">
+      ${ring(ws.pct, 104, 10)}
+      <div class="small" style="margin-top:6px">This week · ${ws.done} of ${ws.total} tasks</div>
+    </section>
+    <section class="card" aria-label="Next session">
+      <div class="big-num">${nd}</div>
+      <div style="font-weight:600;font-size:14px;margin-top:4px">${nd === 0 ? 'Session with Dagmar today' : 'Next session with Dagmar in ' + plural(nd, 'day')}</div>
+      <div class="small mono" style="margin-top:2px">${fmtDate(ns.day)} · ${fmtTime(ns.time)}</div>
+    </section>
+  </div>
+  <p class="small" style="margin-top:14px;text-align:center">${S.cfg.reminders && S.cfg.reminders.checkin === false ? 'Daily reminder off' : 'Daily check in reminder at ' + fmtTime(S.cfg.checkin || '07:30')} · Review on ${esc(S.cfg.reviewDay || 'Sunday')}</p>`;
+}
+function ring(pct, size, w){
+  const r = (size - w) / 2, c = 2 * Math.PI * r, off = c * (1 - Math.min(pct, 100) / 100);
+  return `<div class="ring-wrap" style="width:${size}px;height:${size}px" role="img" aria-label="Week progress ${pct} percent">
+    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--panel-2)" stroke-width="${w}"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="${w}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 ${size/2} ${size/2})" style="transition:stroke-dashoffset .5s"/>
+    </svg><div class="v">${pct}%</div></div>`;
+}
+function taskRow(t, o, showObj){
+  if (ui.editTask === t.id){
+    return `<div class="inline-form">
+      <div class="field"><label for="et_t">Task</label><input class="input" id="et_t" value="${esc(t.title)}" maxlength="90"></div>
+      <div class="field"><label for="et_h">Estimated hours</label><input class="input" id="et_h" type="number" min="0.25" max="40" step="0.25" value="${t.hours}"></div>
+      <div class="acts"><button class="btn btn-ghost btn-sm" data-act="cancel">Cancel</button><button class="btn btn-primary btn-sm" data-act="saveTask" data-obj="${o.id}" data-task="${t.id}">Save</button></div></div>`;
+  }
+  const id = 'chk_' + t.id + (showObj ? '_p' : '');
+  return `<div class="task ${t.done ? 'done' : ''}">
+    <input type="checkbox" class="check" id="${id}" data-act="toggle" data-obj="${o.id}" data-task="${t.id}" ${t.done ? 'checked' : ''}>
+    <label class="body" for="${id}"><div class="t">${esc(t.title)}</div>${showObj ? `<div class="s"><span style="color:${areaColor(o.area)}">●</span> ${esc(o.title)}</div>` : ''}</label>
+    <span class="hrs" aria-label="${t.hours} hours">${t.hours} h</span>
+    ${showObj ? '' : `<button class="icon-btn" data-act="editTask" data-task="${t.id}" aria-label="Edit task ${esc(t.title)}">${ICON.edit}</button><button class="icon-btn" data-act="delTask" data-obj="${o.id}" data-task="${t.id}" aria-label="Delete task ${esc(t.title)}">${ICON.trash}</button>`}
+  </div>`;
+}
+
+/* GOALS */
+function renderGoals(){
+  const load = totalLoad(), cap = +S.capacity || 1, pct = Math.round(load / cap * 100);
+  const vision = ui.editVision
+    ? `<div class="field"><label for="visionIn">Your 3 year vision</label><textarea class="input" id="visionIn" rows="3" maxlength="220">${esc(S.cfg.vision)}</textarea></div>
+       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px"><button class="btn btn-ghost btn-sm" data-act="cancelVision">Cancel</button><button class="btn btn-primary btn-sm" data-act="saveVision">Save</button></div>`
+    : `<blockquote>"${esc(S.cfg.vision || 'Write your 3 year vision.')}"</blockquote>`;
+  return `
+  <div class="sec-title" style="margin-top:8px"><span>Goals</span><small>Vision · 90 days · This week</small></div>
+  <section class="card vision" aria-labelledby="vh">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span class="level" id="vh">Level 1 · 3 year vision</span>${ui.editVision ? '' : `<button class="icon-btn" data-act="editVision" aria-label="Edit vision">${ICON.edit}</button>`}</div>
+    ${vision}
+    <div class="chips" style="margin-top:12px" aria-label="Life areas">${areasList().map(a => `<span class="chip"><i style="background:${areaColor(a)}"></i>${esc(a)}</span>`).join('')}</div>
+  </section>
+
+  <section class="card" aria-labelledby="loadh">
+    <div class="load-row">
+      <div><h3 id="loadh">${loadEmoji(pct)} Weekly load ${pct}%</h3><div class="small">${loadLabel(pct)} · needs <span class="mono">${load} h</span> of your time each week</div></div>
+      <label class="cap">Available <input class="input mono" type="number" min="1" max="80" step="0.5" value="${S.capacity}" data-bind="capacity" aria-label="Hours available per week for goals"> h/week</label>
+    </div>
+  </section>
+
+  <div class="sec-title"><span class="level" style="font-size:12px">Level 2 · 90 day objectives</span>
+    <button class="btn btn-soft btn-sm" data-act="addObj" ${ui.addObj ? 'disabled' : ''}>+ Objective</button></div>
+  ${ui.addObj ? objForm(null) : ''}
+  ${S.objectives.map(objCard).join('') || '<p class="empty">No objectives yet. Add one with Dagmar.</p>'}
+  ${S.cfg.program === 'impact' ? impactModule() : ''}
+  <p class="small" style="text-align:center;margin-top:16px">Objectives are co-created with Dagmar using ${esc(METHOD.methodology[1].toLowerCase())}.</p>`;
+}
+function objForm(o){
+  const areas = areasList();
+  const v = o || { title:'', area:areas[0] || '', due:addDays(60), load:2 };
+  return `<div class="card inline-form" style="background:var(--panel-2)">
+    <h3>${o ? 'Edit objective' : 'New 90 day objective'}</h3>
+    <div class="field"><label for="of_t">Objective</label><input class="input" id="of_t" maxlength="80" value="${esc(v.title)}" placeholder="For example: Run my first workshop"></div>
+    <div class="grid2">
+      <div class="field"><label for="of_a">Area</label><select class="input" id="of_a">${areas.map(a => `<option ${a === v.area ? 'selected' : ''}>${esc(a)}</option>`).join('')}</select></div>
+      <div class="field"><label for="of_l">Hours per week</label><input class="input" id="of_l" type="number" min="0.5" max="40" step="0.5" value="${v.load}"></div>
+    </div>
+    <div class="field"><label for="of_d">Deadline</label><input class="input" id="of_d" type="date" value="${v.due}"></div>
+    <div class="saved" id="ofErr" role="alert" style="color:var(--red-ink)"></div>
+    <div class="acts"><button class="btn btn-ghost btn-sm" data-act="cancel">Cancel</button><button class="btn btn-primary btn-sm" data-act="saveObj" ${o ? `data-obj="${o.id}"` : ''}>Save</button></div>
+  </div>`;
+}
+function objCard(o){
+  if (ui.editObj === o.id) return objForm(o);
+  const p = objProgress(o), d = dueInfo(o.due);
+  const week = o.tasks.filter(t => t.week), earlier = o.tasks.filter(t => !t.week);
+  const open = ui.earlier[o.id];
+  return `<article class="card obj" style="--area:${areaColor(o.area)}" aria-label="${esc(o.title)}">
+    <div class="obj-top">
+      <span class="area-tag"><i></i>${esc(o.area)}</span>
+      <div class="obj-actions">
+        <button class="icon-btn" data-act="editObj" data-obj="${o.id}" aria-label="Edit objective ${esc(o.title)}">${ICON.edit}</button>
+        <button class="icon-btn" data-act="delObj" data-obj="${o.id}" aria-label="Delete objective ${esc(o.title)}">${ICON.trash}</button>
+      </div>
+    </div>
+    <h4>${p === 100 ? '✅ ' : ''}${esc(o.title)}</h4>
+    <div class="pbar" role="progressbar" aria-label="${esc(o.title)} progress" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100"><span style="width:${p}%"></span></div>
+    <div class="obj-meta">
+      <span class="pct">${p}%</span>
+      <span class="due ${d.cls}">${d.text}</span>
+      <span>Needs <span class="mono">${o.load} h</span>/week</span>
+    </div>
+    ${o.coCreated ? '<div style="margin-top:8px"><span class="badge">🤝 Co-created with Dagmar</span></div>' : ''}
+    <div class="sub-h"><span>Level 3 · This week's tasks</span><span class="mono">${week.filter(t => t.done).length}/${week.length}</span></div>
+    ${week.map(t => taskRow(t, o, false)).join('') || '<p class="empty">No tasks this week.</p>'}
+    ${ui.addTask === o.id ? `<div class="inline-form">
+        <div class="field"><label for="nt_t">New task</label><input class="input" id="nt_t" maxlength="90" placeholder="What is the next step?" data-enter="saveNewTask" data-obj="${o.id}"></div>
+        <div class="field"><label for="nt_h">Estimated hours</label><input class="input" id="nt_h" type="number" min="0.25" max="40" step="0.25" value="1"></div>
+        <div class="acts"><button class="btn btn-ghost btn-sm" data-act="cancel">Cancel</button><button class="btn btn-primary btn-sm" data-act="saveNewTask" data-obj="${o.id}">Add task</button></div></div>`
+      : `<button class="linkish" style="margin-top:8px" data-act="addTask" data-obj="${o.id}">+ Add task</button>`}
+    ${earlier.length ? `<div style="margin-top:10px"><button class="linkish" data-act="earlier" data-obj="${o.id}" aria-expanded="${!!open}">${open ? 'Hide' : 'Show'} earlier steps (${earlier.filter(t => t.done).length} of ${earlier.length} done)</button></div>
+      ${open ? earlier.map(t => taskRow(t, o, false)).join('') : ''}` : ''}
+  </article>`;
+}
+function impactModule(){
+  const steps = METHOD.programs.impact.steps, done = S.impactDone || [];
+  const n = done.filter(Boolean).length, cur = done.findIndex(x => !x);
+  return `<section class="card" aria-labelledby="imh">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 id="imh">Idea to Impact</h3><span class="mono small">${n} of 6</span></div>
+    <div class="pbar" style="margin-top:8px"><span style="width:${Math.round(n / 6 * 100)}%"></span></div>
+    <ol class="path">${steps.map((s, i) => `<li class="${done[i] ? 'done' : i === cur ? 'current' : ''}"><span class="dot" aria-hidden="true">${done[i] ? '✓' : i + 1}</span>
+      <button data-act="impact" data-i="${i}" aria-pressed="${!!done[i]}">${esc(s)}<small>${done[i] ? 'Done' : i === cur ? 'In progress with Dagmar' : 'Coming up'}</small></button></li>`).join('')}</ol>
+  </section>`;
+}
+
+/* REVIEW */
+function renderReview(){
+  const last = k => S.valuesHist[k][S.valuesHist[k].length - 1];
+  if (!S.draft) S.draft = { values:{ courage:last('courage'), clarity:last('clarity'), connection:last('connection'), commitment:last('commitment') }, wins:'', obstacles:'', focus:'' };
+  const d = S.draft, p = phaseById(S.cfg.phase);
+  const doneToday = S.reviewedOn === isoDay(today0());
+  return `
+  <div class="sec-title" style="margin-top:8px"><span>Weekly review</span><small>About 10 minutes</small></div>
+  <section class="card" aria-label="Review status">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <div><div style="font-weight:600">🔥 <span class="mono">${S.streak}</span> week streak</div><div class="small">Your review day is ${esc(S.cfg.reviewDay || 'Sunday')} · last review ${fmtDate(S.lastReview)}</div></div>
+      ${doneToday ? '<span class="badge">Done this week</span>' : ''}
+    </div>
+  </section>
+  <section class="card" aria-labelledby="vh2">
+    <h3 id="vh2">Your values this week</h3>
+    <div class="small">From 1 to 10, how did you live each value?</div>
+    ${METHOD.values.map(v => `<div class="slider">
+      <div class="top"><label for="rv_${v.id}"><b>${v.name}</b></label><span class="mono" id="rvo_${v.id}">${d.values[v.id]}</span></div>
+      <small>${esc(v.desc)}</small>
+      <input type="range" id="rv_${v.id}" min="1" max="10" step="1" value="${d.values[v.id]}" data-val="${v.id}" aria-describedby="rvo_${v.id}">
+    </div>`).join('')}
+  </section>
+  <section class="card" aria-labelledby="rth">
+    <h3 id="rth">Reflect</h3>
+    <div class="field"><label for="rw">Wins</label><textarea class="input" id="rw" data-draft="wins" rows="2" placeholder="What went well?">${esc(d.wins)}</textarea></div>
+    <div class="field"><label for="ro">Obstacles</label><textarea class="input" id="ro" data-draft="obstacles" rows="2" placeholder="What got in the way?">${esc(d.obstacles)}</textarea></div>
+    <div class="field"><label for="rf">Focus for next week</label><textarea class="input" id="rf" data-draft="focus" rows="2" placeholder="One thing that matters most">${esc(d.focus)}</textarea></div>
+    <p class="small" style="margin-top:8px">${S.cfg.privacy.review ? '👁 Dagmar can read this text.' : '🔒 This text stays private. Change it in Coach.'}</p>
+  </section>
+  ${p.id === 'letgo' ? `<section class="card" aria-labelledby="lg2"><h3 id="lg2">Letting go of</h3><div class="small">What you are releasing during this phase.</div>${letgoList('lg2')}</section>` : ''}
+  <button class="btn btn-primary btn-block" style="margin-top:16px" data-act="submitReview">${doneToday ? 'Update this week\'s review' : 'Submit weekly review'}</button>`;
+}
+
+/* PROGRESS */
+function renderProgress(){
+  const ws = weekStats(), ov = overall();
+  const hist = S.progressHist.concat([ov]);
+  return `
+  <div class="sec-title" style="margin-top:8px"><span>Progress</span><small>Last 12 weeks</small></div>
+  <div class="tiles">
+    <div class="tile"><div class="n">${ov}%</div><div class="l">90 day objectives</div></div>
+    <div class="tile"><div class="n">🔥 ${S.streak}</div><div class="l">Review streak (weeks)</div></div>
+    <div class="tile"><div class="n">${ws.done}/${ws.total}</div><div class="l">Tasks done this week</div></div>
+    <div class="tile"><div class="n">${ws.hours} h</div><div class="l">Hours this week</div></div>
+  </div>
+  <section class="card" aria-labelledby="lc"><h3 id="lc">Objective progress</h3><div class="small">Average of your 90 day objectives, by week</div>${lineChart(hist)}</section>
+  <section class="card" aria-labelledby="vc"><h3 id="vc">Your values</h3><div class="small">Weekly scores, last 8 weeks</div>${valuesChart()}
+    <div class="legend">${METHOD.values.map(v => `<span><i style="background:${v.color}"></i>${v.name}</span>`).join('')}</div></section>
+  <section class="card" aria-labelledby="hc"><h3 id="hc">Consistency</h3><div class="small">Days you checked in or completed tasks, last 16 weeks</div>${heatmap()}
+    <div class="legend" aria-hidden="true"><span>Less</span>${[0,1,2,3,4].map(l => `<i style="background:${heatColor(l)}"></i>`).join('')}<span>More</span></div></section>
+  <section class="card" aria-labelledby="dc"><h3 id="dc">Hours by area</h3><div class="small">Completed task hours</div>${donut()}</section>`;
+}
+function lineChart(data){
+  const W = 340, H = 160, pl = 28, pr = 8, pt = 10, pb = 22;
+  const x = i => pl + i * (W - pl - pr) / (data.length - 1), y = v => pt + (100 - v) * (H - pt - pb) / 100;
+  const pts = data.map((v, i) => x(i).toFixed(1) + ',' + y(v).toFixed(1));
+  const area = `M${x(0)},${y(0)} L${pts.join(' L')} L${x(data.length - 1)},${H - pb} L${x(0)},${H - pb} Z`;
+  const grid = [0, 25, 50, 75, 100].map(g => `<line x1="${pl}" x2="${W - pr}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line)" stroke-dasharray="${g ? '3 3' : ''}"/><text x="${pl - 6}" y="${y(g) + 3}" text-anchor="end">${g}</text>`).join('');
+  const labels = data.map((_, i) => (i % 3 === 0 || i === data.length - 1) ? `<text x="${x(i)}" y="${H - 6}" text-anchor="middle">${i === data.length - 1 ? 'Now' : 'W' + (i + 1)}</text>` : '').join('');
+  const last = data.length - 1;
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Objective progress over 12 weeks, from ${data[0]} to ${data[last]} percent">
+    <defs><linearGradient id="lg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".28"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>
+    ${grid}<path d="${area}" fill="url(#lg)"/><polyline points="${pts.join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${x(last)}" cy="${y(data[last])}" r="4.5" fill="#fff" stroke="var(--accent-ink)" stroke-width="2.5"/>
+    <text x="${x(last) - 8}" y="${y(data[last]) - 9}" text-anchor="end" style="fill:var(--text);font-size:11px">${data[last]}%</text>${labels}</svg>`;
+}
+function valuesChart(){
+  const W = 340, H = 150, pl = 22, pr = 8, pt = 8, pb = 20, n = 8;
+  const x = i => pl + i * (W - pl - pr) / (n - 1), y = v => pt + (10 - v) * (H - pt - pb) / 9;
+  const grid = [1, 4, 7, 10].map(g => `<line x1="${pl}" x2="${W - pr}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line)" stroke-dasharray="3 3"/><text x="${pl - 6}" y="${y(g) + 3}" text-anchor="end">${g}</text>`).join('');
+  const lines = METHOD.values.map(v => { const d = S.valuesHist[v.id].slice(-n); return `<polyline points="${d.map((s, i) => x(i) + ',' + y(s)).join(' ')}" fill="none" stroke="${v.color}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>` + d.map((s, i) => i === d.length - 1 ? `<circle cx="${x(i)}" cy="${y(s)}" r="3.5" fill="${v.color}"/>` : '').join(''); }).join('');
+  const labels = Array.from({ length:n }, (_, i) => (i % 2 === 1 || i === n - 1) ? `<text x="${x(i)}" y="${H - 5}" text-anchor="middle">${i === n - 1 ? 'Now' : 'W' + (i + 1)}</text>` : '').join('');
+  const summary = METHOD.values.map(v => v.name + ' ' + S.valuesHist[v.id][S.valuesHist[v.id].length - 1]).join(', ');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Value scores over 8 weeks. This week: ${summary}">${grid}${lines}${labels}</svg>`;
+}
+function heatColor(l){ return ['var(--panel-2)', 'color-mix(in srgb, var(--accent) 25%, #fff)', 'color-mix(in srgb, var(--accent) 50%, #fff)', 'color-mix(in srgb, var(--accent) 78%, #fff)', 'var(--accent-ink)'][l]; }
+function heatmap(){
+  const r = rng(hashStr(S.cfg.name || 'x'));
+  const now = new Date(); const dow = (now.getDay() + 6) % 7; // Monday = 0
+  let cols = '', active = 0;
+  for (let w = 0; w < 16; w++){
+    let cells = '';
+    for (let d = 0; d < 7; d++){
+      const future = w === 15 && d > dow;
+      if (future){ cells += '<span class="c future"></span>'; continue; }
+      const ramp = 0.35 + 0.55 * (w / 15);
+      let lvl = r() < ramp ? 1 + Math.floor(r() * 4) : 0;
+      if (d >= 5 && lvl > 2) lvl -= 1;
+      if (lvl) active++;
+      cells += `<span class="c" style="background:${heatColor(lvl)}"></span>`;
+    }
+    cols += `<div class="col">${cells}</div>`;
+  }
+  return `<div class="heat" role="img" aria-label="Consistency heatmap: active on ${active} days in the last 16 weeks">${cols}</div>`;
+}
+function donut(){
+  const by = {};
+  S.objectives.forEach(o => o.tasks.forEach(t => { if (t.done) by[o.area] = (by[o.area] || 0) + (+t.hours || 0); }));
+  const entries = Object.entries(by).filter(e => e[1] > 0).sort((a, b) => b[1] - a[1]);
+  const tot = entries.reduce((s, e) => s + e[1], 0);
+  if (!tot) return '<p class="empty">Complete a task to see your hours by area.</p>';
+  const R = 52, w = 18, c = 2 * Math.PI * R; let acc = 0;
+  const arcs = entries.map(([a, h]) => { const len = h / tot * c; const s = `<circle cx="70" cy="70" r="${R}" fill="none" stroke="${areaColor(a)}" stroke-width="${w}" stroke-dasharray="${len} ${c - len}" stroke-dashoffset="${-acc}" transform="rotate(-90 70 70)"/>`; acc += len; return s; }).join('');
+  return `<div class="donut-wrap" style="margin-top:10px">
+    <svg width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Hours by area: ${entries.map(e => e[0] + ' ' + round1(e[1]) + ' hours').join(', ')}">${arcs}
+      <text x="70" y="68" text-anchor="middle" style="font-family:var(--mono);font-size:20px;fill:var(--text)">${round1(tot)}</text><text x="70" y="86" text-anchor="middle" style="font-size:11px;fill:var(--muted)">hours</text></svg>
+    <div class="legend">${entries.map(([a, h]) => `<span><i style="background:${areaColor(a)}"></i>${esc(a)} <b class="mono" style="font-weight:500">${round1(h)} h</b></span>`).join('')}</div>
+  </div>`;
+}
+
+/* COACH */
+function renderCoach(){
+  const ns = S.nextSession, nd = daysUntil(ns.day), dt = parseDay(ns.day);
+  const allTags = Array.from(new Set(S.notes.flatMap(n => tagsOf(n.text))));
+  const notes = S.notes.filter(n => !ui.noteFilter || tagsOf(n.text).includes(ui.noteFilter));
+  const tier = METHOD.tiers[PAYER_TIER[S.cfg.payer] || 'company'];
+  const nextCharge = new Date(); nextCharge.setDate(1); nextCharge.setMonth(nextCharge.getMonth() + 1);
+  const pv = S.cfg.privacy;
+  return `
+  <div class="sec-title" style="margin-top:8px"><span>Your coach</span><small>Dagmar, PCC</small></div>
+  <section class="card" aria-labelledby="nsh">
+    <div class="session">
+      <div class="cal" aria-hidden="true"><div class="m">${dt.toLocaleDateString('en-CA', { month:'short' })}</div><div class="d">${dt.getDate()}</div></div>
+      <div><h3 id="nsh">Next session with Dagmar</h3>
+        <div class="small mono">${fmtDate(ns.day, { weekday:'long', month:'long', day:'numeric' })} · ${fmtTime(ns.time)}</div>
+        <div class="small">${nd === 0 ? 'Today' : 'In ' + plural(nd, 'day')} · Session ${ns.n} of ${ns.of} · Video call</div></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="nth">
+    <h3 id="nth">Notes for our session</h3>
+    <div class="small">Add #topics. Press Enter to save.</div>
+    <div class="add-row" style="margin-top:10px"><label class="sr-only" for="noteIn">New note</label><input class="input" id="noteIn" data-enter="addNote" maxlength="200" placeholder="Something to bring up #topic"></div>
+    ${allTags.length ? `<div class="chips" style="margin-top:10px" role="group" aria-label="Filter notes by topic">
+      <button class="chip" data-act="filter" data-v="" aria-pressed="${!ui.noteFilter}">All</button>
+      ${allTags.map(t => `<button class="chip" data-act="filter" data-v="${esc(t)}" aria-pressed="${ui.noteFilter === t}">#${esc(t)}</button>`).join('')}</div>` : ''}
+    <div style="margin-top:6px">${notes.map(n => `<div class="note"><p>${n.text.split(/(#[\w-]+)/).map((part, i) => i % 2 ? '<span class="tag">' + esc(part) + '</span>' : esc(part)).join('')}<span class="when">${fmtDate(n.date)}</span></p>
+      <button class="icon-btn" data-act="delNote" data-id="${n.id}" aria-label="Delete note">${ICON.trash}</button></div>`).join('') || '<p class="empty">No notes for this topic.</p>'}</div>
+  </section>
+
+  <section class="card" aria-labelledby="pvh">
+    <h3 id="pvh">What Dagmar can see</h3>
+    <div class="toggle-row"><div class="t" id="pva">Progress<small>Objectives, tasks and 90 day %</small></div><label class="switch"><input type="checkbox" data-priv="progress" aria-labelledby="pva" ${pv.progress ? 'checked' : ''}><span></span></label></div>
+    <div class="toggle-row"><div class="t" id="pvb">Value scores<small>Weekly value sliders</small></div><label class="switch"><input type="checkbox" data-priv="values" aria-labelledby="pvb" ${pv.values ? 'checked' : ''}><span></span></label></div>
+    <div class="toggle-row"><div class="t" id="pvc">Weekly review text<small>Wins, obstacles and focus</small></div><label class="switch"><input type="checkbox" data-priv="review" aria-labelledby="pvc" ${pv.review ? 'checked' : ''}><span></span></label></div>
+    <div class="toggle-row"><div class="t">Private journal<small>Always private. Only you can read it.</small></div><span class="lock">${ICON.lock} Locked</span></div>
+  </section>
+
+  <section class="card" aria-labelledby="sbh">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 id="sbh">Subscription</h3><span class="badge" style="background:#E6F3E8;color:var(--green-ink)">● Active</span></div>
+    <div style="margin-top:8px">
+      <div class="sub-row"><span class="muted">Plan</span><span><b>${tier.name}</b></span></div>
+      <div class="sub-row"><span class="muted">Price</span><span class="mono">${money(tier.monthly)}/month CAD</span></div>
+      <div class="sub-row"><span class="muted">Setup</span><span class="mono">${money(tier.setup)} · paid</span></div>
+      <div class="sub-row"><span class="muted">Billing</span><span>${esc(tier.note)}</span></div>
+      <div class="sub-row"><span class="muted">Next charge</span><span class="mono">${nextCharge.toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' })}</span></div>
+    </div>
+    <button class="btn btn-ghost btn-block" style="margin-top:12px" data-act="pay">Manage payment</button>
+  </section>
+
+  <section class="card" aria-labelledby="dmh">
+    <h3 id="dmh">Demo controls</h3>
+    <div class="small">Changes are saved in this browser. Reset to start again from Andrea's example.</div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <a class="btn btn-soft" href="${'form.html?cfg=' + encodeCfg(currentCfg())}">Edit my app</a>
+      <button class="btn btn-danger" data-act="reset">Reset demo</button>
+    </div>
+  </section>`;
+}
+
+/* icons */
+const ICON = {
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  lock:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>'
+};
+
+/* toast + confetti */
+let toastT;
+function toast(msg, celebrate){
+  const t = $('#toast'); t.textContent = msg; t.className = 'toast show' + (celebrate ? ' celebrate' : '');
+  clearTimeout(toastT); toastT = setTimeout(() => t.className = 'toast', celebrate ? 4800 : 2800);
+  if (celebrate) confetti();
+}
+function confetti(){
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = $('#confetti'); const cols = [getComputedStyle(document.documentElement).getPropertyValue('--accent'), '#F2A25C', '#5FAE6C', '#E0625F', '#8A6FD1'];
+  box.innerHTML = Array.from({ length:40 }, () => `<i style="left:${Math.random() * 100}%;background:${cols[Math.floor(Math.random() * cols.length)]};animation-delay:${Math.random() * .4}s;animation-duration:${1.2 + Math.random()}s"></i>`).join('');
+  setTimeout(() => box.innerHTML = '', 2600);
+}
+
+/* actions */
+function findObj(id){ return S.objectives.find(o => o.id === id); }
+function toggleTask(objId, taskId, checked){
+  const o = findObj(objId); if (!o) return; const t = o.tasks.find(x => x.id === taskId); if (!t) return;
+  const wasComplete = objProgress(o) === 100;
+  t.done = checked;
+  const ids = S.todayDone.ids;
+  if (checked && !ids.includes(t.id)) ids.push(t.id);
+  if (objProgress(o) === 100 && !wasComplete && checked){
+    const total = S.objectives.length, n = S.objectives.filter(x => objProgress(x) === 100).length;
+    toast('🎉 You completed ' + o.title + '. It moves you toward your vision: ' + n + ' of ' + total + ' (' + Math.round(n / total * 100) + '%)', true);
+  } else if (checked){
+    toast('Nice. ' + t.title + ' is done.');
+  }
+  save(); render();
+  const again = document.getElementById(document.activeElement && document.activeElement.id ? document.activeElement.id : '');
+  if (again) again.focus();
+}
+function act(name, el){
+  const d = el.dataset;
+  switch(name){
+    case 'energy': S.energy = d.v; save(); render(); toast({ high:'🔥 High energy: bigger tasks first.', normal:'🙂 Normal energy: ordered by deadline.', low:'😴 Low energy: shorter tasks first.' }[d.v]); break;
+    case 'editVision': ui.editVision = true; render(); setTimeout(() => { const v = $('#visionIn'); if (v) v.focus(); }); break;
+    case 'cancelVision': ui.editVision = false; render(); break;
+    case 'saveVision': { const v = $('#visionIn').value.trim(); if (!v) return; S.cfg.vision = v; ui.editVision = false; save(); render(); toast('Vision saved.'); break; }
+    case 'addObj': ui.addObj = true; ui.editObj = null; render(); setTimeout(() => { const t = $('#of_t'); if (t) t.focus(); }); break;
+    case 'editObj': ui.editObj = d.obj; ui.addObj = false; render(); setTimeout(() => { const t = $('#of_t'); if (t) t.focus(); }); break;
+    case 'cancel': ui.editObj = null; ui.addObj = false; ui.addTask = null; ui.editTask = null; render(); break;
+    case 'saveObj': {
+      const title = $('#of_t').value.trim(), area = $('#of_a').value, load = Math.max(0.5, +$('#of_l').value || 1), due = $('#of_d').value || addDays(60);
+      if (!title){ $('#ofErr').textContent = 'Please name the objective.'; $('#of_t').focus(); return; }
+      if (d.obj){ const o = findObj(d.obj); Object.assign(o, { title, area, load, due }); toast('Objective updated.'); }
+      else { S.objectives.push({ id:uid(), title, area, load, due, coCreated:true, tasks:[] }); ui.addTask = S.objectives[S.objectives.length - 1].id; toast('Objective added. Now add its first task.'); }
+      ui.editObj = null; ui.addObj = false; save(); render();
+      if (ui.addTask) setTimeout(() => { const t = $('#nt_t'); if (t) t.focus(); });
+      break;
+    }
+    case 'delObj': { const o = findObj(d.obj); if (!o) return; if (!confirm('Delete "' + o.title + '" and its tasks?')) return; S.objectives = S.objectives.filter(x => x.id !== d.obj); save(); render(); toast('Objective deleted.'); break; }
+    case 'addTask': ui.addTask = d.obj; ui.editTask = null; render(); setTimeout(() => { const t = $('#nt_t'); if (t) t.focus(); }); break;
+    case 'saveNewTask': {
+      const o = findObj(d.obj), title = $('#nt_t').value.trim(), hours = Math.max(0.25, +$('#nt_h').value || 1);
+      if (!title){ $('#nt_t').focus(); return; }
+      o.tasks.push({ id:uid(), title, hours, done:false, week:true }); ui.addTask = null; save(); render(); toast('Task added to this week.'); break;
+    }
+    case 'editTask': ui.editTask = d.task; ui.addTask = null; render(); setTimeout(() => { const t = $('#et_t'); if (t) t.focus(); }); break;
+    case 'saveTask': { const o = findObj(d.obj), t = o && o.tasks.find(x => x.id === d.task); if (!t) return; const title = $('#et_t').value.trim(); if (!title) return; t.title = title; t.hours = Math.max(0.25, +$('#et_h').value || t.hours); ui.editTask = null; save(); render(); toast('Task updated.'); break; }
+    case 'delTask': { const o = findObj(d.obj); if (!o) return; const t = o.tasks.find(x => x.id === d.task); if (!t || !confirm('Delete "' + t.title + '"?')) return; o.tasks = o.tasks.filter(x => x.id !== d.task); save(); render(); toast('Task deleted.'); break; }
+    case 'earlier': ui.earlier[d.obj] = !ui.earlier[d.obj]; render(); break;
+    case 'impact': { const i = +d.i; S.impactDone[i] = !S.impactDone[i]; save(); render(); if (S.impactDone[i]) toast('🎉 ' + METHOD.programs.impact.steps[i] + ' is done. ' + S.impactDone.filter(Boolean).length + ' of 6 steps.', true); break; }
+    case 'addLetgo': { const inp = document.getElementById(d.for || el.id); const v = inp && inp.value.trim(); if (!v) return; S.letgo.push(v); save(); render(); toast('Added to your Letting go of list.'); setTimeout(() => { const n = document.getElementById(inp.id); if (n) n.focus(); }); break; }
+    case 'rmLetgo': S.letgo.splice(+d.i, 1); save(); render(); toast('Let go. Well done.'); break;
+    case 'submitReview': {
+      const dr = S.draft, todayIso = isoDay(today0()), again = S.reviewedOn === todayIso;
+      METHOD.values.forEach(v => { const h = S.valuesHist[v.id]; if (again) h[h.length - 1] = dr.values[v.id]; else { h.push(dr.values[v.id]); if (h.length > 8) h.shift(); } });
+      if (dr.wins || dr.obstacles || dr.focus) S.reviewText = { wins:dr.wins, obstacles:dr.obstacles, focus:dr.focus };
+      if (!again){ S.streak += 1; S.progressHist.push(overall()); if (S.progressHist.length > 11) S.progressHist.shift(); }
+      S.lastReview = todayIso; S.reviewedOn = todayIso; S.draft = null;
+      save(); render(); $('#screen').scrollTop = 0;
+      toast(again ? 'Review updated.' : '🎉 Weekly review done. Your streak is now ' + S.streak + ' weeks.', !again);
+      break;
+    }
+    case 'filter': ui.noteFilter = d.v || null; render(); break;
+    case 'addNote': { const inp = $('#noteIn'); const v = inp.value.trim(); if (!v) return; S.notes.unshift({ id:uid(), text:v, date:isoDay(today0()) }); ui.noteFilter = null; save(); render(); toast('Note saved for your session.'); setTimeout(() => { const n = $('#noteIn'); if (n) n.focus(); }); break; }
+    case 'delNote': S.notes = S.notes.filter(n => n.id !== d.id); save(); render(); break;
+    case 'pay': toast('Demo only. Payments are handled securely in the real service.'); break;
+    case 'reset':
+      if (!confirm('Reset the demo to Andrea\'s original example? Your changes in this browser will be cleared.')) return;
+      drop(KEY); drop('cp_demo_client');
+      S = generateState(clone(EXAMPLE)); Object.assign(ui, { tab:'today', editObj:null, addObj:false, addTask:null, editTask:null, earlier:{}, noteFilter:null, editVision:false });
+      applyPalette(S.cfg.palette); save(); render(); $('#screen').scrollTop = 0; toast('Demo reset to Andrea\'s example.');
+      break;
+  }
+}
+
+/* events */
+$('#tabbar').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b) switchTab(b.dataset.tab); });
+$('#tabbar').addEventListener('keydown', e => {
+  if (!['ArrowLeft','ArrowRight'].includes(e.key)) return;
+  const tabs = Array.from(document.querySelectorAll('.tab')); const i = tabs.findIndex(t => t.dataset.tab === ui.tab);
+  const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; switchTab(n.dataset.tab); n.focus();
+});
+const scr = $('#screen');
+scr.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el || el.dataset.act === 'toggle') return;
+  e.preventDefault(); act(el.dataset.act, el);
+});
+scr.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.act === 'toggle'){ const id = t.id; toggleTask(t.dataset.obj, t.dataset.task, t.checked); const n = document.getElementById(id); if (n) n.focus(); return; }
+  if (t.dataset.priv){ S.cfg.privacy[t.dataset.priv] = t.checked; save(); toast(t.checked ? 'Dagmar can now see this.' : 'Hidden from Dagmar.'); return; }
+  if (t.dataset.bind === 'capacity'){ S.capacity = Math.max(1, +t.value || 10); save(); render(); return; }
+});
+let refT;
+scr.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.val){ S.draft.values[t.dataset.val] = +t.value; document.getElementById('rvo_' + t.dataset.val).textContent = t.value; store(KEY, S); return; }
+  if (t.dataset.draft){ S.draft[t.dataset.draft] = t.value; store(KEY, S); return; }
+  if (t.dataset.bind === 'reflection'){ S.reflection[S.cfg.phase] = t.value; store(KEY, S); clearTimeout(refT); const s = $('#refSaved'); if (s){ s.textContent = 'Saving...'; refT = setTimeout(() => { s.textContent = 'Saved on this device'; }, 500); } }
+});
+scr.addEventListener('keydown', e => {
+  const t = e.target;
+  if (e.key === 'Enter' && t.dataset.enter){ e.preventDefault(); act(t.dataset.enter, t); }
+  if (e.key === 'Escape' && (ui.editObj || ui.addObj || ui.addTask || ui.editTask)){ act('cancel', t); }
+});
+
+boot();
+</script>
+</body>
+</html>

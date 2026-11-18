@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Courage Plan · Personalize your app</title>
+<meta name="description" content="Demo: personalization form for a Courage Space client app.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F3ED; --panel:#FFFFFF; --panel-2:#F2EEE6; --line:#E9E3D7; --text:#2B2722; --muted:#7A7264;
+  --accent:#EF7A4E; --accent-2:#F2A25C; --accent-soft:#FDECE0; --accent-ink:#B84A22;
+  --green:#5FAE6C; --red:#E0625F; --amber:#C98A1B;
+  --display:'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --body:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --shadow:0 1px 2px rgba(43,39,34,.04), 0 8px 24px rgba(43,39,34,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;transition:transform .12s ease, background .15s ease, box-shadow .15s ease}
+button:active{transform:scale(.97)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* demo nav */
+.demo-nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#2B2722;color:#F6F3ED;font-size:13px}
+.demo-brand{font-family:var(--display);font-weight:600;letter-spacing:.01em;white-space:nowrap}
+.demo-brand em{font-style:normal;color:#F2A25C;font-weight:600;margin-left:4px}
+.demo-links{display:flex;gap:4px;overflow-x:auto}
+.demo-links a{color:#E9E3D7;text-decoration:none;padding:6px 12px;border-radius:999px;white-space:nowrap;font-weight:500}
+.demo-links a:hover{background:rgba(255,255,255,.08)}
+.demo-links a[aria-current="page"]{background:#F6F3ED;color:#2B2722}
+@media (max-width:560px){.demo-brand{display:none}.demo-nav{justify-content:center}}
+
+/* header */
+.head{background:linear-gradient(180deg,#FFF8F1 0%,var(--bg) 100%);padding:28px 16px 8px}
+.head-inner{max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,4vw,34px);line-height:1.15;margin-top:4px}
+.head p{color:var(--muted);max-width:560px;margin-top:6px}
+.head-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;text-decoration:none;min-height:42px}
+.btn-primary{background:var(--accent-ink);color:#fff;box-shadow:0 4px 14px rgba(43,39,34,.12)}
+.btn-primary:hover{filter:brightness(1.06)}
+.btn-ghost{background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.btn-ghost:hover{background:var(--panel-2)}
+.btn-soft{background:var(--accent-soft);color:var(--accent-ink)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+/* layout */
+.wrap{max-width:1120px;margin:0 auto;padding:16px 16px 64px;display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+@media (min-width:1000px){.wrap{grid-template-columns:minmax(0,1fr) 340px;align-items:start}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.wizard{padding:24px}
+@media (max-width:560px){.wizard{padding:18px}}
+
+.progress-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);margin-bottom:8px}
+.progress-top .mono{font-family:var(--mono);font-size:12px}
+.bar{height:8px;background:var(--panel-2);border-radius:999px;overflow:hidden}
+.bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:999px;transition:width .3s ease}
+.steps-dots{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.steps-dots button{font-family:var(--display);font-weight:600;font-size:12px;padding:5px 10px;border-radius:999px;background:var(--panel-2);color:var(--muted)}
+.steps-dots button[aria-current="step"]{background:var(--panel);color:var(--accent-ink);box-shadow:0 0 0 1px var(--line), 0 2px 8px rgba(43,39,34,.08)}
+.steps-dots button.done{color:var(--text)}
+
+.step{display:none;margin-top:24px}
+.step.active{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.step h2{font-family:var(--display);font-weight:700;font-size:22px;line-height:1.2}
+.step .lead{color:var(--muted);margin-top:4px;margin-bottom:18px}
+
+.field{margin-bottom:16px}
+.field > label, .label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.hint{font-size:13px;color:var(--muted);margin-top:4px}
+.input, textarea.input, select.input{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:14px;background:var(--panel);transition:border .15s, box-shadow .15s}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.input{resize:vertical;min-height:84px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+
+.options{display:grid;gap:10px}
+.options.cols3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:700px){.options.cols3{grid-template-columns:1fr}}
+.opt{position:relative;display:block}
+.opt input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.opt .box{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--panel);transition:border .15s, background .15s, box-shadow .15s;height:100%}
+.opt .box strong{font-family:var(--display);font-weight:600;display:block}
+.opt .box small{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+.opt input:checked + .box{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)}
+.opt input:focus-visible + .box{outline:3px solid var(--accent);outline-offset:2px}
+.opt:hover .box{border-color:var(--accent-2)}
+
+.phase-note{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--panel-2);font-size:14px}
+.phase-note b{font-family:var(--display)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-weight:500;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+.chip .x{margin-left:6px;opacity:.6}
+.add-row{display:flex;gap:8px;margin-top:12px}
+.add-row .input{flex:1}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:8px}
+
+.obj-row{display:grid;grid-template-columns:1fr 170px 40px;gap:8px;margin-bottom:8px;align-items:center}
+@media (max-width:560px){.obj-row{grid-template-columns:1fr 40px}.obj-row select{grid-column:1/2}}
+.icon-btn{width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);border:1px solid var(--line);background:var(--panel)}
+.icon-btn:hover{color:var(--red);background:var(--panel-2)}
+
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.toggle-row:last-child{border-bottom:0}
+.toggle-row .t{font-weight:500}
+.toggle-row .t small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.switch{position:relative;width:46px;height:26px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
+.switch span{position:absolute;inset:0;background:#D8D1C3;border-radius:999px;transition:background .2s}
+.switch span::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
+.switch input:checked + span{background:var(--accent-ink)}
+.switch input:checked + span::after{transform:translateX(20px)}
+.switch input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+.switch input:disabled{cursor:not-allowed}
+.switch input:disabled + span{background:#ECE6DA}
+.lock{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);font-weight:500}
+
+.palettes{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media (max-width:560px){.palettes{grid-template-columns:repeat(3,1fr)}}
+.pal .box{text-align:center;padding:12px 8px}
+.swatch{display:flex;justify-content:center;gap:4px;margin-bottom:8px}
+.swatch i{width:18px;height:18px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.06)}
+
+.err{display:none;margin-top:12px;padding:10px 14px;border-radius:12px;background:#FCE8E7;color:#9E2F2C;font-size:14px;font-weight:500}
+.err.show{display:block}
+
+.nav-btns{display:flex;justify-content:space-between;gap:12px;margin-top:28px;padding-top:18px;border-top:1px solid var(--line)}
+
+/* preview */
+.side{position:sticky;top:64px}
+@media (max-width:999px){.side{display:none}}
+.side h3{font-family:var(--display);font-size:14px;font-weight:600;color:var(--muted);margin:0 0 10px 4px;text-transform:uppercase;letter-spacing:.08em}
+.mini{border-radius:28px;border:8px solid #2B2722;background:var(--bg);overflow:hidden;box-shadow:0 18px 40px rgba(43,39,34,.18)}
+.mini-head{background:linear-gradient(180deg,#FFF8F1,var(--bg));padding:18px 16px 12px}
+.mini-head .app{font-family:var(--display);font-weight:700;font-size:20px}
+.mini-head .hi{color:var(--muted);font-size:13px}
+.mini-body{padding:0 12px 14px;display:grid;gap:10px}
+.mini-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}
+.mini-badge{display:inline-block;font-family:var(--display);font-weight:600;font-size:12px;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)}
+.mini-areas{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.mini-areas span{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--panel-2)}
+.mini-obj{font-size:13px;display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.mini-obj:last-child{border-bottom:0}
+.mini-bar{height:6px;border-radius:999px;background:var(--panel-2);margin-top:8px;overflow:hidden}
+.mini-bar span{display:block;height:100%;width:40%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.mini-tabs{display:flex;justify-content:space-around;padding:10px 6px;background:#fff;border-top:1px solid var(--line);font-size:11px;color:var(--muted);font-family:var(--display);font-weight:600}
+.mini-tabs span:first-child{color:var(--accent-ink)}
+
+.final-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+@media (max-width:760px){.final-grid{grid-template-columns:1fr}}
+.summary dt{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-top:12px}
+.summary dd{font-weight:500}
+.final-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#2B2722;color:#fff;padding:12px 18px;border-radius:14px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:all .25s ease;max-width:calc(100% - 32px);box-shadow:0 10px 30px rgba(0,0,0,.2);z-index:100}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.modal-bg{position:fixed;inset:0;background:rgba(43,39,34,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:90}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:20px;padding:28px;max-width:440px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+.modal .big{font-size:40px}
+.modal h2{font-family:var(--display);font-size:22px;margin:8px 0}
+.modal p{color:var(--muted);margin-bottom:18px}
+</style>
+</head>
+<body>
+
+<nav class="demo-nav" aria-label="Demo pages">
+  <span class="demo-brand">Courage Plan <em>demo</em></span>
+  <div class="demo-links">
+    <a href="form.html" aria-current="page">Form</a>
+    <a href="app.html" id="navApp">Client app</a>
+    <a href="coach.html">Dagmar's dashboard</a>
+  </div>
+</nav>
+
+<header class="head">
+  <div class="head-inner">
+    <div>
+      <div class="eyebrow">Courage Space · Your personal app</div>
+      <h1>Let's design your app</h1>
+      <p>Eight short steps, about 5 minutes. You can change any answer later. This example is already filled in so you can see a finished result.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn btn-ghost" id="loadExample" type="button">Load example</button>
+      <button class="btn btn-ghost" id="startBlank" type="button">Start blank</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <main class="card wizard" id="wizard">
+    <div class="progress-top"><span id="stepLabel">Step 1 of 8</span><span class="mono" id="stepPct">13%</span></div>
+    <div class="bar" role="progressbar" aria-label="Form progress" aria-valuemin="0" aria-valuemax="100" id="progressBar"><span id="progressFill" style="width:13%"></span></div>
+    <div class="steps-dots" id="stepDots" aria-label="Steps"></div>
+
+    <form id="form" novalidate autocomplete="off">
+      <!-- 1 -->
+      <section class="step" data-step="1" aria-labelledby="s1h">
+        <h2 id="s1h">About you</h2>
+        <p class="lead">Tell us who this app is for.</p>
+        <div class="row2">
+          <div class="field"><label for="f_name">Your name</label><input class="input" id="f_name" name="name" required placeholder="First and last name"></div>
+          <div class="field"><label for="f_role">Your role</label><input class="input" id="f_role" name="role" required placeholder="For example: VP Operations"></div>
+        </div>
+        <fieldset class="field" style="border:0">
+          <legend class="label">Your program with Dagmar</legend>
+          <div class="options cols3" id="programOpts"></div>
+        </fieldset>
+      </section>
+
+      <!-- 2 -->
+      <section class="step" data-step="2" aria-labelledby="s2h">
+        <h2 id="s2h">Name your app</h2>
+        <p class="lead">It is yours. Pick a suggestion or write your own.</p>
+        <fieldset style="border:0"><legend class="sr-only">App name</legend>
+          <div class="options" id="nameOpts"></div>
+        </fieldset>
+        <div class="field" style="margin-top:12px">
+          <label for="f_customName">Custom name</label>
+          <input class="input" id="f_customName" maxlength="28" placeholder="For example: North Star">
+          <div class="hint">Typing here selects the custom option.</div>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section class="step" data-step="3" aria-labelledby="s3h">
+        <h2 id="s3h">Your change</h2>
+        <p class="lead">Dagmar's FALL Through Change model has four phases. Which sentence sounds most like you today?</p>
+        <fieldset style="border:0"><legend class="sr-only">Change statement</legend>
+          <div class="options" id="phaseOpts"></div>
+        </fieldset>
+        <div class="phase-note" id="phaseNote" aria-live="polite"></div>
+      </section>
+
+      <!-- 4 -->
+      <section class="step" data-step="4" aria-labelledby="s4h">
+        <h2 id="s4h">Life areas</h2>
+        <p class="lead">Choose 3 to 6 areas you want your app to organize.</p>
+        <div class="chips" id="areaChips" role="group" aria-label="Life areas"></div>
+        <div class="add-row">
+          <label for="f_customArea" class="sr-only">Add a custom area</label>
+          <input class="input" id="f_customArea" maxlength="20" placeholder="Add your own area">
+          <button class="btn btn-soft" type="button" id="addArea">Add</button>
+        </div>
+        <div class="count" id="areaCount" aria-live="polite"></div>
+      </section>
+
+      <!-- 5 -->
+      <section class="step" data-step="5" aria-labelledby="s5h">
+        <h2 id="s5h">Vision and goals</h2>
+        <p class="lead">One sentence for where you want to be, and up to 3 objectives for the next 90 days.</p>
+        <div class="field">
+          <label for="f_vision">Your 3 year vision</label>
+          <textarea class="input" id="f_vision" maxlength="220" rows="2" placeholder="In 3 years I..."></textarea>
+          <div class="hint">Keep it to one sentence.</div>
+        </div>
+        <div class="label" id="objLabel">90 day objectives</div>
+        <div id="objList" role="group" aria-labelledby="objLabel"></div>
+        <button class="btn btn-soft" type="button" id="addObj">+ Add objective</button>
+        <div class="hint">You will build the weekly tasks with Dagmar in your app.</div>
+      </section>
+
+      <!-- 6 -->
+      <section class="step" data-step="6" aria-labelledby="s6h">
+        <h2 id="s6h">Your rhythm</h2>
+        <p class="lead">When should your app check in with you?</p>
+        <div class="row2">
+          <div class="field"><label for="f_checkin">Daily check in time</label><input class="input" type="time" id="f_checkin"></div>
+          <div class="field"><label for="f_reviewDay">Weekly review day</label>
+            <select class="input" id="f_reviewDay"></select>
+          </div>
+        </div>
+        <div class="card" style="padding:4px 16px;box-shadow:none">
+          <div class="toggle-row"><div class="t" id="rm1">Daily check in reminder<small>A gentle nudge at your check in time</small></div><label class="switch"><input type="checkbox" id="f_remCheckin" aria-labelledby="rm1"><span></span></label></div>
+          <div class="toggle-row"><div class="t" id="rm2">Weekly review reminder<small>On your review day, about 10 minutes</small></div><label class="switch"><input type="checkbox" id="f_remReview" aria-labelledby="rm2"><span></span></label></div>
+          <div class="toggle-row"><div class="t" id="rm3">Session reminder<small>The day before each session with Dagmar</small></div><label class="switch"><input type="checkbox" id="f_remSession" aria-labelledby="rm3"><span></span></label></div>
+        </div>
+      </section>
+
+      <!-- 7 -->
+      <section class="step" data-step="7" aria-labelledby="s7h">
+        <h2 id="s7h">Style</h2>
+        <p class="lead">Pick your colors and the voice your app speaks with. The page previews your palette live.</p>
+        <fieldset style="border:0" class="field"><legend class="label">Palette</legend>
+          <div class="palettes" id="paletteOpts"></div>
+        </fieldset>
+        <fieldset style="border:0" class="field"><legend class="label">Tone</legend>
+          <div class="options cols3" id="toneOpts"></div>
+        </fieldset>
+      </section>
+
+      <!-- 8 -->
+      <section class="step" data-step="8" aria-labelledby="s8h">
+        <h2 id="s8h">Privacy and plan</h2>
+        <p class="lead">You decide what Dagmar can see. You can change this any time in your app.</p>
+        <div class="card" style="padding:4px 16px;box-shadow:none;margin-bottom:20px">
+          <div class="toggle-row"><div class="t" id="pv1">Progress<small>Objectives, tasks and your 90 day %</small></div><label class="switch"><input type="checkbox" id="f_pvProgress" aria-labelledby="pv1"><span></span></label></div>
+          <div class="toggle-row"><div class="t" id="pv2">Value scores<small>Your weekly Courage, Clarity, Connection and Commitment scores</small></div><label class="switch"><input type="checkbox" id="f_pvValues" aria-labelledby="pv2"><span></span></label></div>
+          <div class="toggle-row"><div class="t" id="pv3">Weekly review text<small>Your wins, obstacles and focus</small></div><label class="switch"><input type="checkbox" id="f_pvReview" aria-labelledby="pv3"><span></span></label></div>
+          <div class="toggle-row"><div class="t" id="pv4">Private journal<small>Always private. Only you can read it.</small></div><span class="lock" aria-labelledby="pv4"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Locked</span></div>
+        </div>
+        <fieldset style="border:0"><legend class="label">Who pays for your plan?</legend>
+          <div class="options" id="payerOpts"></div>
+        </fieldset>
+      </section>
+
+      <!-- final -->
+      <section class="step" data-step="9" aria-labelledby="s9h">
+        <h2 id="s9h">Your app is ready</h2>
+        <p class="lead">Here is a preview. Open it to try it, or submit it to Dagmar.</p>
+        <div class="final-grid">
+          <dl class="summary" id="summary"></dl>
+          <div id="finalPreview"></div>
+        </div>
+        <div class="final-actions">
+          <a class="btn btn-primary" id="openApp" href="app.html">Open my app</a>
+          <button class="btn btn-ghost" type="button" id="submitBtn">Submit to Dagmar</button>
+        </div>
+      </section>
+
+      <div class="err" id="err" role="alert"></div>
+
+      <div class="nav-btns">
+        <button class="btn btn-ghost" type="button" id="backBtn">Back</button>
+        <button class="btn btn-primary" type="button" id="nextBtn">Next</button>
+      </div>
+    </form>
+  </main>
+
+  <aside class="side" aria-label="Live preview">
+    <h3>Live preview</h3>
+    <div id="sidePreview"></div>
+  </aside>
+</div>
+
+<div class="modal-bg" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="big" aria-hidden="true">🎉</div>
+    <h2 id="modalTitle">Sent to Dagmar</h2>
+    <p id="modalText">This is a demo, so nothing was sent and no payment was taken. In the real service Dagmar receives your setup and your app goes live.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a class="btn btn-primary" id="modalOpen" href="app.html">Open my app</a>
+      <a class="btn btn-ghost" href="coach.html">See Dagmar's dashboard</a>
+      <button class="btn btn-ghost" type="button" id="modalClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// Validate with Dagmar
+const METHOD = {
+  coach: 'Dagmar',
+  model: 'FALL Through Change',
+  phases: [
+    { id:'face', n:1, name:'Face the change', summary:'Name what is changing and what feels scary.', prompt:'What is changing, and what are you avoiding looking at?',
+      statement:'Something big is changing and I have not fully faced it yet.',
+      why:'You are at the start. Your app will help you name what is changing and look at it with courage, one day at a time.' },
+    { id:'accept', n:2, name:'Accept', summary:'Acknowledge reality without judging it.', prompt:'What is true right now that you can stop fighting?',
+      statement:'I can see the change clearly, but part of me is still fighting it.',
+      why:'You see the change. Your app will help you acknowledge what is true without judging it, so your energy goes to what you can move.' },
+    { id:'letgo', n:3, name:'Let go', summary:'Release habits, beliefs or commitments that no longer serve you.', prompt:'What are you ready to put down this week?',
+      statement:'I know what I need to release, and I am working on letting it go.',
+      why:'You are ready to release. Your app adds a "Letting go of" list to your day and your weekly review.' },
+    { id:'learn', n:4, name:'Learn and grow', summary:'Goals, habits and measured progress.', prompt:'What did you learn this week that you will use next week?',
+      statement:'I have accepted the change and I am ready to build what comes next.',
+      why:'You are building. Your app focuses on goals, habits and measured progress toward your vision.' }
+  ],
+  values: [
+    { id:'courage', name:'Courage', desc:'Leading with vulnerability' },
+    { id:'clarity', name:'Clarity', desc:'Defining purpose and path' },
+    { id:'connection', name:'Connection', desc:'Building strong partnerships' },
+    { id:'commitment', name:'Commitment', desc:'Dedication to growth' }
+  ],
+  methodology: ['Deep listening', 'Co-created goal setting', 'Accountability and progress tracking', 'Tailored strategies'],
+  programs: {
+    leadership: { name:'Leadership Coaching', short:'Leadership', desc:'For leaders and executives growing their impact' },
+    business:   { name:'Business Coaching', short:'Business', desc:'For founders building a stronger business' },
+    impact:     { name:'Idea to Impact', short:'Idea to Impact', desc:'Turn an idea into a profitable business in 6 steps',
+                  steps:['Craft Your Vision','Define Your Ideal Client','Build Your Brand Identity','Uncover Your Why','Establish Your Differentiator','Create a Profitable Strategy'] }
+  },
+  tiers: {
+    company:      { name:'Company', payer:'My company', setup:3000, monthly:250, note:'Your company pays' },
+    professional: { name:'Professional', payer:'Myself', setup:2000, monthly:150, note:'You pay' },
+    access:       { name:'Access', payer:'I would like to talk about accessible options', setup:750, monthly:60, note:'Limited spots' }
+  },
+  commission: 0.20
+};
+
+const PALETTES = {
+  ember:  { name:'Ember',  accent:'#EF7A4E', accent2:'#F2A25C', soft:'#FDECE0', ink:'#B84A22' },
+  ocean:  { name:'Ocean',  accent:'#3B8FC4', accent2:'#5EB5D6', soft:'#E2F0F8', ink:'#1F5F8B' },
+  forest: { name:'Forest', accent:'#4E9A64', accent2:'#8DBF6A', soft:'#E4F2E6', ink:'#2E6B44' },
+  plum:   { name:'Plum',   accent:'#9A5AAE', accent2:'#C985BE', soft:'#F3E6F4', ink:'#6E3A7C' },
+  slate:  { name:'Slate',  accent:'#5B7189', accent2:'#8EA3B8', soft:'#E7ECF1', ink:'#3A4C5E' }
+};
+const TONES = {
+  motivating: { name:'Motivating', desc:'Energy and encouragement' },
+  calm:       { name:'Calm', desc:'Gentle and grounded' },
+  direct:     { name:'Direct', desc:'Clear and to the point' }
+};
+const PAYERS = { company:'company', self:'professional', talk:'access' };
+const BASE_AREAS = ['Career','Leadership','Health','Family','Relationships','Finances','Growth','Business','Rest'];
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+const EXAMPLE = {
+  v:1, name:'Andrea Lin', role:'VP Operations', program:'leadership', appName:'Plan Andrea', phase:'learn',
+  areas:['Leadership','Health','Family','Growth'],
+  vision:'In 3 years I lead operations for a company I believe in, with energy for my family and myself.',
+  objectives:[
+    { title:'Delegate 3 recurring reports to my team', area:'Leadership' },
+    { title:'Train 3 times a week', area:'Health' },
+    { title:'Protect 2 family evenings every week', area:'Family' }
+  ],
+  checkin:'07:30', reviewDay:'Sunday', reminders:{ checkin:true, review:true, session:true },
+  palette:'ocean', tone:'calm', privacy:{ progress:true, values:true, review:false }, payer:'company'
+};
+const BLANK = {
+  v:1, name:'', role:'', program:'', appName:'', phase:'', areas:[], vision:'', objectives:[{ title:'', area:'' }],
+  checkin:'08:00', reviewDay:'Sunday', reminders:{ checkin:true, review:true, session:true },
+  palette:'ember', tone:'', privacy:{ progress:true, values:true, review:false }, payer:''
+};
+
+/* helpers */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const money = n => '$' + Number(n).toLocaleString('en-CA');
+function encodeCfg(c){ return encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(c))))); }
+function decodeCfg(s){ try { return JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(s))))); } catch(e){ try { return JSON.parse(decodeURIComponent(escape(atob(s)))); } catch(e2){ return null; } } }
+function store(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch(e){ return false; } }
+function load(key){ try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch(e){ return null; } }
+function firstName(n){ return (String(n || '').trim().split(/\s+/)[0]) || 'You'; }
+function phaseById(id){ return METHOD.phases.find(p => p.id === id); }
+function applyPalette(id){
+  const p = PALETTES[id] || PALETTES.ember, r = document.documentElement.style;
+  r.setProperty('--accent', p.accent); r.setProperty('--accent-2', p.accent2); r.setProperty('--accent-soft', p.soft); r.setProperty('--accent-ink', p.ink);
+}
+let toastT;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 3200); }
+
+/* state */
+let cfg;
+let step = 1;
+const TOTAL = 8;
+
+function normalize(c){
+  const n = Object.assign(clone(BLANK), c || {});
+  n.reminders = Object.assign({}, BLANK.reminders, (c && c.reminders) || {});
+  n.privacy = Object.assign({}, BLANK.privacy, (c && c.privacy) || {});
+  if (!Array.isArray(n.areas)) n.areas = [];
+  if (!Array.isArray(n.objectives) || !n.objectives.length) n.objectives = [{ title:'', area:'' }];
+  return n;
+}
+
+function initFromUrl(){
+  const p = new URLSearchParams(location.search).get('cfg');
+  if (p){ const d = decodeCfg(p); if (d && d.name !== undefined) return normalize(d); }
+  return clone(EXAMPLE);
+}
+
+/* render step contents */
+function renderPrograms(){
+  $('#programOpts').innerHTML = Object.entries(METHOD.programs).map(([id, p]) =>
+    `<label class="opt"><input type="radio" name="program" value="${id}" ${cfg.program === id ? 'checked' : ''}><span class="box"><strong>${esc(p.short)}</strong><small>${esc(p.desc)}</small></span></label>`).join('');
+}
+function nameSuggestions(){
+  const f = firstName(cfg.name), y = new Date().getFullYear() + 1;
+  return cfg.name.trim() ? ['Plan ' + f, f + ' ' + y, f + ' OS'] : ['Plan You', 'You ' + y, 'You OS'];
+}
+function renderNames(){
+  const sugg = nameSuggestions();
+  const isCustom = cfg.appName && !sugg.includes(cfg.appName);
+  $('#nameOpts').innerHTML = sugg.map(s =>
+    `<label class="opt"><input type="radio" name="appName" value="${esc(s)}" ${cfg.appName === s ? 'checked' : ''}><span class="box"><strong>${esc(s)}</strong></span></label>`).join('') +
+    `<label class="opt"><input type="radio" name="appName" value="__custom" ${isCustom ? 'checked' : ''}><span class="box"><strong>Custom name</strong><small>Use the field below</small></span></label>`;
+  $('#f_customName').value = isCustom ? cfg.appName : ($('#f_customName').value || '');
+}
+function renderPhases(){
+  $('#phaseOpts').innerHTML = METHOD.phases.map(p =>
+    `<label class="opt"><input type="radio" name="phase" value="${p.id}" ${cfg.phase === p.id ? 'checked' : ''}><span class="box"><strong>"${esc(p.statement)}"</strong></span></label>`).join('');
+  renderPhaseNote();
+}
+function renderPhaseNote(){
+  const p = phaseById(cfg.phase);
+  $('#phaseNote').innerHTML = p
+    ? `Suggested phase: <b>Phase ${p.n} of 4: ${esc(p.name)}</b>. ${esc(p.why)}`
+    : 'Choose the sentence that fits best. It sets the suggested phase for your app, and you can revisit it with Dagmar.';
+}
+function renderAreas(){
+  const all = BASE_AREAS.concat(cfg.areas.filter(a => !BASE_AREAS.includes(a)));
+  $('#areaChips').innerHTML = all.map(a => {
+    const on = cfg.areas.includes(a), custom = !BASE_AREAS.includes(a);
+    return `<button type="button" class="chip" data-area="${esc(a)}" aria-pressed="${on}">${esc(a)}${custom ? '<span class="x" aria-hidden="true">×</span>' : ''}</button>`;
+  }).join('');
+  const n = cfg.areas.length;
+  $('#areaCount').textContent = n + ' selected · choose 3 to 6';
+}
+function renderObjectives(){
+  const areas = cfg.areas.length ? cfg.areas : BASE_AREAS;
+  $('#objList').innerHTML = cfg.objectives.map((o, i) => `
+    <div class="obj-row">
+      <label class="sr-only" for="obj_t_${i}">Objective ${i + 1}</label>
+      <input class="input" id="obj_t_${i}" data-obj="${i}" data-k="title" maxlength="80" placeholder="Objective ${i + 1}, for example: Train 3 times a week" value="${esc(o.title)}">
+      <label class="sr-only" for="obj_a_${i}">Area for objective ${i + 1}</label>
+      <select class="input" id="obj_a_${i}" data-obj="${i}" data-k="area">
+        <option value="">Area</option>
+        ${areas.map(a => `<option ${o.area === a ? 'selected' : ''}>${esc(a)}</option>`).join('')}
+      </select>
+      <button type="button" class="icon-btn" data-rmobj="${i}" aria-label="Remove objective ${i + 1}" ${cfg.objectives.length < 2 ? 'disabled' : ''}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>`).join('');
+  $('#addObj').disabled = cfg.objectives.length >= 3;
+}
+function renderRhythm(){
+  $('#f_checkin').value = cfg.checkin || '';
+  $('#f_reviewDay').innerHTML = DAYS.map(d => `<option ${cfg.reviewDay === d ? 'selected' : ''}>${d}</option>`).join('');
+  $('#f_remCheckin').checked = !!cfg.reminders.checkin;
+  $('#f_remReview').checked = !!cfg.reminders.review;
+  $('#f_remSession').checked = !!cfg.reminders.session;
+}
+function renderStyle(){
+  $('#paletteOpts').innerHTML = Object.entries(PALETTES).map(([id, p]) =>
+    `<label class="opt pal"><input type="radio" name="palette" value="${id}" ${cfg.palette === id ? 'checked' : ''}><span class="box"><span class="swatch" aria-hidden="true"><i style="background:${p.accent}"></i><i style="background:${p.accent2}"></i><i style="background:${p.soft}"></i></span><strong>${p.name}</strong></span></label>`).join('');
+  $('#toneOpts').innerHTML = Object.entries(TONES).map(([id, t]) =>
+    `<label class="opt"><input type="radio" name="tone" value="${id}" ${cfg.tone === id ? 'checked' : ''}><span class="box"><strong>${t.name}</strong><small>${t.desc}</small></span></label>`).join('');
+}
+function renderPrivacy(){
+  $('#f_pvProgress').checked = !!cfg.privacy.progress;
+  $('#f_pvValues').checked = !!cfg.privacy.values;
+  $('#f_pvReview').checked = !!cfg.privacy.review;
+  const labels = { company:'My company', self:'Myself', talk:'I would like to talk about accessible options' };
+  $('#payerOpts').innerHTML = Object.entries(PAYERS).map(([id, tier]) => {
+    const t = METHOD.tiers[tier];
+    return `<label class="opt"><input type="radio" name="payer" value="${id}" ${cfg.payer === id ? 'checked' : ''}><span class="box"><strong>${labels[id]}</strong><small>${t.name} plan · ${money(t.setup)} setup + ${money(t.monthly)}/month CAD${id === 'talk' ? ' · limited spots' : ''}</small></span></label>`;
+  }).join('');
+}
+
+function miniPreview(){
+  const p = phaseById(cfg.phase);
+  const areas = cfg.areas.slice();
+  if (cfg.program === 'leadership' && !areas.includes('Leadership and EI')) areas.push('Leadership and EI');
+  const objs = cfg.objectives.filter(o => o.title.trim());
+  const pal = PALETTES[cfg.palette] || PALETTES.ember;
+  const style = `--accent:${pal.accent};--accent-2:${pal.accent2};--accent-soft:${pal.soft};--accent-ink:${pal.ink}`;
+  return `<div class="mini" style="${style}" aria-label="Preview of ${esc(cfg.appName || 'your app')}">
+    <div class="mini-head"><div class="hi">Good morning, ${esc(firstName(cfg.name))}</div><div class="app">${esc(cfg.appName || 'Your app')}</div></div>
+    <div class="mini-body">
+      <div class="mini-card"><span class="mini-badge">${p ? 'Phase ' + p.n + ' of 4: ' + esc(p.name) : 'Phase not chosen yet'}</span>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px">${p ? esc(p.prompt) : 'Pick a change statement in step 3.'}</div></div>
+      <div class="mini-card"><div style="font-family:var(--display);font-weight:600;font-size:13px">Life areas</div>
+        <div class="mini-areas">${areas.length ? areas.map(a => `<span>${esc(a)}</span>`).join('') : '<span>None yet</span>'}</div></div>
+      <div class="mini-card"><div style="font-family:var(--display);font-weight:600;font-size:13px">90 day objectives</div>
+        ${objs.length ? objs.map(o => `<div class="mini-obj"><span>${esc(o.title)}</span><span style="color:var(--muted)">${esc(o.area)}</span></div>`).join('') : '<div class="mini-obj"><span style="color:var(--muted)">Add them in step 5</span></div>'}
+        <div class="mini-bar"><span></span></div></div>
+    </div>
+    <div class="mini-tabs"><span>Today</span><span>Goals</span><span>Review</span><span>Progress</span><span>Coach</span></div>
+  </div>`;
+}
+function renderSummary(){
+  const p = phaseById(cfg.phase), tier = METHOD.tiers[PAYERS[cfg.payer]];
+  const shared = ['progress','values','review'].filter(k => cfg.privacy[k]).map(k => ({ progress:'Progress', values:'Value scores', review:'Weekly review text' }[k]));
+  const rows = [
+    ['App name', cfg.appName], ['For', cfg.name + (cfg.role ? ', ' + cfg.role : '')],
+    ['Program', METHOD.programs[cfg.program] ? METHOD.programs[cfg.program].name : ''],
+    ['Phase', p ? 'Phase ' + p.n + ' of 4: ' + p.name : ''],
+    ['Life areas', cfg.areas.join(', ')], ['Vision', cfg.vision],
+    ['Rhythm', 'Check in at ' + fmtTime(cfg.checkin) + ', review on ' + cfg.reviewDay],
+    ['Style', (PALETTES[cfg.palette] || {}).name + ' palette, ' + (TONES[cfg.tone] ? TONES[cfg.tone].name.toLowerCase() : '') + ' tone'],
+    ['Dagmar can see', shared.length ? shared.join(', ') : 'Nothing yet'],
+    ['Plan', tier ? tier.name + ' · ' + money(tier.setup) + ' setup + ' + money(tier.monthly) + '/month CAD' : '']
+  ];
+  $('#summary').innerHTML = rows.map(r => `<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('');
+  $('#finalPreview').innerHTML = miniPreview();
+}
+function fmtTime(t){
+  if (!t) return '';
+  const [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'pm' : 'am'; const hh = ((h + 11) % 12) + 1;
+  return hh + ':' + String(m).padStart(2, '0') + ' ' + ap;
+}
+
+function renderAll(){
+  renderPrograms(); renderNames(); renderPhases(); renderAreas(); renderObjectives(); renderRhythm(); renderStyle(); renderPrivacy();
+  $('#f_name').value = cfg.name; $('#f_role').value = cfg.role; $('#f_vision').value = cfg.vision;
+  applyPalette(cfg.palette);
+  refreshPreview();
+}
+function refreshPreview(){
+  $('#sidePreview').innerHTML = miniPreview();
+  const url = 'app.html?cfg=' + encodeCfg(cleanCfg());
+  $('#navApp').href = url; $('#openApp').href = url; $('#modalOpen').href = url;
+}
+function cleanCfg(){
+  const c = clone(cfg);
+  c.objectives = c.objectives.filter(o => o.title.trim()).map(o => ({ title:o.title.trim(), area:o.area || (c.areas[0] || 'Growth') }));
+  c.name = c.name.trim(); c.role = c.role.trim(); c.vision = c.vision.trim();
+  return c;
+}
+
+/* steps */
+function showStep(n){
+  step = n;
+  document.querySelectorAll('.step').forEach(s => s.classList.toggle('active', +s.dataset.step === n));
+  const shown = Math.min(n, TOTAL);
+  const pct = n > TOTAL ? 100 : Math.round(n / TOTAL * 100);
+  $('#stepLabel').textContent = n > TOTAL ? 'All done' : 'Step ' + n + ' of ' + TOTAL;
+  $('#stepPct').textContent = pct + '%';
+  $('#progressFill').style.width = pct + '%';
+  $('#progressBar').setAttribute('aria-valuenow', pct);
+  $('#backBtn').disabled = n === 1;
+  $('#nextBtn').textContent = n === TOTAL ? 'See my app' : 'Next';
+  $('#nextBtn').style.display = n > TOTAL ? 'none' : '';
+  hideErr();
+  renderDots();
+  if (n > TOTAL){ renderSummary(); saveClient(false); }
+  if (n === 2) renderNames();
+  if (n === 5) renderObjectives();
+  const h = document.querySelector('.step.active h2');
+  if (h && window._userNav){ h.setAttribute('tabindex', '-1'); h.focus({ preventScroll:true }); window.scrollTo({ top:0, behavior:'smooth' }); }
+}
+const STEP_NAMES = ['About you','App name','Your change','Life areas','Vision','Rhythm','Style','Privacy'];
+function renderDots(){
+  $('#stepDots').innerHTML = STEP_NAMES.map((s, i) => {
+    const n = i + 1;
+    return `<button type="button" data-goto="${n}" ${n === step ? 'aria-current="step"' : ''} class="${n < step ? 'done' : ''}">${n}. ${s}</button>`;
+  }).join('') + `<button type="button" data-goto="9" ${step === 9 ? 'aria-current="step"' : ''}>Preview</button>`;
+}
+function validate(n){
+  switch(n){
+    case 1:
+      if (!cfg.name.trim()) return ['Please add your name.', '#f_name'];
+      if (!cfg.role.trim()) return ['Please add your role.', '#f_role'];
+      if (!cfg.program) return ['Please choose your program with Dagmar.', '#programOpts input'];
+      return null;
+    case 2: return cfg.appName.trim() ? null : ['Please choose a name for your app, or write a custom one.', '#f_customName'];
+    case 3: return cfg.phase ? null : ['Please choose the sentence that sounds most like you.', '#phaseOpts input'];
+    case 4: return (cfg.areas.length >= 3 && cfg.areas.length <= 6) ? null : ['Please choose between 3 and 6 life areas. You have ' + cfg.areas.length + '.', '#areaChips button'];
+    case 5:
+      if (!cfg.vision.trim()) return ['Please write your 3 year vision in one sentence.', '#f_vision'];
+      if (!cfg.objectives.some(o => o.title.trim())) return ['Please add at least one 90 day objective.', '#obj_t_0'];
+      for (let i = 0; i < cfg.objectives.length; i++){ const o = cfg.objectives[i]; if (o.title.trim() && !o.area) return ['Please pick an area for objective ' + (i + 1) + '.', '#obj_a_' + i]; }
+      return null;
+    case 6: return cfg.checkin ? null : ['Please choose a daily check in time.', '#f_checkin'];
+    case 7: return cfg.tone ? null : ['Please choose a tone for your app.', '#toneOpts input'];
+    case 8: return cfg.payer ? null : ['Please choose who pays for your plan.', '#payerOpts input'];
+  }
+  return null;
+}
+function showErr(msg){ const e = $('#err'); e.textContent = msg; e.classList.add('show'); }
+function hideErr(){ $('#err').classList.remove('show'); }
+
+function saveClient(submitted){
+  const c = cleanCfg();
+  const prev = load('cp_demo_client');
+  const rec = { cfg:c, source:'form', submitted:!!submitted || !!(prev && prev.submitted && prev.cfg && prev.cfg.name === c.name), updatedAt:new Date().toISOString() };
+  // keep the app snapshot only when it belongs to the same person
+  if (prev && prev.snapshot && prev.cfg && prev.cfg.name === c.name) rec.snapshot = prev.snapshot;
+  store('cp_demo_client', rec);
+}
+
+/* events */
+const form = $('#form');
+form.addEventListener('submit', e => e.preventDefault());
+form.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'f_name'){
+    // keep a chosen suggestion in sync with the new name
+    const idx = nameSuggestions().indexOf(cfg.appName);
+    cfg.name = t.value;
+    if (idx >= 0) cfg.appName = nameSuggestions()[idx];
+  }
+  else if (t.id === 'f_role') cfg.role = t.value;
+  else if (t.id === 'f_vision') cfg.vision = t.value;
+  else if (t.id === 'f_customName'){ cfg.appName = t.value; const r = document.querySelector('input[name="appName"][value="__custom"]'); if (r) r.checked = true; }
+  else if (t.dataset.obj !== undefined && t.dataset.k === 'title') cfg.objectives[+t.dataset.obj].title = t.value;
+  else if (t.id === 'f_checkin') cfg.checkin = t.value;
+  refreshPreview();
+});
+form.addEventListener('change', e => {
+  const t = e.target;
+  if (t.name === 'program') cfg.program = t.value;
+  else if (t.name === 'appName'){ cfg.appName = t.value === '__custom' ? $('#f_customName').value : t.value; if (t.value === '__custom') $('#f_customName').focus(); }
+  else if (t.name === 'phase'){ cfg.phase = t.value; renderPhaseNote(); }
+  else if (t.dataset.obj !== undefined && t.dataset.k === 'area') cfg.objectives[+t.dataset.obj].area = t.value;
+  else if (t.id === 'f_reviewDay') cfg.reviewDay = t.value;
+  else if (t.id === 'f_remCheckin') cfg.reminders.checkin = t.checked;
+  else if (t.id === 'f_remReview') cfg.reminders.review = t.checked;
+  else if (t.id === 'f_remSession') cfg.reminders.session = t.checked;
+  else if (t.name === 'palette'){ cfg.palette = t.value; applyPalette(t.value); }
+  else if (t.name === 'tone') cfg.tone = t.value;
+  else if (t.id === 'f_pvProgress') cfg.privacy.progress = t.checked;
+  else if (t.id === 'f_pvValues') cfg.privacy.values = t.checked;
+  else if (t.id === 'f_pvReview') cfg.privacy.review = t.checked;
+  else if (t.name === 'payer') cfg.payer = t.value;
+  hideErr();
+  refreshPreview();
+});
+$('#areaChips').addEventListener('click', e => {
+  const b = e.target.closest('[data-area]'); if (!b) return;
+  const a = b.dataset.area, on = cfg.areas.includes(a);
+  if (on){
+    cfg.areas = cfg.areas.filter(x => x !== a);
+  } else {
+    if (cfg.areas.length >= 6){ showErr('You can choose up to 6 areas. Remove one first.'); return; }
+    cfg.areas.push(a);
+  }
+  hideErr();
+  renderAreas();
+  const again = document.querySelector('#areaChips [data-area="' + CSS.escape(a) + '"]'); if (again) again.focus();
+  refreshPreview();
+});
+function addCustomArea(){
+  const v = $('#f_customArea').value.trim().replace(/\s+/g, ' ');
+  if (!v) return;
+  const name = v.charAt(0).toUpperCase() + v.slice(1);
+  if (cfg.areas.some(a => a.toLowerCase() === name.toLowerCase())){ showErr(name + ' is already selected.'); return; }
+  if (cfg.areas.length >= 6){ showErr('You can choose up to 6 areas. Remove one first.'); return; }
+  cfg.areas.push(name); $('#f_customArea').value = ''; hideErr(); renderAreas(); refreshPreview();
+}
+$('#addArea').addEventListener('click', addCustomArea);
+$('#f_customArea').addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); addCustomArea(); } });
+$('#addObj').addEventListener('click', () => {
+  if (cfg.objectives.length >= 3) return;
+  cfg.objectives.push({ title:'', area:'' }); renderObjectives();
+  const last = $('#obj_t_' + (cfg.objectives.length - 1)); if (last) last.focus();
+});
+$('#objList').addEventListener('click', e => {
+  const b = e.target.closest('[data-rmobj]'); if (!b) return;
+  cfg.objectives.splice(+b.dataset.rmobj, 1); renderObjectives(); refreshPreview();
+});
+$('#stepDots').addEventListener('click', e => {
+  const b = e.target.closest('[data-goto]'); if (!b) return;
+  const to = +b.dataset.goto;
+  if (to > step){ for (let i = step; i < to; i++){ const v = validate(i); if (v){ window._userNav = true; showStep(i); showErr(v[0]); return; } } }
+  window._userNav = true; showStep(to);
+});
+$('#nextBtn').addEventListener('click', () => {
+  const v = validate(step);
+  if (v){ showErr(v[0]); const el = document.querySelector(v[1]); if (el) el.focus(); return; }
+  window._userNav = true; showStep(step + 1);
+});
+$('#backBtn').addEventListener('click', () => { if (step > 1){ window._userNav = true; showStep(step - 1); } });
+$('#loadExample').addEventListener('click', () => { cfg = clone(EXAMPLE); $('#f_customName').value = ''; renderAll(); showStep(1); toast("Andrea's example is loaded."); });
+$('#startBlank').addEventListener('click', () => { cfg = clone(BLANK); $('#f_customName').value = ''; renderAll(); showStep(1); $('#f_name').focus(); toast('The form is blank. Start with your name.'); });
+$('#openApp').addEventListener('click', () => { saveClient(false); });
+$('#navApp').addEventListener('click', () => { saveClient(false); });
+$('#submitBtn').addEventListener('click', () => {
+  for (let i = 1; i <= TOTAL; i++){ const v = validate(i); if (v){ window._userNav = true; showStep(i); showErr(v[0]); return; } }
+  saveClient(true);
+  $('#modalText').textContent = 'This is a demo, so nothing was sent and no payment was taken. In the real service Dagmar receives ' + (cfg.appName || 'your app') + ' and it goes live for ' + firstName(cfg.name) + '.';
+  $('#modal').classList.add('show'); $('#modalOpen').focus();
+});
+$('#modalClose').addEventListener('click', () => { $('#modal').classList.remove('show'); $('#submitBtn').focus(); });
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') $('#modal').classList.remove('show'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#modal').classList.remove('show'); });
+
+/* boot */
+cfg = initFromUrl();
+renderAll();
+showStep(1);
+if (new URLSearchParams(location.search).get('cfg')) toast('Your current answers are loaded. Change anything you like.');
+</script>
+</body>
+</html>
